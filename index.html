@@ -1,347 +1,264 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Эвакуатор Краснодар — круглосуточно</title>
 
-<style>
-    :root {
-        --accent: #ffcc00;
-        --accent2: #ffdd55;
-        --bg: #050509;
-    }
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#000000">
 
-    body {
-        margin: 0;
-        padding: 0;
-        background: radial-gradient(circle at top, #1b2340 0%, #050509 55%, #000000 100%);
-        color: #fff;
-        font-family: Arial, sans-serif;
-        overflow-x: hidden;
-    }
+    <!-- ИКОНКА ПРИЛОЖЕНИЯ -->
+    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="icon" type="image/png" href="icon.png">
 
-    .fade {
-        opacity: 0;
-        transform: translateY(30px);
-        animation: fadeIn 1.2s forwards;
-    }
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
 
-    @keyframes fadeIn {
-        to {
-            opacity: 1;
-            transform: translateY(0);
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: radial-gradient(circle at top, #202b3b 0%, #05070a 45%, #000000 100%);
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
-    }
 
-    /* Ночной город + неон */
-    .hero {
-        min-height: 100vh;
-        background: url('https://images.unsplash.com/photo-1505761671935-60b3a7427bad?auto=format&fit=crop&w=1600&q=80') center/cover fixed;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        padding: 30px 20px;
-        position: relative;
-    }
+        .page {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
 
-    .hero::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: rgba(0,0,0,0.65);
-    }
+        .header { text-align: center; padding: 8px 0; }
+        .logo-text { font-size: 24px; font-weight: 700; }
+        .city { font-size: 14px; opacity: 0.8; }
 
-    .hero-inner {
-        position: relative;
-        z-index: 2;
-        max-width: 900px;
-    }
+        .hero {
+            background: #ffffff10;
+            backdrop-filter: blur(12px);
+            border-radius: 18px;
+            padding: 18px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
 
-    .hero-title {
-        font-size: 46px;
-        font-weight: 800;
-        color: var(--accent);
-        text-shadow: 0 0 25px #000;
-        margin-bottom: 10px;
-    }
+        .hero-title { font-size: 22px; font-weight: 700; }
+        .hero-subtitle { font-size: 14px; opacity: 0.85; }
 
-    .hero-sub {
-        font-size: 22px;
-        opacity: 0.95;
-        margin: 5px 0;
-    }
+        .hero-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 6px;
+        }
 
-    .hero-tag {
-        margin-top: 15px;
-        font-size: 18px;
-        opacity: 0.8;
-    }
+        .tag {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: #ffffff15;
+        }
 
-    .hero-line {
-        margin: 22px auto 0;
-        width: 140px;
-        height: 2px;
-        background: linear-gradient(90deg, transparent, var(--accent), transparent);
-    }
+        .card {
+            background: #ffffff08;
+            border-radius: 16px;
+            padding: 14px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
 
-    .btn-main {
-        display: inline-block;
-        margin-top: 28px;
-        padding: 14px 42px;
-        background: linear-gradient(90deg, var(--accent), var(--accent2));
-        color: #000;
-        font-size: 22px;
-        font-weight: bold;
-        border-radius: 999px;
-        text-decoration: none;
-        transition: 0.25s;
-        box-shadow: 0 0 24px rgba(255,204,0,0.7);
-    }
+        .card-title { font-size: 16px; font-weight: 600; }
+        .card-text { font-size: 13px; opacity: 0.9; }
 
-    .btn-main:hover {
-        transform: translateY(-2px) scale(1.05);
-        box-shadow: 0 0 32px rgba(255,204,0,1);
-    }
+        .btn-main {
+            display: block;
+            width: 100%;
+            margin-top: 8px;
+            padding: 16px;
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+            border-radius: 14px;
+            text-decoration: none;
+            color: #ffffff;
+            background: linear-gradient(135deg, #ff7b39, #ff3b3b);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.6);
+        }
 
-    .hero-note {
-        margin-top: 10px;
-        font-size: 15px;
-        opacity: 0.7;
-    }
+        .social-block {
+            background: #ffffff08;
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
 
-    /* Общие блоки */
-    .section {
-        max-width: 1000px;
-        margin: 0 auto;
-        padding: 60px 20px;
-        text-align: center;
-    }
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
 
-    .section-title {
-        font-size: 32px;
-        font-weight: 700;
-        color: var(--accent);
-        margin-bottom: 20px;
-        text-shadow: 0 0 10px #000;
-    }
+        .social-icons a {
+            width: 60px;
+            height: 60px;
+            background: #ffffff12;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(6px);
+        }
 
-    .section-sub {
-        font-size: 18px;
-        opacity: 0.8;
-        margin-bottom: 30px;
-    }
+        .social-icons img {
+            width: 32px;
+            height: 32px;
+        }
 
-    /* Карточки */
-    .cards {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 20px;
-    }
+        .stars {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 6px;
+        }
 
-    .card {
-        background: rgba(15,15,20,0.9);
-        border-radius: 18px;
-        padding: 20px 18px;
-        box-shadow: 0 18px 40px rgba(0,0,0,0.7);
-        border: 1px solid rgba(255,255,255,0.06);
-    }
+        .stars img {
+            width: 26px;
+            filter: invert(80%) sepia(90%) saturate(500%) hue-rotate(5deg);
+        }
 
-    .card-title {
-        font-size: 20px;
-        font-weight: 700;
-        color: var(--accent);
-        margin-bottom: 8px;
-    }
+        .bottom-bar {
+            position: sticky;
+            bottom: 0;
+            background: #000000e0;
+            backdrop-filter: blur(16px);
+            padding: 10px 16px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-width: 480px;
+            margin: 0 auto;
+        }
 
-    .card-text {
-        font-size: 17px;
-        opacity: 0.9;
-        line-height: 1.6;
-    }
+        .bottom-text {
+            font-size: 12px;
+            opacity: 0.8;
+            text-align: center;
+        }
 
-    .card-list {
-        list-style: none;
-        padding: 0;
-        margin: 8px 0 0;
-        font-size: 17px;
-    }
-
-    .card-list li {
-        margin: 5px 0;
-        opacity: 0.9;
-    }
-
-    /* Контакты */
-    .contacts-phone {
-        font-size: 26px;
-        font-weight: 700;
-        margin-top: 8px;
-    }
-
-    .btn-secondary {
-        display: inline-block;
-        margin-top: 18px;
-        padding: 10px 28px;
-        border-radius: 999px;
-        border: 1px solid var(--accent);
-        color: var(--accent);
-        text-decoration: none;
-        font-size: 17px;
-        transition: 0.25s;
-    }
-
-    .btn-secondary:hover {
-        background: rgba(255,204,0,0.12);
-        transform: translateY(-1px);
-    }
-
-    /* Соцсети */
-    .social-buttons {
-        margin-top: 18px;
-    }
-
-    .social-btn {
-        display: inline-block;
-        margin: 6px;
-        padding: 9px 20px;
-        border-radius: 999px;
-        background: rgba(10,10,10,0.8);
-        border: 1px solid rgba(255,255,255,0.12);
-        color: #fff;
-        text-decoration: none;
-        font-size: 16px;
-        transition: 0.25s;
-    }
-
-    .social-btn:hover {
-        border-color: var(--accent);
-        box-shadow: 0 0 14px rgba(255,204,0,0.7);
-        transform: translateY(-1px);
-    }
-
-    .footer {
-        text-align: center;
-        padding: 25px 20px 30px;
-        font-size: 15px;
-        opacity: 0.6;
-    }
-
-    @media (max-width: 600px) {
-        .hero-title { font-size: 32px; }
-        .hero-sub { font-size: 18px; }
-    }
-</style>
+        .phone-link {
+            color: #ffb36b;
+            text-decoration: none;
+            font-weight: 500;
+        }
+    </style>
 </head>
-
 <body>
+    <div class="page">
 
-<!-- ГЛАВНЫЙ ЭКРАН -->
-<div class="hero fade">
-    <div class="hero-inner">
-        <div class="hero-title">Эвакуатор Краснодар 24/7</div>
-        <div class="hero-sub">Ночной город. Быстрая помощь на дороге.</div>
-        <div class="hero-sub">Подача от 15 минут · Работаем по краю</div>
-        <div class="hero-tag">Когда машина подвела — мы не подведём.</div>
-        <div class="hero-line"></div>
-        <a class="btn-main" href="tel:+79996362202">Позвонить эвакуатору</a>
-        <div class="hero-note">Нажмите, чтобы сразу набрать номер</div>
-    </div>
-</div>
+        <header class="header">
+            <div class="logo-text">Эвакуатор Краснодар</div>
+            <div class="city">Работаем по городу и краю</div>
+        </header>
 
-<!-- О КОМПАНИИ -->
-<div class="section fade">
-    <div class="section-title">О компании</div>
-    <div class="section-sub">
-        Профессиональная служба эвакуации в Краснодаре. Работаем круглосуточно, аккуратно и честно.
-    </div>
+        <section class="hero">
+            <div class="hero-title">Круглосуточный эвакуатор</div>
+            <div class="hero-subtitle">Быстро приедем, аккуратно погрузим и доставим авто.</div>
 
-    <div class="cards">
-        <div class="card">
-            <div class="card-title">Кому помогаем</div>
-            <div class="card-text">
-                Легковые авто, кроссоверы, внедорожники, мотоциклы. Эвакуация после поломки, ДТП, выезда на СТО или домой.
+            <div class="hero-tags">
+                <span class="tag">24/7</span>
+                <span class="tag">Доступные цены</span>
+                <span class="tag">Легковые и кроссоверы</span>
             </div>
-        </div>
-        <div class="card">
-            <div class="card-title">Как работаем</div>
+
+            <a class="btn-main" href="tel:+79888717018">Позвонить эвакуатору</a>
+        </section>
+
+        <section class="card">
+            <div class="card-title">Когда нужен эвакуатор</div>
             <div class="card-text">
-                Звонок → адрес → цена сразу. Подача эвакуатора от 15 минут по городу.
+                • ДТП или поломка<br>
+                • Машина не заводится<br>
+                • Нужно перевезти авто<br>
+                • Низкий клиренс
             </div>
-        </div>
-        <div class="card">
-            <div class="card-title">Где работаем</div>
-            <div class="card-text">
-                Краснодар и весь край. Заберём из города, с трассы, из двора, с парковки ТЦ или СТО.
+        </section>
+
+        <section class="card">
+            <div class="card-title">Контакты</div>
+            <a class="phone-link" href="tel:+79888717018">+7 (988) 871‑70‑18</a>
+        </section>
+
+        <!-- КАРТА ЯГОДИНА -->
+        <section class="card">
+            <div class="card-title">Где мы находимся</div>
+            <div class="card-text">Район Ягодина, Краснодар. Работаем по всему городу.</div>
+
+            <div style="width:100%; height:260px; border-radius:14px; overflow:hidden; margin-top:10px;">
+                <iframe
+                    src="https://yandex.ru/map-widget/v1/?um=constructor%3A1c3e6c5f0f3f4b2d8e9f7a1c4d2b9e8f1a7c6b5d3e2f1c0b&source=constructor"
+                    width="100%" height="260" frameborder="0">
+                </iframe>
             </div>
-        </div>
+        </section>
+
+        <!-- СОЦСЕТИ -->
+        <section class="social-block">
+            <div class="card-title" style="text-align:center;">Мы в соцсетях</div>
+
+            <div class="social-icons">
+
+                <a href="https://t.me/ТВОЙ_ТЕЛЕГРАМ">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg">
+                </a>
+
+                <a href="https://vk.com/ТВОЙ_VK">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/VK.com-logo.svg">
+                </a>
+
+                <a href="https://ok.ru/ТВОЙ_МАХ">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Ok.ru_logo.svg">
+                </a>
+
+                <a href="https://wa.me/79888717018">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg">
+                </a>
+
+                <a href="https://www.avito.ru/ТВОЙ_ПРОФИЛЬ">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Avito_logo.svg">
+                </a>
+
+            </div>
+
+            <div class="stars">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg">
+            </div>
+
+            <div style="text-align:center; font-size:13px; opacity:0.9;">
+                Рейтинг 5.0 — клиенты рекомендуют нас
+            </div>
+        </section>
+
     </div>
-</div>
 
-<!-- УСЛУГИ -->
-<div class="section fade">
-    <div class="section-title">Услуги эвакуатора</div>
-    <div class="cards">
-        <div class="card">
-            <div class="card-title">Эвакуация по городу</div>
-            <ul class="card-list">
-                <li>Подача от 15 минут</li>
-                <li>Доставка до дома или СТО</li>
-                <li>Фиксированная стоимость по районам</li>
-            </ul>
-        </div>
-        <div class="card">
-            <div class="card-title">Эвакуация по краю</div>
-            <ul class="card-list">
-                <li>Выезд по трассам и в населённые пункты</li>
-                <li>Цена оговаривается заранее</li>
-                <li>Без скрытых доплат</li>
-            </ul>
-        </div>
-        <div class="card">
-            <div class="card-title">После ДТП</div>
-            <ul class="card-list">
-                <li>Аккуратная погрузка повреждённого авто</li>
-                <li>Доставка на выбранную СТО или стоянку</li>
-                <li>Помощь с размещением автомобиля</li>
-            </ul>
-        </div>
-        <div class="card">
-            <div class="card-title">Мотоэвакуация</div>
-            <ul class="card-list">
-                <li>Перевозка мотоциклов и скутеров</li>
-                <li>Надёжная фиксация</li>
-                <li>Бережное отношение к технике</li>
-            </ul>
-        </div>
+    <div class="bottom-bar">
+        <a class="btn-main" href="tel:+79888717018">Вызвать эвакуатор сейчас</a>
+        <div class="bottom-text">Нажмите кнопку — мы перезвоним.</div>
     </div>
-</div>
-
-<!-- КОНТАКТЫ -->
-<div class="section fade">
-    <div class="section-title">Контакты</div>
-    <div>Телефон для вызова эвакуатора:</div>
-    <div class="contacts-phone">+7 999 636‑22‑02</div>
-    <a class="btn-main" href="tel:+79996362202">Позвонить сейчас</a>
-    <br>
-    <a class="btn-secondary" href="tel:+79996362202">Сохранить номер</a>
-</div>
-
-<!-- СОЦСЕТИ -->
-<div class="section fade">
-    <div class="section-title">Социальные сети</div>
-    <div class="section-sub">Удобно написать, уточнить цену или отправить геолокацию.</div>
-    <div class="social-buttons">
-        <a class="social-btn" href="#">VK</a>
-        <a class="social-btn" href="#">Telegram</a>
-        <a class="social-btn" href="#">WhatsApp</a>
-    </div>
-</div>
-
-<!-- ФУТЕР -->
-<div class="footer fade">
-    © Эвакуатор Краснодар 24/7 · Ночной город, быстрая помощь на дороге
-</div>
 
 </body>
 </html>
