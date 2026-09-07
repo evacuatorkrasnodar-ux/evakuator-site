@@ -5,107 +5,215 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Эвакуатор Краснодар 24/7</title>
 
+    <!-- PWA manifest -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Яндекс.Карты с твоим API-ключом -->
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=fc0f9182-0eee-4e83-bed3-8e561c88c4d5&lang=ru_RU"></script>
+
     <style>
-        body {
-            margin: 0;
-            background: #0a0a0a;
-            font-family: Arial, sans-serif;
-            color: #fff;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: auto;
-            padding: 20px;
-        }
-
-        h1 {
-            text-align: center;
-            color: #f7c600;
-            margin-bottom: 20px;
-        }
-
-        .block {
-            background: #111;
-            padding: 20px;
-            border-radius: 15px;
-            border: 1px solid #333;
-            margin-bottom: 20px;
-        }
-
-        .btn-call {
-            width: 100%;
-            padding: 14px;
-            background: #f7c600;
-            border: none;
-            border-radius: 10px;
-            font-size: 20px;
-            font-weight: bold;
-            cursor: pointer;
-            color: #000;
-            margin-top: 10px;
-        }
-
-        .messengers {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .msg-btn {
-            flex: 1;
-            padding: 12px;
-            border-radius: 10px;
-            border: none;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
+        body { margin:0; background:#0a0a0a; font-family:Arial,sans-serif; color:#fff; }
+        .container { max-width:900px; margin:auto; padding:20px; }
+        h1 { text-align:center; color:#f7c600; margin-bottom:10px; }
+        .install-btn { width:100%; padding:14px; background:#0088ff; border:none; border-radius:10px;
+                       font-size:18px; font-weight:bold; cursor:pointer; margin-bottom:20px; display:none; }
+        .calc-block { background:#111; padding:20px; border-radius:15px; border:1px solid #333; margin-bottom:20px; }
+        .calc-row { display:flex; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
+        input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
+                        background:#1a1a1a; color:#fff; font-size:15px; }
+        .calc-btn { width:100%; padding:14px; background:linear-gradient(135deg,#f7c600,#ff7b00);
+                    border:none; border-radius:10px; font-size:18px; font-weight:bold; cursor:pointer; color:#000; }
+        #calcResult { margin-top:10px; font-size:18px; color:#f7c600; }
+        #map { width:100%; height:250px; border-radius:15px; margin-top:15px; }
+        .form-block { background:#111; padding:20px; border-radius:15px; border:1px solid #333; }
+        .form-submit { width:100%; padding:14px; background:linear-gradient(135deg,#ff7b00,#f7c600);
+                       border:none; border-radius:10px; font-size:18px; font-weight:bold; cursor:pointer; color:#000; margin-top:10px; }
+        .messengers { display:flex; gap:10px; margin-top:10px; }
+        .msg-btn { flex:1; padding:12px; border-radius:10px; border:none; font-size:16px; font-weight:bold; cursor:pointer; }
         .whatsapp { background:#25D366; color:#000; }
         .telegram { background:#0088cc; color:#fff; }
     </style>
 </head>
-
 <body>
 
 <div class="container">
-
     <h1>Эвакуатор Краснодар 24/7</h1>
 
-    <div class="block">
-        <h2>Наши услуги</h2>
-        <p>• Эвакуация легковых авто</p>
-        <p>• Эвакуация внедорожников</p>
-        <p>• Перевозка мотоциклов</p>
-        <p>• Эвакуация спецтехники</p>
+    <button class="install-btn" id="installBtn">📱 Сохранить на главный экран</button>
+
+    <div class="calc-block">
+        <h2>Расчёт стоимости</h2>
+
+        <div class="calc-row">
+            <input type="text" id="fromAddress" placeholder="Откуда забрать">
+        </div>
+
+        <div class="calc-row">
+            <input type="text" id="toAddress" placeholder="Куда отвезти">
+        </div>
+
+        <div class="calc-row">
+            <select id="carType">
+                <option value="1.0">Легковой автомобиль</option>
+                <option value="1.1">Кроссовер / минивэн</option>
+                <option value="1.3">Малый грузовик</option>
+            </select>
+        </div>
+
+        <button class="calc-btn" onclick="detectRouteDistance()">Определить расстояние</button>
+        <button class="calc-btn" style="margin-top:8px;background:#f7c600;" onclick="calcPrice()">Рассчитать цену</button>
+
+        <div id="calcResult">Введите адреса и нажмите «Определить расстояние».</div>
+
+        <div id="map"></div>
     </div>
 
-    <div class="block">
-        <h2>Почему мы</h2>
-        <p>• Подача от 15 минут</p>
-        <p>• Работаем круглосуточно</p>
-        <p>• Опыт более 8 лет</p>
-        <p>• Аккуратная погрузка</p>
-    </div>
+    <div class="form-block">
+        <h2>Быстрая заявка</h2>
 
-    <div class="block">
-        <h2>Контакты</h2>
-        <p style="font-size:24px; color:#f7c600; font-weight:bold;">
-            +7 (988) 871‑70‑18
-        </p>
+        <div class="calc-row">
+            <input id="name" type="text" placeholder="Ваше имя">
+        </div>
 
-        <button class="btn-call" onclick="window.location.href='tel:+79888717018'">
-            Позвонить
-        </button>
+        <div class="calc-row">
+            <input id="phone" type="tel" placeholder="Ваш телефон">
+        </div>
+
+        <div class="calc-row">
+            <input id="details" type="text" placeholder="Откуда → Куда, авто, ситуация">
+        </div>
+
+        <button class="form-submit" onclick="submitForm()">Позвонить</button>
 
         <div class="messengers">
-            <button class="msg-btn whatsapp" onclick="window.open('https://wa.me/79888717018','_blank')">WhatsApp</button>
-            <button class="msg-btn telegram" onclick="window.open('https://t.me/your_username','_blank')">Telegram</button>
+            <button class="msg-btn whatsapp" onclick="sendWhatsApp()">WhatsApp</button>
+            <button class="msg-btn telegram" onclick="sendTelegram()">Telegram</button>
         </div>
     </div>
-
 </div>
+
+<script>
+// =========================
+// PWA кнопка установки
+// =========================
+
+let deferredPrompt;
+const installBtn = document.getElementById("installBtn");
+
+window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    installBtn.style.display = "block";
+});
+
+installBtn.addEventListener("click", () => {
+    installBtn.style.display = "none";
+    deferredPrompt.prompt();
+});
+
+// =========================
+// Яндекс.Карты — расчёт маршрута
+// =========================
+
+let map, route;
+let ymapsReady = false;
+
+ymaps.ready(() => {
+    ymapsReady = true;
+    map = new ymaps.Map("map", {
+        center: [45.035470, 38.975313],
+        zoom: 9
+    });
+});
+
+function detectRouteDistance() {
+    const from = document.getElementById("fromAddress").value.trim();
+    const to = document.getElementById("toAddress").value.trim();
+    const result = document.getElementById("calcResult");
+
+    if (!from || !to) {
+        result.textContent = "Введите оба адреса.";
+        return;
+    }
+
+    result.textContent = "Строим маршрут…";
+
+    if (!ymapsReady) {
+        result.textContent = "Карта загружается…";
+        return;
+    }
+
+    if (route) map.geoObjects.remove(route);
+
+    ymaps.route([from, to]).then(r => {
+        route = r;
+        map.geoObjects.add(route);
+        map.setBounds(route.getBounds());
+
+        const meters = route.getLength();
+        const km = Math.round(meters / 1000);
+
+        document.getElementById("distance")?.remove();
+        const hidden = document.createElement("input");
+        hidden.type = "hidden";
+        hidden.id = "distance";
+        hidden.value = km;
+        document.body.appendChild(hidden);
+
+        result.textContent = "Расстояние: ~ " + km + " км";
+    }).catch(() => {
+        result.textContent = "Маршрут не найден. Уточните адреса.";
+    });
+}
+
+// =========================
+// РАСЧЁТ ЦЕНЫ
+// =========================
+
+function calcPrice() {
+    const km = parseFloat(document.getElementById("distance")?.value || "0");
+    const carType = parseFloat(document.getElementById("carType").value);
+
+    if (!km) {
+        document.getElementById("calcResult").textContent = "Сначала определите расстояние.";
+        return;
+    }
+
+    const basePerKm = 60;
+    const minCar = 1700;
+    const minCross = 1900;
+    const minTruck = 2200;
+
+    let minPrice = minCar;
+    if (carType === 1.1) minPrice = minCross;
+    if (carType === 1.3) minPrice = minTruck;
+
+    let price = km * basePerKm * carType;
+    if (price < minPrice) price = minPrice;
+
+    document.getElementById("calcResult").textContent =
+        "Цена эвакуации: ~ " + Math.round(price) + " ₽";
+}
+
+// =========================
+// ЗАЯВКА
+// =========================
+
+function submitForm() {
+    const phone = "+7XXXXXXXXXX"; // твой номер
+    window.location.href = "tel:" + phone;
+}
+
+function sendWhatsApp() {
+    const wa = "7XXXXXXXXXX"; // твой WhatsApp
+    window.open("https://wa.me/" + wa, "_blank");
+}
+
+function sendTelegram() {
+    const tg = "https://t.me/your_username"; // твой Telegram
+    window.open(tg, "_blank");
+}
+</script>
 
 </body>
 </html>
