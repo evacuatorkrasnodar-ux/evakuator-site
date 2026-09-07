@@ -30,6 +30,70 @@
             min-height: 100vh;
         }
 
+        /* Загрузочный экран */
+        .loader-overlay {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at top, #111827 0, #020617 60%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .loader-logo {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #f7c600, #ff7b00);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 35px rgba(247,198,0,0.9);
+            animation: loaderPulse 2s infinite;
+        }
+
+        .loader-logo span {
+            font-size: 34px;
+            font-weight: 900;
+            color: #111827;
+        }
+
+        .loader-text {
+            margin-top: 18px;
+            font-size: 14px;
+            color: #e5e7eb;
+            text-align: center;
+        }
+
+        .loader-bar {
+            margin-top: 16px;
+            width: 160px;
+            height: 4px;
+            border-radius: 999px;
+            background: rgba(31,41,55,0.9);
+            overflow: hidden;
+        }
+
+        .loader-bar-inner {
+            width: 40%;
+            height: 100%;
+            background: linear-gradient(90deg, #f7c600, #ff7b00);
+            animation: loaderMove 1.4s infinite;
+        }
+
+        @keyframes loaderPulse {
+            0% { transform: scale(1); box-shadow: 0 0 35px rgba(247,198,0,0.9); }
+            50% { transform: scale(1.08); box-shadow: 0 0 55px rgba(247,198,0,1); }
+            100% { transform: scale(1); box-shadow: 0 0 35px rgba(247,198,0,0.9); }
+        }
+
+        @keyframes loaderMove {
+            0% { transform: translateX(-60%); }
+            100% { transform: translateX(160%); }
+        }
+
         .bg-anim {
             position: fixed;
             inset: 0;
@@ -332,6 +396,12 @@
             color: #a5b4fc;
         }
 
+        .geo-info {
+            margin-top: 6px;
+            font-size: 11px;
+            color: #9ca3af;
+        }
+
         .map-block {
             margin-top: 12px;
             border-radius: 14px;
@@ -406,6 +476,42 @@
             color: #6b7280;
         }
 
+        .messengers {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .msg-btn {
+            flex: 1;
+            min-width: 140px;
+            border-radius: 999px;
+            border: none;
+            padding: 9px 12px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .msg-btn.whatsapp {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: #022c22;
+        }
+
+        .msg-btn.telegram {
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
+            color: #02131f;
+        }
+
+        .msg-btn span.icon {
+            font-size: 16px;
+        }
+
         footer {
             margin-top: 18px;
             font-size: 11px;
@@ -419,6 +525,19 @@
     </style>
 </head>
 <body>
+
+<div class="loader-overlay" id="loader">
+    <div class="loader-logo">
+        <span>Э</span>
+    </div>
+    <div class="loader-text">
+        Запускаем эвакуаторный сервис…<br>
+        Готовим интерфейс как у приложения.
+    </div>
+    <div class="loader-bar">
+        <div class="loader-bar-inner"></div>
+    </div>
+</div>
 
 <div class="bg-anim"></div>
 
@@ -489,7 +608,7 @@
                 </div>
             </div>
 
-            <!-- Правая часть: калькулятор + карта + форма -->
+            <!-- Правая часть: калькулятор + карта + форма + мессенджеры -->
             <div class="side-block">
                 <div class="side-title">
                     <h3>Калькулятор стоимости эвакуации</h3>
@@ -513,11 +632,15 @@
                     <div class="calc-result" id="calcResult">
                         Введите расстояние и тип авто, чтобы увидеть примерную цену.
                     </div>
+                    <div class="geo-info" id="geoInfo">
+                        Попробуем определить ваше местоположение, чтобы быстрее рассчитать подачу…
+                    </div>
                 </div>
 
                 <div class="map-block">
                     <!-- Можно заменить на Google Maps, если хочешь -->
-                    <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A1b4f3c9c9c9c9c9c9c9c9c9c9c9c9c9&amp;source=constructor"
+                    <iframe id="mapFrame"
+                            src="https://yandex.ru/map-widget/v1/?um=constructor%3A1b4f3c9c9c9c9c9c9c9c9c9c9c9c9c9&amp;source=constructor"
                             loading="lazy"
                             referrerpolicy="no-referrer-when-downgrade">
                     </iframe>
@@ -541,6 +664,18 @@
                     <div class="form-note">
                         Заявка не уходит на сервер — мы просто сформируем текст и откроем звонок/сообщение, чтобы вы ничего не забыли.
                     </div>
+
+                    <div class="messengers">
+                        <!-- ВАЖНО: сюда поставь свои контакты -->
+                        <button class="msg-btn whatsapp" onclick="sendWhatsApp()">
+                            <span class="icon">🟢</span>
+                            <span>Написать в WhatsApp</span>
+                        </button>
+                        <button class="msg-btn telegram" onclick="sendTelegram()">
+                            <span class="icon">📨</span>
+                            <span>Написать в Telegram</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -554,6 +689,18 @@
 </div>
 
 <script>
+    // Загрузочный экран
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            const loader = document.getElementById('loader');
+            if (loader) {
+                loader.style.opacity = '0';
+                loader.style.transition = 'opacity 0.5s ease';
+                setTimeout(() => loader.remove(), 600);
+            }
+        }, 1200);
+    });
+
     // Регистрация сервис-воркера для PWA
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/service-worker.js').catch(() => {});
@@ -600,19 +747,86 @@
         const details = document.getElementById('details').value.trim();
 
         let text = 'Заявка на эвакуатор.%0A';
-        if (name) text += 'Имя: ' + name + '%0A';
-        if (phone) text += 'Телефон: ' + phone + '%0A';
-        if (details) text += 'Ситуация: ' + details + '%0A';
+        if (name) text += 'Имя: ' + encodeURIComponent(name) + '%0A';
+        if (phone) text += 'Телефон: ' + encodeURIComponent(phone) + '%0A';
+        if (details) text += 'Ситуация: ' + encodeURIComponent(details) + '%0A';
 
-        // Вариант: открыть звонок с номером
         // ВАЖНО: сюда поставь свой номер
         const callNumber = '+7XXXXXXXXXX';
 
-        // Откроем просто звонок, а текст пусть будет подсказкой для оператора
         alert('Сейчас откроется звонок. Сформированный текст заявки:\n\n' +
             decodeURIComponent(text.replace(/%0A/g, '\n')));
 
         window.location.href = 'tel:' + callNumber;
+    }
+
+    // Геолокация клиента
+    (function detectGeo() {
+        const geoInfo = document.getElementById('geoInfo');
+        if (!navigator.geolocation) {
+            if (geoInfo) geoInfo.textContent =
+                'Ваш браузер не поддерживает автоматическое определение геолокации.';
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                const lat = pos.coords.latitude.toFixed(4);
+                const lon = pos.coords.longitude.toFixed(4);
+                if (geoInfo) {
+                    geoInfo.textContent =
+                        'Мы определили ваше примерное местоположение: широта ' +
+                        lat + ', долгота ' + lon +
+                        '. Оператор сможет быстрее оценить подачу.';
+                }
+
+                // При желании можно подставить координаты в карту (нужен свой конструктор Яндекс/Google)
+                // Здесь просто оставляем инфу для оператора.
+            },
+            () => {
+                if (geoInfo) {
+                    geoInfo.textContent =
+                        'Не удалось автоматически определить геолокацию. Вы можете просто указать адрес в заявке.';
+                }
+            },
+            { timeout: 5000 }
+        );
+    })();
+
+    // WhatsApp
+    function sendWhatsApp() {
+        const name = document.getElementById('name').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const details = document.getElementById('details').value.trim();
+
+        let text = 'Заявка на эвакуатор.%0A';
+        if (name) text += 'Имя: ' + encodeURIComponent(name) + '%0A';
+        if (phone) text += 'Телефон: ' + encodeURIComponent(phone) + '%0A';
+        if (details) text += 'Ситуация: ' + encodeURIComponent(details) + '%0A';
+
+        // ВАЖНО: сюда поставь свой номер WhatsApp в формате 7XXXXXXXXXX
+        const waNumber = '7XXXXXXXXXX';
+
+        const url = 'https://wa.me/' + waNumber + '?text=' + text;
+        window.open(url, '_blank');
+    }
+
+    // Telegram
+    function sendTelegram() {
+        const name = document.getElementById('name').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const details = document.getElementById('details').value.trim();
+
+        let text = 'Заявка на эвакуатор.\n';
+        if (name) text += 'Имя: ' + name + '\n';
+        if (phone) text += 'Телефон: ' + phone + '\n';
+        if (details) text += 'Ситуация: ' + details + '\n';
+
+        // ВАЖНО: сюда поставь свой @username или ссылку на чат
+        const tgLink = 'https://t.me/your_username';
+
+        alert('Скопируйте текст заявки и отправьте в Telegram:\n\n' + text);
+        window.open(tgLink, '_blank');
     }
 </script>
 
