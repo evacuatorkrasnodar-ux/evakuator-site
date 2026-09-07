@@ -1,206 +1,212 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Эвакуатор Краснодар 24/7</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Эвакуатор Краснодар 24/7</title>
 
-    <!-- PWA manifest -->
-    <link rel="manifest" href="manifest.json">
+<style>
+    body {
+        margin: 0;
+        background: #0a0a0a;
+        font-family: 'Montserrat', sans-serif;
+        color: white;
+        overflow-x: hidden;
+    }
 
-    <!-- Яндекс.Карты с API-ключом -->
-    <script src="https://api-maps.yandex.ru/2.1/?apikey=ТВОЙ_КЛЮЧ&lang=ru_RU"></script>
+    /* Анимация плавного появления */
+    .fade {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeIn 1.2s forwards;
+    }
 
-    <style>
-        body { margin:0; background:#0a0a0a; font-family:Arial,sans-serif; color:#fff; }
-        .container { max-width:900px; margin:auto; padding:20px; }
-        h1 { text-align:center; color:#f7c600; margin-bottom:10px; }
-        .install-btn { width:100%; padding:14px; background:#0088ff; border:none; border-radius:10px;
-                       font-size:18px; font-weight:bold; cursor:pointer; margin-bottom:20px; display:none; }
-        .calc-block { background:#111; padding:20px; border-radius:15px; border:1px solid #333; margin-bottom:20px; }
-        .calc-row { display:flex; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
-        input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
-                        background:#1a1a1a; color:#fff; font-size:15px; }
-        .calc-btn { width:100%; padding:14px; background:linear-gradient(135deg,#f7c600,#ff7b00);
-                    border:none; border-radius:10px; font-size:18px; font-weight:bold; cursor:pointer; color:#000; }
-        #calcResult { margin-top:10px; font-size:18px; color:#f7c600; }
-        #map { width:100%; height:250px; border-radius:15px; margin-top:15px; }
-        .form-block { background:#111; padding:20px; border-radius:15px; border:1px solid #333; }
-        .form-submit { width:100%; padding:14px; background:linear-gradient(135deg,#ff7b00,#f7c600);
-                       border:none; border-radius:10px; font-size:18px; font-weight:bold; cursor:pointer; color:#000; margin-top:10px; }
-        .messengers { display:flex; gap:10px; margin-top:10px; }
-        .msg-btn { flex:1; padding:12px; border-radius:10px; border:none; font-size:16px; font-weight:bold; cursor:pointer; }
-        .whatsapp { background:#25D366; color:#000; }
-        .telegram { background:#0088cc; color:#fff; }
-    </style>
+    @keyframes fadeIn {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Главный экран */
+    header {
+        height: 90vh;
+        background: url('https://i.imgur.com/8kQf4mP.jpeg') center/cover no-repeat fixed;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    header::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(0,0,0,0.55);
+    }
+
+    .hero {
+        position: relative;
+        z-index: 2;
+        max-width: 700px;
+    }
+
+    .hero h1 {
+        font-size: 52px;
+        font-weight: 800;
+        color: #FFD700;
+        text-shadow: 0 0 20px #000;
+    }
+
+    .hero p {
+        font-size: 22px;
+        margin-top: 10px;
+        opacity: 0.9;
+    }
+
+    .btn {
+        margin-top: 25px;
+        background: linear-gradient(135deg, #FFD700, #FF7B00);
+        padding: 16px 40px;
+        border-radius: 12px;
+        color: black;
+        font-weight: 700;
+        font-size: 22px;
+        text-decoration: none;
+        display: inline-block;
+        transition: 0.3s;
+    }
+
+    .btn:hover {
+        transform: scale(1.08);
+        box-shadow: 0 0 20px #FFD700;
+    }
+
+    /* Блоки */
+    section {
+        padding: 60px 20px;
+        max-width: 1100px;
+        margin: auto;
+    }
+
+    h2 {
+        text-align: center;
+        font-size: 38px;
+        color: #FFD700;
+        margin-bottom: 40px;
+    }
+
+    .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 25px;
+    }
+
+    .card {
+        background: #111;
+        padding: 25px;
+        border-radius: 15px;
+        border: 1px solid #333;
+        text-align: center;
+        transition: 0.3s;
+        font-size: 20px;
+    }
+
+    .card:hover {
+        border-color: #FFD700;
+        transform: translateY(-8px);
+        box-shadow: 0 0 15px #FFD70055;
+    }
+
+    /* Контакты */
+    .phone {
+        font-size: 32px;
+        color: #FFD700;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .messengers {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+        justify-content: center;
+    }
+
+    .msg-btn {
+        padding: 14px 20px;
+        border-radius: 12px;
+        font-size: 18px;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .msg-btn:hover {
+        transform: scale(1.08);
+    }
+
+    .whatsapp { background:#25D366; color:#000; }
+    .telegram { background:#0088cc; color:#fff; }
+
+    footer {
+        text-align: center;
+        padding: 40px;
+        background: #111;
+        color: #aaa;
+        margin-top: 40px;
+    }
+</style>
 </head>
+
 <body>
 
-<div class="container">
-    <h1>Эвакуатор Краснодар 24/7</h1>
-
-    <button class="install-btn" id="installBtn">📱 Сохранить на главный экран</button>
-
-    <div class="calc-block">
-        <h2>Расчёт стоимости</h2>
-
-        <div class="calc-row">
-            <input type="text" id="fromAddress" placeholder="Откуда забрать">
-        </div>
-
-        <div class="calc-row">
-            <input type="text" id="toAddress" placeholder="Куда отвезти">
-        </div>
-
-        <div class="calc-row">
-            <select id="carType">
-                <option value="1.0">Легковой автомобиль</option>
-                <option value="1.1">Кроссовер / минивэн</option>
-                <option value="1.3">Малый грузовик</option>
-            </select>
-        </div>
-
-        <button class="calc-btn" onclick="detectRouteDistance()">Определить расстояние</button>
-        <button class="calc-btn" style="margin-top:8px;background:#f7c600;" onclick="calcPrice()">Рассчитать цену</button>
-
-        <div id="calcResult">Введите адреса и нажмите «Определить расстояние».</div>
-
-        <div id="map"></div>
+<header>
+    <div class="hero fade">
+        <h1>Эвакуатор Краснодар 24/7</h1>
+        <p>Быстро • Надёжно • Круглосуточно</p>
+        <a class="btn" href="tel:+79888717018">Вызвать эвакуатор</a>
     </div>
+</header>
 
-    <div class="form-block">
-        <h2>Быстрая заявка</h2>
-
-        <div class="calc-row">
-            <input id="name" type="text" placeholder="Ваше имя">
-        </div>
-
-        <div class="calc-row">
-            <input id="phone" type="tel" placeholder="Ваш телефон">
-        </div>
-
-        <div class="calc-row">
-            <input id="details" type="text" placeholder="Откуда → Куда, авто, ситуация">
-        </div>
-
-        <button class="form-submit" onclick="submitForm()">Позвонить</button>
-
-        <div class="messengers">
-            <button class="msg-btn whatsapp" onclick="sendWhatsApp()">WhatsApp</button>
-            <button class="msg-btn telegram" onclick="sendTelegram()">Telegram</button>
-        </div>
+<section class="fade">
+    <h2>Наши услуги</h2>
+    <div class="cards">
+        <div class="card">Эвакуация легковых авто</div>
+        <div class="card">Эвакуация внедорожников</div>
+        <div class="card">Перевозка мотоциклов</div>
+        <div class="card">Эвакуация спецтехники</div>
     </div>
-</div>
+</section>
 
-<script>
-// PWA кнопка
-let deferredPrompt;
-const installBtn = document.getElementById("installBtn");
+<section class="fade">
+    <h2>Почему выбирают нас</h2>
+    <div class="cards">
+        <div class="card">Подача от 15 минут</div>
+        <div class="card">Работаем 24/7</div>
+        <div class="card">Опыт более 8 лет</div>
+        <div class="card">Аккуратная погрузка</div>
+    </div>
+</section>
 
-window.addEventListener("beforeinstallprompt", (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    installBtn.style.display = "block";
-});
+<section class="fade">
+    <h2>Контакты</h2>
+    <p style="text-align:center;">
+        <a class="phone" href="tel:+79888717018">+7 (988) 871‑70‑18</a><br><br>
+        Краснодар и край
+    </p>
 
-installBtn.addEventListener("click", () => {
-    installBtn.style.display = "none";
-    deferredPrompt.prompt();
-});
+    <div class="messengers">
+        <button class="msg-btn whatsapp" onclick="window.open('https://wa.me/79888717018','_blank')">WhatsApp</button>
+        <button class="msg-btn telegram" onclick="window.open('https://t.me/your_username','_blank')">Telegram</button>
+    </div>
+</section>
 
-// Яндекс.Карты
-let map, route;
-let ymapsReady = false;
-
-ymaps.ready(() => {
-    ymapsReady = true;
-    map = new ymaps.Map("map", {
-        center: [45.035470, 38.975313],
-        zoom: 9
-    });
-});
-
-function detectRouteDistance() {
-    const from = document.getElementById("fromAddress").value.trim();
-    const to = document.getElementById("toAddress").value.trim();
-    const result = document.getElementById("calcResult");
-
-    if (!from || !to) {
-        result.textContent = "Введите оба адреса.";
-        return;
-    }
-
-    if (!ymapsReady) {
-        result.textContent = "Карта загружается…";
-        return;
-    }
-
-    result.textContent = "Строим маршрут…";
-
-    if (route) map.geoObjects.remove(route);
-
-    ymaps.route([from, to]).then(r => {
-        route = r;
-        map.geoObjects.add(route);
-        map.setBounds(route.getBounds());
-
-        const meters = route.getLength();
-        const km = Math.round(meters / 1000);
-
-        document.getElementById("distance")?.remove();
-        const hidden = document.createElement("input");
-        hidden.type = "hidden";
-        hidden.id = "distance";
-        hidden.value = km;
-        document.body.appendChild(hidden);
-
-        result.textContent = "Расстояние: ~ " + km + " км";
-    }).catch(() => {
-        result.textContent = "Маршрут не найден. Уточните адреса.";
-    });
-}
-
-function calcPrice() {
-    const km = parseFloat(document.getElementById("distance")?.value || "0");
-    const carType = parseFloat(document.getElementById("carType").value);
-
-    if (!km) {
-        document.getElementById("calcResult").textContent = "Сначала определите расстояние.";
-        return;
-    }
-
-    const basePerKm = 60;
-    const minCar = 1700;
-    const minCross = 1900;
-    const minTruck = 2200;
-
-    let minPrice = minCar;
-    if (carType === 1.1) minPrice = minCross;
-    if (carType === 1.3) minPrice = minTruck;
-
-    let price = km * basePerKm * carType;
-    if (price < minPrice) price = minPrice;
-
-    document.getElementById("calcResult").textContent =
-        "Цена эвакуации: ~ " + Math.round(price) + " ₽";
-}
-
-// Заявка и мессенджеры
-function submitForm() {
-    const phone = "+7XXXXXXXXXX"; // твой номер
-    window.location.href = "tel:" + phone;
-}
-
-function sendWhatsApp() {
-    const wa = "7XXXXXXXXXX"; // твой WhatsApp
-    window.open("https://wa.me/" + wa, "_blank");
-}
-
-function sendTelegram() {
-    const tg = "https://t.me/your_username"; // твой Telegram
-    window.open(tg, "_blank");
-}
-</script>
+<footer>
+    © 2026 Эвакуатор Краснодар — круглосуточно
+</footer>
 
 </body>
 </html>
