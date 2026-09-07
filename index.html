@@ -2,263 +2,619 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Эвакуатор Краснодар — круглосуточно</title>
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#000000">
-
-    <!-- ИКОНКА ПРИЛОЖЕНИЯ -->
-    <link rel="apple-touch-icon" href="icon.png">
-    <link rel="icon" type="image/png" href="icon.png">
+    <title>Эвакуатор Краснодар 24/7</title>
 
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
 
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --bg1: #05060a;
+            --bg2: #111827;
+            --accent: #f7c600;
+            --accent2: #ff7b00;
+            --text: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
 
         body {
-            background: radial-gradient(circle at top, #202b3b 0%, #05070a 45%, #000000 100%);
-            color: #ffffff;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color: var(--text);
+            background: radial-gradient(circle at top, #1f2937 0, #05060a 55%);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
         }
 
-        .page {
-            max-width: 480px;
+        .bg-anim {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
+            background:
+                radial-gradient(circle at 10% 20%, rgba(247,198,0,0.15) 0, transparent 40%),
+                radial-gradient(circle at 80% 0%, rgba(255,123,0,0.18) 0, transparent 45%),
+                radial-gradient(circle at 50% 100%, rgba(15,118,110,0.18) 0, transparent 50%);
+            animation: bgMove 18s infinite alternate;
+        }
+
+        @keyframes bgMove {
+            0% { transform: translate3d(0,0,0); }
+            100% { transform: translate3d(10px,-10px,0); }
+        }
+
+        .container {
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .header { text-align: center; padding: 8px 0; }
-        .logo-text { font-size: 24px; font-weight: 700; }
-        .city { font-size: 14px; opacity: 0.8; }
-
-        .hero {
-            background: #ffffff10;
-            backdrop-filter: blur(12px);
-            border-radius: 18px;
-            padding: 18px 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .hero-title { font-size: 22px; font-weight: 700; }
-        .hero-subtitle { font-size: 14px; opacity: 0.85; }
-
-        .hero-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 6px;
-        }
-
-        .tag {
-            font-size: 12px;
-            padding: 4px 10px;
-            border-radius: 999px;
-            background: #ffffff15;
+            padding: 20px 16px 40px;
         }
 
         .card {
-            background: #ffffff08;
-            border-radius: 16px;
-            padding: 14px 12px;
+            background: linear-gradient(145deg, rgba(15,23,42,0.95), rgba(3,7,18,0.95));
+            border-radius: 24px;
+            padding: 22px 18px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.7);
+            border: 1px solid rgba(148,163,184,0.25);
+            backdrop-filter: blur(12px);
+        }
+
+        header {
             display: flex;
-            flex-direction: column;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .logo-circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #f7c600, #ff7b00);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 25px rgba(247,198,0,0.7);
+            animation: pulse 2.5s infinite;
+        }
+
+        .logo-circle span {
+            font-size: 30px;
+            font-weight: 900;
+            color: #111827;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 25px rgba(247,198,0,0.7); }
+            50% { transform: scale(1.06); box-shadow: 0 0 40px rgba(247,198,0,0.9); }
+            100% { transform: scale(1); box-shadow: 0 0 25px rgba(247,198,0,0.7); }
+        }
+
+        .title-block {
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .title-block h1 {
+            margin: 0;
+            font-size: 28px;
+            letter-spacing: 0.03em;
+        }
+
+        .title-block h1 span {
+            color: var(--accent);
+        }
+
+        .title-block p {
+            margin: 4px 0 0;
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
+        .badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .badge {
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            border: 1px solid rgba(156,163,175,0.5);
+            color: #e5e7eb;
+        }
+
+        .badge.accent {
+            border-color: rgba(247,198,0,0.8);
+            color: var(--accent);
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+            gap: 18px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 800px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .hero-block {
+            border-radius: 18px;
+            padding: 16px 14px 18px;
+            background: radial-gradient(circle at top left, rgba(247,198,0,0.12), transparent 55%);
+            border: 1px solid rgba(55,65,81,0.8);
+        }
+
+        .hero-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hero-top h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .hero-top h2 span {
+            color: var(--accent);
+        }
+
+        .hero-top small {
+            font-size: 11px;
+            color: #9ca3af;
+        }
+
+        .hero-text {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #e5e7eb;
+        }
+
+        .hero-text strong {
+            color: var(--accent);
+        }
+
+        .hero-actions {
+            margin-top: 14px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .btn-main {
+            flex: 1;
+            min-width: 180px;
+            background: linear-gradient(135deg, #f7c600, #ff7b00);
+            color: #111827;
+            border: none;
+            border-radius: 999px;
+            padding: 12px 18px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 12px 30px rgba(247,198,0,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .btn-main:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 16px 40px rgba(247,198,0,0.8);
+        }
+
+        .btn-main span.icon {
+            font-size: 18px;
+        }
+
+        .btn-secondary {
+            min-width: 140px;
+            border-radius: 999px;
+            border: 1px solid rgba(156,163,175,0.7);
+            background: rgba(17,24,39,0.9);
+            color: #e5e7eb;
+            padding: 10px 14px;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
             gap: 6px;
         }
 
-        .card-title { font-size: 16px; font-weight: 600; }
-        .card-text { font-size: 13px; opacity: 0.9; }
-
-        .btn-main {
-            display: block;
-            width: 100%;
-            margin-top: 8px;
-            padding: 16px;
-            font-size: 18px;
-            font-weight: 600;
-            text-align: center;
-            border-radius: 14px;
-            text-decoration: none;
-            color: #ffffff;
-            background: linear-gradient(135deg, #ff7b39, #ff3b3b);
-            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.6);
+        .btn-secondary span.icon {
+            font-size: 16px;
+            color: var(--accent);
         }
 
-        .social-block {
-            background: #ffffff08;
+        .hero-bottom {
+            margin-top: 14px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        .hero-bottom div {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .hero-bottom span.dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+
+        .side-block {
+            border-radius: 18px;
+            padding: 14px 12px 16px;
+            background: radial-gradient(circle at top right, rgba(56,189,248,0.18), transparent 55%);
+            border: 1px solid rgba(55,65,81,0.8);
+        }
+
+        .side-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .side-title h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .side-title small {
+            font-size: 11px;
+            color: #9ca3af;
+        }
+
+        .calc-block {
+            margin-top: 10px;
+            font-size: 13px;
+        }
+
+        .calc-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .calc-row input,
+        .calc-row select {
+            flex: 1;
+            padding: 8px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(75,85,99,0.9);
+            background: rgba(15,23,42,0.9);
+            color: #e5e7eb;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .calc-row input::placeholder {
+            color: #6b7280;
+        }
+
+        .calc-btn {
+            margin-top: 8px;
+            width: 100%;
+            border-radius: 999px;
+            border: none;
+            padding: 9px 12px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: #052e16;
+        }
+
+        .calc-result {
+            margin-top: 8px;
+            font-size: 13px;
+            color: #a5b4fc;
+        }
+
+        .map-block {
+            margin-top: 12px;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid rgba(55,65,81,0.9);
+        }
+
+        .map-block iframe {
+            width: 100%;
+            height: 190px;
+            border: 0;
+        }
+
+        .form-block {
+            margin-top: 16px;
             border-radius: 16px;
-            padding: 16px;
+            padding: 12px 10px 14px;
+            background: radial-gradient(circle at bottom left, rgba(247,198,0,0.12), transparent 55%);
+            border: 1px dashed rgba(148,163,184,0.7);
+            font-size: 13px;
+        }
+
+        .form-block h4 {
+            margin: 0 0 6px;
+            font-size: 14px;
+        }
+
+        .form-row {
             display: flex;
             flex-direction: column;
-            gap: 14px;
-        }
-
-        .social-icons {
-            display: flex;
-            justify-content: center;
-            gap: 18px;
-            flex-wrap: wrap;
-        }
-
-        .social-icons a {
-            width: 60px;
-            height: 60px;
-            background: #ffffff12;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(6px);
-        }
-
-        .social-icons img {
-            width: 32px;
-            height: 32px;
-        }
-
-        .stars {
-            display: flex;
-            justify-content: center;
             gap: 6px;
             margin-top: 6px;
         }
 
-        .stars img {
-            width: 26px;
-            filter: invert(80%) sepia(90%) saturate(500%) hue-rotate(5deg);
+        .form-row label {
+            font-size: 11px;
+            color: #9ca3af;
         }
 
-        .bottom-bar {
-            position: sticky;
-            bottom: 0;
-            background: #000000e0;
-            backdrop-filter: blur(16px);
-            padding: 10px 16px 14px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            max-width: 480px;
-            margin: 0 auto;
+        .form-row input,
+        .form-row textarea {
+            padding: 8px 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(75,85,99,0.9);
+            background: rgba(15,23,42,0.9);
+            color: #e5e7eb;
+            font-size: 13px;
+            outline: none;
+            resize: vertical;
         }
 
-        .bottom-text {
-            font-size: 12px;
-            opacity: 0.8;
+        .form-row textarea {
+            min-height: 60px;
+        }
+
+        .form-submit {
+            margin-top: 8px;
+            width: 100%;
+            border-radius: 999px;
+            border: none;
+            padding: 9px 12px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            color: #1b0b02;
+        }
+
+        .form-note {
+            margin-top: 6px;
+            font-size: 11px;
+            color: #6b7280;
+        }
+
+        footer {
+            margin-top: 18px;
+            font-size: 11px;
+            color: #6b7280;
             text-align: center;
         }
 
-        .phone-link {
-            color: #ffb36b;
-            text-decoration: none;
-            font-weight: 500;
+        footer span {
+            color: var(--accent);
         }
     </style>
 </head>
 <body>
-    <div class="page">
 
-        <header class="header">
-            <div class="logo-text">Эвакуатор Краснодар</div>
-            <div class="city">Работаем по городу и краю</div>
+<div class="bg-anim"></div>
+
+<div class="container">
+    <div class="card">
+
+        <header>
+            <div class="logo-circle">
+                <span>Э</span>
+            </div>
+            <div class="title-block">
+                <h1><span>Эвакуатор</span> Краснодар 24/7</h1>
+                <p>Быстрая подача • Аккуратная погрузка • Честная цена</p>
+                <div class="badges">
+                    <div class="badge accent">Работаем по всему Краснодару и краю</div>
+                    <div class="badge">Легковые, кроссоверы, малые грузовики</div>
+                    <div class="badge">Оплата наличными и переводом</div>
+                </div>
+            </div>
         </header>
 
-        <section class="hero">
-            <div class="hero-title">Круглосуточный эвакуатор</div>
-            <div class="hero-subtitle">Быстро приедем, аккуратно погрузим и доставим авто.</div>
+        <div class="main-grid">
+            <!-- Левая часть: герой + кнопки -->
+            <div class="hero-block">
+                <div class="hero-top">
+                    <div>
+                        <h2>Нужен эвакуатор <span>сейчас?</span></h2>
+                        <small>Среднее время подачи по городу: 25–40 минут</small>
+                    </div>
+                    <div>
+                        <small>Краснодар • Край</small><br>
+                        <small style="color:#a5b4fc;">Работаем 24 часа в сутки</small>
+                    </div>
+                </div>
 
-            <div class="hero-tags">
-                <span class="tag">24/7</span>
-                <span class="tag">Доступные цены</span>
-                <span class="tag">Легковые и кроссоверы</span>
+                <div class="hero-text">
+                    <strong>Сломался автомобиль, ДТП, не заводится, сел АКБ?</strong><br>
+                    Заберём аккуратно, без лишних разговоров и накруток.  
+                    Сразу скажем итоговую стоимость по телефону.
+                </div>
+
+                <div class="hero-actions">
+                    <!-- ВАЖНО: сюда поставь свой номер -->
+                    <a href="tel:+7XXXXXXXXXX" class="btn-main">
+                        <span class="icon">📞</span>
+                        <span>Вызвать эвакуатор</span>
+                    </a>
+
+                    <button class="btn-secondary" onclick="scrollToForm()">
+                        <span class="icon">📝</span>
+                        <span>Оставить заявку онлайн</span>
+                    </button>
+                </div>
+
+                <div class="hero-bottom">
+                    <div>
+                        <span class="dot"></span>
+                        <span>Подача по Краснодару и ближайшим районам</span>
+                    </div>
+                    <div>
+                        <span class="dot"></span>
+                        <span>Фиксированная цена до погрузки</span>
+                    </div>
+                    <div>
+                        <span class="dot"></span>
+                        <span>Опытные водители, аккуратная работа</span>
+                    </div>
+                </div>
             </div>
 
-            <a class="btn-main" href="tel:+79888717018">Позвонить эвакуатору</a>
-        </section>
+            <!-- Правая часть: калькулятор + карта + форма -->
+            <div class="side-block">
+                <div class="side-title">
+                    <h3>Калькулятор стоимости эвакуации</h3>
+                    <small>Оценка предварительной цены</small>
+                </div>
 
-        <section class="card">
-            <div class="card-title">Когда нужен эвакуатор</div>
-            <div class="card-text">
-                • ДТП или поломка<br>
-                • Машина не заводится<br>
-                • Нужно перевезти авто<br>
-                • Низкий клиренс
+                <div class="calc-block">
+                    <div class="calc-row">
+                        <input type="number" id="distance" placeholder="Расстояние, км (по трассе/городу)">
+                        <select id="carType">
+                            <option value="1.0">Легковой автомобиль</option>
+                            <option value="1.1">Кроссовер / минивэн</option>
+                            <option value="1.3">Малый грузовик</option>
+                        </select>
+                    </div>
+                    <div class="calc-row">
+                        <input type="number" id="extraWait" placeholder="Ожидание, минут (если нужно)">
+                        <input type="number" id="cityKm" placeholder="Пробег по городу, км">
+                    </div>
+                    <button class="calc-btn" onclick="calcPrice()">Рассчитать стоимость</button>
+                    <div class="calc-result" id="calcResult">
+                        Введите расстояние и тип авто, чтобы увидеть примерную цену.
+                    </div>
+                </div>
+
+                <div class="map-block">
+                    <!-- Можно заменить на Google Maps, если хочешь -->
+                    <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A1b4f3c9c9c9c9c9c9c9c9c9c9c9c9c9&amp;source=constructor"
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+
+                <div class="form-block" id="requestForm">
+                    <h4>Быстрая заявка на эвакуатор</h4>
+                    <div class="form-row">
+                        <label for="name">Имя</label>
+                        <input id="name" type="text" placeholder="Как к вам обращаться">
+                    </div>
+                    <div class="form-row">
+                        <label for="phone">Телефон</label>
+                        <input id="phone" type="tel" placeholder="+7 ___ ___ __ __">
+                    </div>
+                    <div class="form-row">
+                        <label for="details">Адрес, авто, ситуация</label>
+                        <textarea id="details" placeholder="Напишите: откуда забирать, марка авто, что случилось"></textarea>
+                    </div>
+                    <button class="form-submit" onclick="submitForm()">Отправить заявку (через телефон)</button>
+                    <div class="form-note">
+                        Заявка не уходит на сервер — мы просто сформируем текст и откроем звонок/сообщение, чтобы вы ничего не забыли.
+                    </div>
+                </div>
             </div>
-        </section>
+        </div>
 
-        <section class="card">
-            <div class="card-title">Контакты</div>
-            <a class="phone-link" href="tel:+79888717018">+7 (988) 871‑70‑18</a>
-        </section>
-
-        <!-- КАРТА ЯГОДИНА -->
-        <section class="card">
-            <div class="card-title">Где мы находимся</div>
-            <div class="card-text">Район Ягодина, Краснодар. Работаем по всему городу.</div>
-
-            <div style="width:100%; height:260px; border-radius:14px; overflow:hidden; margin-top:10px;">
-                <iframe
-                    src="https://yandex.ru/map-widget/v1/?um=constructor%3A1c3e6c5f0f3f4b2d8e9f7a1c4d2b9e8f1a7c6b5d3e2f1c0b&source=constructor"
-                    width="100%" height="260" frameborder="0">
-                </iframe>
-            </div>
-        </section>
-
-        <!-- СОЦСЕТИ -->
-        <section class="social-block">
-            <div class="card-title" style="text-align:center;">Мы в соцсетях</div>
-
-            <div class="social-icons">
-
-                <a href="https://t.me/ТВОЙ_ТЕЛЕГРАМ">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg">
-                </a>
-
-                <a href="https://vk.com/ТВОЙ_VK">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/21/VK.com-logo.svg">
-                </a>
-
-                <a href="https://ok.ru/ТВОЙ_МАХ">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Ok.ru_logo.svg">
-                </a>
-
-                <a href="https://wa.me/79888717018">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg">
-                </a>
-
-                <a href="https://www.avito.ru/ТВОЙ_ПРОФИЛЬ">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Avito_logo.svg">
-                </a>
-
-            </div>
-
-            <div class="stars">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg">
-            </div>
-
-            <div style="text-align:center; font-size:13px; opacity:0.9;">
-                Рейтинг 5.0 — клиенты рекомендуют нас
-            </div>
-        </section>
+        <footer>
+            © <span>2026</span> Эвакуатор Краснодар • Все права защищены  
+            <br>Сайт сделан как лёгкое приложение — можно добавить на главный экран.
+        </footer>
 
     </div>
+</div>
 
-    <div class="bottom-bar">
-        <a class="btn-main" href="tel:+79888717018">Вызвать эвакуатор сейчас</a>
-        <div class="bottom-text">Нажмите кнопку — мы перезвоним.</div>
-    </div>
+<script>
+    // Регистрация сервис-воркера для PWA
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js').catch(() => {});
+    }
+
+    function scrollToForm() {
+        const form = document.getElementById('requestForm');
+        if (form) {
+            form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    function calcPrice() {
+        const basePerKm = 70; // базовая цена за км
+        const cityPerKm = 50; // по городу
+        const waitPerMin = 10; // ожидание
+
+        const distance = parseFloat(document.getElementById('distance').value || '0');
+        const cityKm = parseFloat(document.getElementById('cityKm').value || '0');
+        const extraWait = parseFloat(document.getElementById('extraWait').value || '0');
+        const carType = parseFloat(document.getElementById('carType').value || '1');
+
+        if (!distance && !cityKm) {
+            document.getElementById('calcResult').textContent =
+                'Укажите хотя бы расстояние или пробег по городу.';
+            return;
+        }
+
+        let price =
+            distance * basePerKm * carType +
+            cityKm * cityPerKm +
+            extraWait * waitPerMin;
+
+        if (price < 2000) price = 2000; // минималка
+
+        document.getElementById('calcResult').textContent =
+            'Примерная стоимость эвакуации: ~ ' + Math.round(price) +
+            ' ₽ (точную цену скажем по телефону).';
+    }
+
+    function submitForm() {
+        const name = document.getElementById('name').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const details = document.getElementById('details').value.trim();
+
+        let text = 'Заявка на эвакуатор.%0A';
+        if (name) text += 'Имя: ' + name + '%0A';
+        if (phone) text += 'Телефон: ' + phone + '%0A';
+        if (details) text += 'Ситуация: ' + details + '%0A';
+
+        // Вариант: открыть звонок с номером
+        // ВАЖНО: сюда поставь свой номер
+        const callNumber = '+7XXXXXXXXXX';
+
+        // Откроем просто звонок, а текст пусть будет подсказкой для оператора
+        alert('Сейчас откроется звонок. Сформированный текст заявки:\n\n' +
+            decodeURIComponent(text.replace(/%0A/g, '\n')));
+
+        window.location.href = 'tel:' + callNumber;
+    }
+</script>
 
 </body>
 </html>
