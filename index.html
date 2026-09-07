@@ -8,9 +8,6 @@
     <!-- PWA manifest -->
     <link rel="manifest" href="manifest.json">
 
-    <!-- Yandex Maps API (нужен для расчёта маршрута) -->
-    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU"></script>
-
     <style>
         body {
             margin: 0;
@@ -78,10 +75,6 @@
             font-size: 18px;
             color: #f7c600;
         }
-        /* карта скрыта */
-        #map {
-            display: none;
-        }
         .form-block {
             background: #111;
             padding: 20px;
@@ -127,7 +120,7 @@
     <button class="install-btn" id="installBtn">📱 Сохранить на главный экран</button>
 
     <div class="calc-block">
-        <h2>Расчёт стоимости (как в такси)</h2>
+        <h2>Расчёт ориентировочной стоимости</h2>
 
         <div class="calc-row">
             <input type="text" id="fromAddress" placeholder="Откуда забрать">
@@ -145,12 +138,9 @@
             </select>
         </div>
 
-        <button class="calc-btn" onclick="detectRouteDistance()">Определить расстояние</button>
-        <button class="calc-btn" style="margin-top:8px;background:#f7c600;" onclick="calcPrice()">Рассчитать цену</button>
+        <button class="calc-btn" onclick="calcPrice()">Рассчитать цену</button>
 
-        <div id="calcResult">Введите адреса и нажмите «Определить расстояние»</div>
-
-        <div id="map"></div>
+        <div id="calcResult">Заполните поля и нажмите «Рассчитать цену».</div>
     </div>
 
     <div class="form-block">
@@ -197,74 +187,21 @@ installBtn.addEventListener("click", () => {
 });
 
 // =========================
-// Яндекс.Карты (скрытая карта)
-// =========================
-
-let map, route;
-let ymapsReady = false;
-
-ymaps.ready(() => {
-    ymapsReady = true;
-    map = new ymaps.Map("map", {
-        center: [45.035470, 38.975313],
-        zoom: 9
-    });
-});
-
-function detectRouteDistance() {
-    const from = document.getElementById("fromAddress").value.trim();
-    const to = document.getElementById("toAddress").value.trim();
-    const result = document.getElementById("calcResult");
-
-    if (!from || !to) {
-        result.textContent = "Введите оба адреса.";
-        return;
-    }
-
-    if (!ymapsReady) {
-        result.textContent = "Карта загружается…";
-        return;
-    }
-
-    result.textContent = "Строим маршрут…";
-
-    if (route) map.geoObjects.remove(route);
-
-    ymaps.route([from, to]).then(r => {
-        route = r;
-        map.geoObjects.add(route);
-
-        const meters = route.getLength();
-        const km = Math.round(meters / 1000);
-
-        document.getElementById("distance")?.remove();
-
-        const hidden = document.createElement("input");
-        hidden.type = "hidden";
-        hidden.id = "distance";
-        hidden.value = km;
-        document.body.appendChild(hidden);
-
-        result.textContent = "Расстояние: ~ " + km + " км";
-    }).catch(() => {
-        result.textContent = "Маршрут не найден. Уточните адреса.";
-    });
-}
-
-// =========================
-// РАСЧЁТ ЦЕНЫ
+// ОРИЕНТИРОВОЧНЫЙ РАСЧЁТ ЦЕНЫ
 // =========================
 
 function calcPrice() {
-    const km = parseFloat(document.getElementById("distance")?.value || "0");
+    const from = document.getElementById("fromAddress").value.trim();
+    const to = document.getElementById("toAddress").value.trim();
     const carType = parseFloat(document.getElementById("carType").value);
+    const result = document.getElementById("calcResult");
 
-    if (!km) {
-        document.getElementById("calcResult").textContent = "Сначала определите расстояние.";
+    if (!from || !to) {
+        result.textContent = "Заполните поля «Откуда» и «Куда».";
         return;
     }
 
-    const basePerKm = 60;
+    // Базовые минимальные цены (чуть ниже конкурентов)
     const minCar = 1700;
     const minCross = 1900;
     const minTruck = 2200;
@@ -273,11 +210,13 @@ function calcPrice() {
     if (carType === 1.1) minPrice = minCross;
     if (carType === 1.3) minPrice = minTruck;
 
-    let price = km * basePerKm * carType;
-    if (price < minPrice) price = minPrice;
+    // Делаем небольшой диапазон
+    const maxPrice = minPrice + 600;
 
-    document.getElementById("calcResult").textContent =
-        "Цена эвакуации: ~ " + Math.round(price) + " ₽";
+    result.textContent =
+        "Ориентировочная стоимость эвакуации: от " +
+        minPrice + " ₽ до " + maxPrice +
+        " ₽. Точную цену скажем по телефону.";
 }
 
 // =========================
