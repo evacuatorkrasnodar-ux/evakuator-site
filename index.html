@@ -8,116 +8,30 @@
     <!-- PWA manifest -->
     <link rel="manifest" href="manifest.json">
 
-    <!-- Yandex Maps API -->
-    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU"></script>
+    <!-- Яндекс.Карты с твоим API-ключом -->
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=fc0f9182-0eee-4e83-bed3-8e561c88c4d5&lang=ru_RU"></script>
 
     <style>
-        body {
-            margin: 0;
-            background: #0a0a0a;
-            font-family: Arial, sans-serif;
-            color: #fff;
-        }
-        .container {
-            max-width: 900px;
-            margin: auto;
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
-            color: #f7c600;
-            margin-bottom: 10px;
-        }
-        .install-btn {
-            width: 100%;
-            padding: 14px;
-            background: #0088ff;
-            border: none;
-            border-radius: 10px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-bottom: 20px;
-            display: none;
-        }
-        .calc-block {
-            background: #111;
-            padding: 20px;
-            border-radius: 15px;
-            border: 1px solid #333;
-            margin-bottom: 20px;
-        }
-        .calc-row {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-            flex-wrap: wrap;
-        }
-        input, select {
-            flex: 1;
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px solid #444;
-            background: #1a1a1a;
-            color: #fff;
-            font-size: 15px;
-        }
-        .calc-btn {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #f7c600, #ff7b00);
-            border: none;
-            border-radius: 10px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            color: #000;
-        }
-        #calcResult {
-            margin-top: 10px;
-            font-size: 18px;
-            color: #f7c600;
-        }
-        #map {
-            width: 100%;
-            height: 250px;
-            border-radius: 15px;
-            margin-top: 15px;
-        }
-        .form-block {
-            background: #111;
-            padding: 20px;
-            border-radius: 15px;
-            border: 1px solid #333;
-        }
-        .form-submit {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #ff7b00, #f7c600);
-            border: none;
-            border-radius: 10px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            color: #000;
-            margin-top: 10px;
-        }
-        .messengers {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        .msg-btn {
-            flex: 1;
-            padding: 12px;
-            border-radius: 10px;
-            border: none;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .whatsapp { background: #25D366; color: #000; }
-        .telegram { background: #0088cc; color: #fff; }
+        body { margin:0; background:#0a0a0a; font-family:Arial,sans-serif; color:#fff; }
+        .container { max-width:900px; margin:auto; padding:20px; }
+        h1 { text-align:center; color:#f7c600; margin-bottom:10px; }
+        .install-btn { width:100%; padding:14px; background:#0088ff; border:none; border-radius:10px;
+                       font-size:18px; font-weight:bold; cursor:pointer; margin-bottom:20px; display:none; }
+        .calc-block { background:#111; padding:20px; border-radius:15px; border:1px solid #333; margin-bottom:20px; }
+        .calc-row { display:flex; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
+        input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
+                        background:#1a1a1a; color:#fff; font-size:15px; }
+        .calc-btn { width:100%; padding:14px; background:linear-gradient(135deg,#f7c600,#ff7b00);
+                    border:none; border-radius:10px; font-size:18px; font-weight:bold; cursor:pointer; color:#000; }
+        #calcResult { margin-top:10px; font-size:18px; color:#f7c600; }
+        #map { width:100%; height:250px; border-radius:15px; margin-top:15px; }
+        .form-block { background:#111; padding:20px; border-radius:15px; border:1px solid #333; }
+        .form-submit { width:100%; padding:14px; background:linear-gradient(135deg,#ff7b00,#f7c600);
+                       border:none; border-radius:10px; font-size:18px; font-weight:bold; cursor:pointer; color:#000; margin-top:10px; }
+        .messengers { display:flex; gap:10px; margin-top:10px; }
+        .msg-btn { flex:1; padding:12px; border-radius:10px; border:none; font-size:16px; font-weight:bold; cursor:pointer; }
+        .whatsapp { background:#25D366; color:#000; }
+        .telegram { background:#0088cc; color:#fff; }
     </style>
 </head>
 <body>
@@ -234,12 +148,12 @@ function detectRouteDistance() {
     ymaps.route([from, to]).then(r => {
         route = r;
         map.geoObjects.add(route);
+        map.setBounds(route.getBounds());
 
         const meters = route.getLength();
         const km = Math.round(meters / 1000);
 
         document.getElementById("distance")?.remove();
-
         const hidden = document.createElement("input");
         hidden.type = "hidden";
         hidden.id = "distance";
