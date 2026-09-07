@@ -1,212 +1,111 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Эвакуатор Краснодар 24/7</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Эвакуатор Краснодар 24/7</title>
 
-<style>
-    body {
-        margin: 0;
-        background: #0a0a0a;
-        font-family: 'Montserrat', sans-serif;
-        color: white;
-        overflow-x: hidden;
-    }
-
-    /* Анимация плавного появления */
-    .fade {
-        opacity: 0;
-        transform: translateY(20px);
-        animation: fadeIn 1.2s forwards;
-    }
-
-    @keyframes fadeIn {
-        to {
-            opacity: 1;
-            transform: translateY(0);
+    <style>
+        body {
+            margin: 0;
+            background: #0a0a0a;
+            font-family: Arial, sans-serif;
+            color: #fff;
         }
-    }
 
-    /* Главный экран */
-    header {
-        height: 90vh;
-        background: url('https://i.imgur.com/8kQf4mP.jpeg') center/cover no-repeat fixed;
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-    }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 20px;
+        }
 
-    header::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: rgba(0,0,0,0.55);
-    }
+        h1 {
+            text-align: center;
+            color: #f7c600;
+            margin-bottom: 20px;
+        }
 
-    .hero {
-        position: relative;
-        z-index: 2;
-        max-width: 700px;
-    }
+        .block {
+            background: #111;
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid #333;
+            margin-bottom: 20px;
+        }
 
-    .hero h1 {
-        font-size: 52px;
-        font-weight: 800;
-        color: #FFD700;
-        text-shadow: 0 0 20px #000;
-    }
+        .btn-call {
+            width: 100%;
+            padding: 14px;
+            background: #f7c600;
+            border: none;
+            border-radius: 10px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #000;
+            margin-top: 10px;
+        }
 
-    .hero p {
-        font-size: 22px;
-        margin-top: 10px;
-        opacity: 0.9;
-    }
+        .messengers {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
 
-    .btn {
-        margin-top: 25px;
-        background: linear-gradient(135deg, #FFD700, #FF7B00);
-        padding: 16px 40px;
-        border-radius: 12px;
-        color: black;
-        font-weight: 700;
-        font-size: 22px;
-        text-decoration: none;
-        display: inline-block;
-        transition: 0.3s;
-    }
+        .msg-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
 
-    .btn:hover {
-        transform: scale(1.08);
-        box-shadow: 0 0 20px #FFD700;
-    }
-
-    /* Блоки */
-    section {
-        padding: 60px 20px;
-        max-width: 1100px;
-        margin: auto;
-    }
-
-    h2 {
-        text-align: center;
-        font-size: 38px;
-        color: #FFD700;
-        margin-bottom: 40px;
-    }
-
-    .cards {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 25px;
-    }
-
-    .card {
-        background: #111;
-        padding: 25px;
-        border-radius: 15px;
-        border: 1px solid #333;
-        text-align: center;
-        transition: 0.3s;
-        font-size: 20px;
-    }
-
-    .card:hover {
-        border-color: #FFD700;
-        transform: translateY(-8px);
-        box-shadow: 0 0 15px #FFD70055;
-    }
-
-    /* Контакты */
-    .phone {
-        font-size: 32px;
-        color: #FFD700;
-        font-weight: 700;
-        text-decoration: none;
-    }
-
-    .messengers {
-        display: flex;
-        gap: 15px;
-        margin-top: 20px;
-        justify-content: center;
-    }
-
-    .msg-btn {
-        padding: 14px 20px;
-        border-radius: 12px;
-        font-size: 18px;
-        font-weight: bold;
-        border: none;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-
-    .msg-btn:hover {
-        transform: scale(1.08);
-    }
-
-    .whatsapp { background:#25D366; color:#000; }
-    .telegram { background:#0088cc; color:#fff; }
-
-    footer {
-        text-align: center;
-        padding: 40px;
-        background: #111;
-        color: #aaa;
-        margin-top: 40px;
-    }
-</style>
+        .whatsapp { background:#25D366; color:#000; }
+        .telegram { background:#0088cc; color:#fff; }
+    </style>
 </head>
 
 <body>
 
-<header>
-    <div class="hero fade">
-        <h1>Эвакуатор Краснодар 24/7</h1>
-        <p>Быстро • Надёжно • Круглосуточно</p>
-        <a class="btn" href="tel:+79888717018">Вызвать эвакуатор</a>
+<div class="container">
+
+    <h1>Эвакуатор Краснодар 24/7</h1>
+
+    <div class="block">
+        <h2>Наши услуги</h2>
+        <p>• Эвакуация легковых авто</p>
+        <p>• Эвакуация внедорожников</p>
+        <p>• Перевозка мотоциклов</p>
+        <p>• Эвакуация спецтехники</p>
     </div>
-</header>
 
-<section class="fade">
-    <h2>Наши услуги</h2>
-    <div class="cards">
-        <div class="card">Эвакуация легковых авто</div>
-        <div class="card">Эвакуация внедорожников</div>
-        <div class="card">Перевозка мотоциклов</div>
-        <div class="card">Эвакуация спецтехники</div>
+    <div class="block">
+        <h2>Почему мы</h2>
+        <p>• Подача от 15 минут</p>
+        <p>• Работаем круглосуточно</p>
+        <p>• Опыт более 8 лет</p>
+        <p>• Аккуратная погрузка</p>
     </div>
-</section>
 
-<section class="fade">
-    <h2>Почему выбирают нас</h2>
-    <div class="cards">
-        <div class="card">Подача от 15 минут</div>
-        <div class="card">Работаем 24/7</div>
-        <div class="card">Опыт более 8 лет</div>
-        <div class="card">Аккуратная погрузка</div>
+    <div class="block">
+        <h2>Контакты</h2>
+        <p style="font-size:24px; color:#f7c600; font-weight:bold;">
+            +7 (988) 871‑70‑18
+        </p>
+
+        <button class="btn-call" onclick="window.location.href='tel:+79888717018'">
+            Позвонить
+        </button>
+
+        <div class="messengers">
+            <button class="msg-btn whatsapp" onclick="window.open('https://wa.me/79888717018','_blank')">WhatsApp</button>
+            <button class="msg-btn telegram" onclick="window.open('https://t.me/your_username','_blank')">Telegram</button>
+        </div>
     </div>
-</section>
 
-<section class="fade">
-    <h2>Контакты</h2>
-    <p style="text-align:center;">
-        <a class="phone" href="tel:+79888717018">+7 (988) 871‑70‑18</a><br><br>
-        Краснодар и край
-    </p>
-
-    <div class="messengers">
-        <button class="msg-btn whatsapp" onclick="window.open('https://wa.me/79888717018','_blank')">WhatsApp</button>
-        <button class="msg-btn telegram" onclick="window.open('https://t.me/your_username','_blank')">Telegram</button>
-    </div>
-</section>
-
-<footer>
-    © 2026 Эвакуатор Краснодар — круглосуточно
-</footer>
+</div>
 
 </body>
 </html>
