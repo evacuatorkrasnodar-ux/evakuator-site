@@ -131,6 +131,44 @@ ymaps.ready(() => {
         center: [45.035470, 38.975313],
         zoom: 9
     });
+
+    // Иконка эвакуатора
+    var evacIcon = new ymaps.Placemark([45.035470, 38.975313], {
+        balloonContent: 'Эвакуатор Краснодар 24/7'
+    }, {
+        iconLayout: 'default#image',
+        iconImageHref: 'https://cdn-icons-png.flaticon.com/512/743/743131.png',
+        iconImageSize: [40, 40],
+        iconImageOffset: [-20, -20]
+    });
+
+    map.geoObjects.add(evacIcon);
+
+    // Кнопка Навигатора
+    var navButton = new ymaps.control.Button({
+        data: { content: "🧭 Открыть в Навигаторе" },
+        options: { maxWidth: 200 }
+    });
+
+    navButton.events.add('click', function () {
+        const from = document.getElementById("fromAddress").value.trim();
+        const to = document.getElementById("toAddress").value.trim();
+
+        if (!from || !to) {
+            alert("Введите адреса!");
+            return;
+        }
+
+        window.open(
+            "yandexnavi://build_route_on_map?text=" + encodeURIComponent(from + " - " + to),
+            "_blank"
+        );
+    });
+
+    map.controls.add(navButton);
+
+    // Авто‑заполнение адреса
+    autoFillFrom();
 });
 
 function detectRouteDistance() {
@@ -170,6 +208,21 @@ function detectRouteDistance() {
         result.textContent = "Расстояние: ~ " + km + " км";
     }).catch(() => {
         result.textContent = "Маршрут не найден. Уточните адреса.";
+    });
+}
+
+// =========================
+// Авто‑заполнение адреса
+// =========================
+
+function autoFillFrom() {
+    ymaps.geolocation.get().then(function (res) {
+        var userCoords = res.geoObjects.get(0).geometry.getCoordinates();
+
+        ymaps.geocode(userCoords).then(function (geo) {
+            var address = geo.geoObjects.get(0).getAddressLine();
+            document.getElementById("fromAddress").value = address;
+        });
     });
 }
 
