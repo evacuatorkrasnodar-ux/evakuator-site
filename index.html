@@ -14,7 +14,7 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
-<!-- Яндекс.Карты API 3.0 — БЕЗ ПРОБЕЛОВ -->
+<!-- Яндекс.Карты API 3.0 -->
 <script src="https://api-maps.yandex.ru/v3/?apikey=fc0f9182-0eee-4e83-bed3-8e561c88c4d5&lang=ru_RU"></script>
 
 <style>
@@ -159,7 +159,7 @@ ymaps3.ready.then(() => {
         }
     });
 
-    const layer = new ymaps3.YMapDefaultLayer();
+    const layer = new ymaps3.YMapDefaultSchemeLayer();
     map.addChild(layer);
 
     const controls = new ymaps3.YMapControls({ position: 'right' });
