@@ -251,6 +251,34 @@ function sendTelegram() {
     window.open("https://t.me/", "_blank"); // добавишь позже
 }
 </script>
+<script>
+// ======== ТЕСТ РАБОТЫ ЯНДЕКС КАРТ ========
+
+ymaps.ready(function () {
+    console.log("YM Ready: API загружен");
+
+    // Пробуем построить тестовый маршрут
+    ymaps.route(["Краснодар", "Анапа"]).then(function (route) {
+        console.log("Маршрут построен — ключ работает");
+        const testBox = document.createElement("div");
+        testBox.style.padding = "10px";
+        testBox.style.margin = "10px 0";
+        testBox.style.background = "#113311";
+        testBox.style.border = "1px solid #44aa44";
+        testBox.innerText = "✔ Яндекс.Карты работают. Маршрут строится.";
+        document.body.appendChild(testBox);
+    }).catch(function (err) {
+        console.log("Ошибка маршрута:", err);
+        const testBox = document.createElement("div");
+        testBox.style.padding = "10px";
+        testBox.style.margin = "10px 0";
+        testBox.style.background = "#331111";
+        testBox.style.border = "1px solid #aa4444";
+        testBox.innerText = "❌ Маршрут НЕ строится. Ключ или домен не разрешён.";
+        document.body.appendChild(testBox);
+    });
+});
+</script>
 
 </body>
 </html>
