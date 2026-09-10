@@ -37,7 +37,16 @@ if ('serviceWorker' in navigator) {
 <style>
 body { margin:0; background:#0a0a0a; font-family:Arial,sans-serif; color:#fff; }
 .container { max-width:900px; margin:auto; padding:20px; }
-h1 { text-align:center; color:#f7c600; margin-bottom:10px; }
+
+h1 { text-align:center; color:#f7c600; margin-bottom:5px; }
+
+.phone-top {
+  text-align:center;
+  font-size:22px;
+  font-weight:bold;
+  color:#fff;
+  margin-top:0;
+}
 
 .section {
   background:#111;
@@ -56,22 +65,74 @@ h1 { text-align:center; color:#f7c600; margin-bottom:10px; }
 }
 
 .calc-row { display:flex; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
-input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
-                background:#1a1a1a; color:#fff; font-size:15px; }
-.calc-btn { width:100%; padding:14px; background:linear-gradient(135deg,#f7c600,#ff7b00);
-            border:none; border-radius:10px; font-size:18px; font-weight:bold; cursor:pointer; color:#000; }
-#calcResult { margin-top:10px; font-size:18px; color:#f7c600; }
-#map { width:100%; height:250px; border-radius:15px; margin-top:15px; }
+input, select {
+  flex:1;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid #444;
+  background:#1a1a1a;
+  color:#fff;
+  font-size:15px;
+}
 
-.form-submit { width:100%; padding:14px; background:linear-gradient(135deg,#ff7b00,#f7c600);
-               border:none; border-radius:10px; font-size:18px; font-weight:bold; cursor:pointer; color:#000; margin-top:10px; }
+.calc-btn {
+  width:100%;
+  padding:14px;
+  background:linear-gradient(135deg,#f7c600,#ff7b00);
+  border:none;
+  border-radius:10px;
+  font-size:18px;
+  font-weight:bold;
+  cursor:pointer;
+  color:#000;
+}
+
+#calcResult { margin-top:10px; font-size:18px; color:#f7c600; }
+
+#map {
+  width:100%;
+  height:250px;
+  border-radius:15px;
+  margin-top:15px;
+}
+
+.form-submit {
+  width:100%;
+  padding:14px;
+  background:linear-gradient(135deg,#ff7b00,#f7c600);
+  border:none;
+  border-radius:10px;
+  font-size:18px;
+  font-weight:bold;
+  cursor:pointer;
+  color:#000;
+  margin-top:10px;
+}
+
 .messengers { display:flex; gap:10px; margin-top:10px; }
-.msg-btn { flex:1; padding:12px; border-radius:10px; border:none; font-size:16px; font-weight:bold; cursor:pointer; }
+.msg-btn {
+  flex:1;
+  padding:12px;
+  border-radius:10px;
+  border:none;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
 .whatsapp { background:#25D366; color:#000; }
 .telegram { background:#0088cc; color:#fff; }
 
-.nav-btn { width:100%; padding:12px; margin-top:10px; border-radius:10px; border:none;
-           background:#222; color:#fff; font-size:15px; cursor:pointer; }
+.nav-btn {
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border-radius:10px;
+  border:none;
+  background:#222;
+  color:#fff;
+  font-size:15px;
+  cursor:pointer;
+}
 
 .avito-block {
   background:#111;
@@ -106,10 +167,13 @@ input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
 
 <h1>Эвакуатор Краснодар 24/7</h1>
 
-<!-- Кнопка установки приложения -->
+<p class="phone-top">
+  📞 <a href="tel:+79888717018" style="color:#f7c600; text-decoration:none;">+7 (988) 871‑70‑18</a>
+</p>
+
 <button id="installBtn" onclick="installApp()">Установить приложение</button>
 
-<!-- ======== ВЕРХ САЙТА — «ПОЧЕМУ ВЫБИРАЮТ НАС» ======== -->
+<!-- ======== ВЕРХ — ПОЧЕМУ ВЫБИРАЮТ НАС ======== -->
 
 <section class="section">
   <h2>Почему выбирают нас</h2>
@@ -175,7 +239,7 @@ input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
   </div>
 </section>
 
-<!-- ======== НИЗ САЙТА — ОТЗЫВЫ, РЕЙТИНГ, АВИТО ======== -->
+<!-- ======== НИЗ — ОТЗЫВЫ, РЕЙТИНГ, АВИТО ======== -->
 
 <section class="section">
   <h2>Отзывы клиентов</h2>
@@ -196,8 +260,7 @@ input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
   </div>
 
   <div class="avito-block">
-    <!-- ЛОГОТИП АВИТО — встроенный Base64 PNG -->
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAA..." style="width:32px; height:32px;">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Avito_logo_2022.svg" style="width:120px; height:auto;">
     <a href="https://www.avito.ru/" target="_blank" style="color:#fff; font-size:16px; font-weight:bold; text-decoration:none;">
       Наш эвакуатор на Авито
     </a>
