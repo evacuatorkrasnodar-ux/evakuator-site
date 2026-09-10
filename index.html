@@ -17,15 +17,11 @@ if ('serviceWorker' in navigator) {
 <!-- Яндекс.Карты API 3.0 -->
 <script src="https://api-maps.yandex.ru/v3/?apikey=fc0f9182-0eee-4e83-bed3-8e561c88c4d5&lang=ru_RU"></script>
 
-<!-- Яндекс.Карты API 2.1 (маршрут + геокодер) -->
-<script src="https://api-maps.yandex.ru/2.1/?apikey=fc0f9182-0eee-4e83-bed3-8e561c88c4d5&lang=ru_RU"></script>
-
 <style>
 body { margin:0; background:#0a0a0a; font-family:Arial,sans-serif; color:#fff; }
 .container { max-width:900px; margin:auto; padding:20px; }
 h1 { text-align:center; color:#f7c600; margin-bottom:10px; }
 
-/* Блоки */
 .section {
   background:#111;
   padding:20px;
@@ -34,7 +30,6 @@ h1 { text-align:center; color:#f7c600; margin-bottom:10px; }
   border:1px solid #2a2a2a;
 }
 
-/* Отзывы */
 .review {
   background:#1a1a1a;
   padding:15px;
@@ -43,7 +38,6 @@ h1 { text-align:center; color:#f7c600; margin-bottom:10px; }
   margin-bottom:12px;
 }
 
-/* Преимущества */
 .adv-item {
   background:#1a1a1a;
   padding:15px;
@@ -52,7 +46,6 @@ h1 { text-align:center; color:#f7c600; margin-bottom:10px; }
   margin-bottom:12px;
 }
 
-/* Калькулятор */
 .calc-row { display:flex; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
 input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
                 background:#1a1a1a; color:#fff; font-size:15px; }
@@ -61,7 +54,6 @@ input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
 #calcResult { margin-top:10px; font-size:18px; color:#f7c600; }
 #map { width:100%; height:250px; border-radius:15px; margin-top:15px; }
 
-/* Заявка */
 .form-submit { width:100%; padding:14px; background:linear-gradient(135deg,#ff7b00,#f7c600);
                border:none; border-radius:10px; font-size:18px; font-weight:bold; cursor:pointer; color:#000; margin-top:10px; }
 .messengers { display:flex; gap:10px; margin-top:10px; }
@@ -71,6 +63,18 @@ input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
 
 .nav-btn { width:100%; padding:12px; margin-top:10px; border-radius:10px; border:none;
            background:#222; color:#fff; font-size:15px; cursor:pointer; }
+
+.footer-avito {
+  background:#111;
+  padding:16px;
+  border-radius:14px;
+  border:1px solid #2a2a2a;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  margin-top:10px;
+}
 </style>
 
 </head>
@@ -80,43 +84,8 @@ input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
 
 <h1>Эвакуатор Краснодар 24/7</h1>
 
-<!-- ⭐ Красивый блок рейтинга + Авито -->
-<section class="section" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
-
-  <div style="display:flex; align-items:center; gap:12px;">
-    <div style="display:flex; gap:4px;">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg" style="width:26px; filter:invert(71%) sepia(94%) saturate(748%) hue-rotate(1deg) brightness(103%) contrast(102%);">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg" style="width:26px; filter:invert(71%) sepia(94%) saturate(748%) hue-rotate(1deg) brightness(103%) contrast(102%);">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg" style="width:26px; filter:invert(71%) sepia(94%) saturate(748%) hue-rotate(1deg) brightness(103%) contrast(102%);">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg" style="width:26px; filter:invert(71%) sepia(94%) saturate(748%) hue-rotate(1deg) brightness(103%) contrast(102%);">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg" style="width:26px; filter:invert(71%) sepia(94%) saturate(748%) hue-rotate(1deg) brightness(103%) contrast(102%);">
-    </div>
-
-    <div style="font-size:18px; color:#f7c600; font-weight:bold;">
-      Рейтинг 4.9 / 5
-    </div>
-  </div>
-
-  <a href="https://www.avito.ru/" target="_blank" style="
-    display:flex;
-    align-items:center;
-    gap:10px;
-    text-decoration:none;
-    background:#1a1a1a;
-    padding:10px 16px;
-    border-radius:10px;
-    border:1px solid #333;
-  ">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Avito_logo.svg" style="width:32px;">
-    <span style="color:#fff; font-size:16px; font-weight:bold;">Мы на Авито</span>
-  </a>
-
-</section>
-
-<!-- ⭐ Преимущества -->
 <section class="section">
   <h2>Почему выбирают нас</h2>
-
   <div class="adv-item">🚚 Подача эвакуатора от 15 минут</div>
   <div class="adv-item">💳 Оплата картой или наличными</div>
   <div class="adv-item">🛠 Аккуратная погрузка без повреждений</div>
@@ -124,16 +93,13 @@ input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
   <div class="adv-item">🔧 Перевозка любых авто: легковые, кроссоверы, грузовые</div>
 </section>
 
-<!-- ⭐ Отзывы -->
 <section class="section">
   <h2>Отзывы клиентов</h2>
-
   <div class="review">«Очень быстро приехали, аккуратно погрузили, цена честная. Рекомендую!» — Сергей</div>
   <div class="review">«Выручили ночью, спасибо большое! Машину доставили без единой царапины.» — Анна</div>
   <div class="review">«Лучший эвакуатор в Краснодаре. Приехали за 20 минут.» — Михаил</div>
 </section>
 
-<!-- ⭐ Калькулятор -->
 <section class="section">
   <h2>Расчёт стоимости</h2>
 
@@ -162,7 +128,6 @@ input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
   <div id="map"></div>
 </section>
 
-<!-- ⭐ Заявка -->
 <section class="section">
   <h2>Быстрая заявка</h2>
 
@@ -186,12 +151,35 @@ input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
   </div>
 </section>
 
+<!-- Блок рейтинга + Авито внизу -->
+<section class="section">
+  <h2>Рейтинг и площадки</h2>
+
+  <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+    <div style="display:flex; gap:4px;">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg" style="width:22px; filter:invert(71%) sepia(94%) saturate(748%) hue-rotate(1deg) brightness(103%) contrast(102%);">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg" style="width:22px; filter:invert(71%) sepia(94%) saturate(748%) hue-rotate(1deg) brightness(103%) contrast(102%);">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg" style="width:22px; filter:invert(71%) sepia(94%) saturate(748%) hue-rotate(1deg) brightness(103%) contrast(102%);">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg" style="width:22px; filter:invert(71%) sepia(94%) saturate(748%) hue-rotate(1deg) brightness(103%) contrast(102%);">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg" style="width:22px; filter:invert(71%) sepia(94%) saturate(748%) hue-rotate(1deg) brightness(103%) contrast(102%);">
+    </div>
+    <div style="font-size:16px; color:#f7c600; font-weight:bold;">
+      Рейтинг 4.9 / 5
+    </div>
+  </div>
+
+  <div class="footer-avito">
+    <img src="https://i.imgur.com/0ZQZpQh.png" style="width:32px; height:32px;">
+    <a href="https://www.avito.ru/" target="_blank" style="color:#fff; font-size:16px; font-weight:bold; text-decoration:none;">
+      Наш эвакуатор на Авито
+    </a>
+  </div>
+</section>
+
 </div>
 
 <script>
-// =========================
 // Карта API 3.0
-// =========================
 let map3;
 ymaps3.ready.then(() => {
     map3 = new ymaps3.YMap(document.getElementById("map"), {
@@ -209,10 +197,40 @@ ymaps3.ready.then(() => {
     map3.addChild(controls);
 });
 
-// =========================
-// Маршрут API 2.1
-// =========================
-function calcRouteAndPrice() {
+// REST‑геокодер
+async function geocodeAddress(address) {
+    const url = "https://geocode-maps.yandex.ru/1.x/?apikey=fc0f9182-0eee-4e83-bed3-8e561c88c4d5&format=json&geocode=" +
+        encodeURIComponent(address);
+
+    const resp = await fetch(url);
+    const data = await resp.json();
+
+    try {
+        const pos = data.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos.split(" ");
+        const lon = parseFloat(pos[0]);
+        const lat = parseFloat(pos[1]);
+        return [lon, lat];
+    } catch (e) {
+        return null;
+    }
+}
+
+// Формула расстояния (км)
+function distanceKm(lat1, lon1, lat2, lon2) {
+    const R = 6371;
+    const toRad = x => x * Math.PI / 180;
+    const dLat = toRad(lat2 - lat1);
+    const dLon = toRad(lon2 - lon1);
+    const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+}
+
+// Расчёт стоимости
+async function calcRouteAndPrice() {
     const from = document.getElementById("fromAddress").value.trim();
     const to = document.getElementById("toAddress").value.trim();
     const result = document.getElementById("calcResult");
@@ -222,55 +240,52 @@ function calcRouteAndPrice() {
         return;
     }
 
-    result.textContent = "Строим маршрут…";
+    result.textContent = "Ищем адреса…";
 
-    ymaps.ready(function () {
-        ymaps.geocode(from).then(function (resFrom) {
-            const fromCoords = resFrom.geoObjects.get(0).geometry.getCoordinates();
+    const fromCoords = await geocodeAddress(from);
+    const toCoords = await geocodeAddress(to);
 
-            ymaps.geocode(to).then(function (resTo) {
-                const toCoords = resTo.geoObjects.get(0).geometry.getCoordinates();
+    if (!fromCoords || !toCoords) {
+        result.textContent = "❌ Адреса не найдены.";
+        return;
+    }
 
-                ymaps.route([fromCoords, toCoords]).then(function (route) {
+    // Маркеры
+    const markerFrom = new ymaps3.YMapMarker({ coordinates: fromCoords }, document.createElement("div"));
+    markerFrom.element.style.cssText = "width:18px;height:18px;background:red;border-radius:50%;";
+    map3.addChild(markerFrom);
 
-                    const map2 = new ymaps.Map('map', {
-                        center: fromCoords,
-                        zoom: 10,
-                        controls: []
-                    });
+    const markerTo = new ymaps3.YMapMarker({ coordinates: toCoords }, document.createElement("div"));
+    markerTo.element.style.cssText = "width:18px;height:18px;background:green;border-radius:50%;";
+    map3.addChild(markerTo);
 
-                    map2.geoObjects.add(route);
-
-                    const distance = route.getLength();
-                    const km = Math.round(distance / 1000);
-
-                    const carType = parseFloat(document.getElementById("carType").value);
-
-                    const basePerKm = 60;
-                    const minCar = 1700;
-                    const minCross = 1900;
-                    const minTruck = 2200;
-
-                    let minPrice = minCar;
-                    if (carType === 1.1) minPrice = minCross;
-                    if (carType === 1.3) minPrice = minTruck;
-
-                    let price = km * basePerKm * carType;
-                    if (price < minPrice) price = minPrice;
-
-                    result.textContent = `Расстояние: ~ ${km} км. Цена эвакуации: ~ ${Math.round(price)} ₽`;
-
-                }, function () {
-                    result.textContent = "❌ Маршрут не найден.";
-                });
-            });
-        });
+    map3.setLocation({
+        center: fromCoords,
+        zoom: 11
     });
+
+    const km = Math.round(
+        distanceKm(fromCoords[1], fromCoords[0], toCoords[1], toCoords[0])
+    );
+
+    const carType = parseFloat(document.getElementById("carType").value);
+
+    const basePerKm = 60;
+    const minCar = 1700;
+    const minCross = 1900;
+    const minTruck = 2200;
+
+    let minPrice = minCar;
+    if (carType === 1.1) minPrice = minCross;
+    if (carType === 1.3) minPrice = minTruck;
+
+    let price = km * basePerKm * carType;
+    if (price < minPrice) price = minPrice;
+
+    result.textContent = `Расстояние: ~ ${km} км. Цена эвакуации: ~ ${Math.round(price)} ₽`;
 }
 
-// =========================
 // Навигатор
-// =========================
 function openInNavigator() {
     const from = document.getElementById("fromAddress").value.trim();
     const to = document.getElementById("toAddress").value.trim();
@@ -285,9 +300,7 @@ function openInNavigator() {
     window.open(url, "_blank");
 }
 
-// =========================
 // Заявка
-// =========================
 function submitForm() {
     window.location.href = "tel:+79888717018";
 }
