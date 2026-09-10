@@ -1,21 +1,18 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
+<head> 
+
+<script>
+  if (window.location.hostname === "www.evakuator-krd.online") {
+    window.location.href = "https://evakuator-krd.online" + window.location.pathname;
+  }
+</script> 
+    
+<link rel="manifest" href="manifest.json">
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Эвакуатор Краснодар 24/7</title>
-
-<!-- PWA -->
-<link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/png" href="favicon.png">
-
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js');
-  }
-</script>
 
 <!-- Яндекс.Карты -->
 <script src="https://api-maps.yandex.ru/2.1/?apikey=fc0f9182-0eee-4e83-bed3-8e561c88c4d5&lang=ru_RU"></script>
@@ -25,34 +22,27 @@ body { margin:0; background:#0a0a0a; font-family:Arial,sans-serif; color:#fff; }
 .container { max-width:900px; margin:auto; padding:20px; }
 h1 { text-align:center; color:#f7c600; margin-bottom:10px; }
 
-.install-btn {
-    width:100%;
-    padding:14px;
-    background:#0088ff;
-    border:none;
-    border-radius:10px;
-    font-size:18px;
-    font-weight:bold;
-    cursor:pointer;
-    margin-bottom:20px;
-    display:none;
-}
+.install-btn { width:100%; padding:14px; background:#0088ff; border:none; border-radius:10px;
+               font-size:18px; font-weight:bold; cursor:pointer; margin-bottom:20px; display:none; }
+
+.top-info { display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; flex-wrap:wrap; }
+.rating { display:flex; align-items:center; gap:8px; }
+.stars { color:#f7c600; font-size:18px; }
+.avito { display:flex; align-items:center; gap:6px; font-size:14px; }
+.avito-icon { width:20px; height:20px; border-radius:4px; background:#00aaff; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:bold; }
 
 .calc-block { background:#111; padding:20px; border-radius:15px; border:1px solid #333; margin-bottom:20px; }
 .calc-row { display:flex; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
 input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
                 background:#1a1a1a; color:#fff; font-size:15px; }
-
 .calc-btn { width:100%; padding:14px; background:linear-gradient(135deg,#f7c600,#ff7b00);
             border:none; border-radius:10px; font-size:18px; font-weight:bold; cursor:pointer; color:#000; }
-
 #calcResult { margin-top:10px; font-size:18px; color:#f7c600; }
 #map { width:100%; height:250px; border-radius:15px; margin-top:15px; }
 
 .form-block { background:#111; padding:20px; border-radius:15px; border:1px solid #333; }
 .form-submit { width:100%; padding:14px; background:linear-gradient(135deg,#ff7b00,#f7c600);
                border:none; border-radius:10px; font-size:18px; font-weight:bold; cursor:pointer; color:#000; margin-top:10px; }
-
 .messengers { display:flex; gap:10px; margin-top:10px; }
 .msg-btn { flex:1; padding:12px; border-radius:10px; border:none; font-size:16px; font-weight:bold; cursor:pointer; }
 .whatsapp { background:#25D366; color:#000; }
@@ -63,65 +53,77 @@ input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
 <body>
 
 <div class="container">
+    <h1>Эвакуатор Краснодар 24/7</h1>
 
-<h1>Эвакуатор Краснодар 24/7</h1>
-
-<!-- Кнопка установки приложения -->
-<button class="install-btn" id="installBtn">📱 Установить как приложение</button>
-
-<div class="calc-block">
-    <h2>Расчёт стоимости</h2>
-
-    <div class="calc-row">
-        <input type="text" id="fromAddress" placeholder="Откуда забрать">
+    <div class="top-info">
+        <div class="rating">
+            <span class="stars">★★★★★</span>
+            <span>Рейтинг 4.9</span>
+        </div>
+        <div class="avito">
+            <div class="avito-icon">A</div>
+            <span>Эвакуатор на Авито</span>
+        </div>
     </div>
 
-    <div class="calc-row">
-        <input type="text" id="toAddress" placeholder="Куда отвезти">
+    <button class="install-btn" id="installBtn">📱 Сохранить на главный экран</button>
+
+    <div class="calc-block">
+        <h2>Расчёт стоимости</h2>
+
+        <div class="calc-row">
+            <input type="text" id="fromAddress" placeholder="Откуда забрать">
+        </div>
+
+        <div class="calc-row">
+            <input type="text" id="toAddress" placeholder="Куда отвезти">
+        </div>
+
+        <div class="calc-row">
+            <select id="carType">
+                <option value="1.0">Легковой автомобиль</option>
+                <option value="1.1">Кроссовер / минивэн</option>
+                <option value="1.3">Малый грузовик</option>
+            </select>
+        </div>
+
+        <!-- ОДНА КНОПКА: строит маршрут + считает цену -->
+        <button class="calc-btn" onclick="calcRouteAndPrice()">Рассчитать стоимость</button>
+
+        <div id="calcResult">Введите адреса и нажмите «Рассчитать стоимость».</div>
+
+        <div id="map"></div>
     </div>
 
-    <div class="calc-row">
-        <select id="carType">
-            <option value="1.0">Легковой автомобиль</option>
-            <option value="1.1">Кроссовер / минивэн</option>
-            <option value="1.3">Малый грузовик</option>
-        </select>
+    <div class="form-block">
+        <h2>Быстрая заявка</h2>
+
+        <div class="calc-row">
+            <input id="name" type="text" placeholder="Ваше имя">
+        </div>
+
+        <div class="calc-row">
+            <input id="phone" type="tel" placeholder="Ваш телефон">
+        </div>
+
+        <div class="calc-row">
+            <input id="details" type="text" placeholder="Откуда → Куда, авто, ситуация">
+        </div>
+
+        <button class="form-submit" onclick="submitForm()">Позвонить</button>
+
+        <div class="messengers">
+            <button class="msg-btn whatsapp" onclick="sendWhatsApp()">WhatsApp</button>
+            <button class="msg-btn telegram" onclick="sendTelegram()">Telegram</button>
+        </div>
     </div>
-
-    <button class="calc-btn" onclick="calcPrice()">Рассчитать цену</button>
-
-    <div id="calcResult">Введите адреса и нажмите «Рассчитать цену».</div>
-
-    <div id="map"></div>
-</div>
-
-<div class="form-block">
-    <h2>Быстрая заявка</h2>
-
-    <div class="calc-row">
-        <input id="name" type="text" placeholder="Ваше имя">
-    </div>
-
-    <div class="calc-row">
-        <input id="phone" type="tel" placeholder="Ваш телефон">
-    </div>
-
-    <div class="calc-row">
-        <input id="details" type="text" placeholder="Откуда → Куда, авто, ситуация">
-    </div>
-
-    <button class="form-submit" onclick="submitForm()">Позвонить</button>
-
-    <div class="messengers">
-        <button class="msg-btn whatsapp" onclick="sendWhatsApp()">WhatsApp</button>
-        <button class="msg-btn telegram" onclick="sendTelegram()">Telegram</button>
-    </div>
-</div>
-
 </div>
 
 <script>
-// PWA кнопка
+// =========================
+// PWA кнопка установки
+// =========================
+
 let deferredPrompt;
 const installBtn = document.getElementById("installBtn");
 
@@ -136,36 +138,43 @@ installBtn.addEventListener("click", () => {
     deferredPrompt.prompt();
 });
 
-// Яндекс.Карты
+// =========================
+// Яндекс.Карты + подсказки адресов
+// =========================
+
 let map, route;
+let ymapsReady = false;
 
 ymaps.ready(() => {
+    ymapsReady = true;
+
     map = new ymaps.Map("map", {
         center: [45.035470, 38.975313],
         zoom: 9
     });
 
+    // Иконка эвакуатора
     var evacIcon = new ymaps.Placemark([45.035470, 38.975313], {
         balloonContent: 'Эвакуатор Краснодар 24/7'
     }, {
         iconLayout: 'default#image',
-        iconImageHref: 'evacuator.png',
+        iconImageHref: 'https://cdn-icons-png.flaticon.com/512/743/743131.png',
         iconImageSize: [40, 40],
         iconImageOffset: [-20, -20]
     });
 
     map.geoObjects.add(evacIcon);
 
-    ymaps.geolocation.get().then(function (res) {
-        var userCoords = res.geoObjects.get(0).geometry.getCoordinates();
-        ymaps.geocode(userCoords).then(function (geo) {
-            var address = geo.geoObjects.get(0).getAddressLine();
-            document.getElementById("fromAddress").value = address;
-        });
-    });
+    // Подсказки адресов (как в такси)
+    var fromSuggest = new ymaps.SuggestView('fromAddress');
+    var toSuggest = new ymaps.SuggestView('toAddress');
+
+    // Авто‑заполнение "Откуда" по геолокации
+    autoFillFrom();
 });
 
-function calcPrice() {
+// ОДНА ФУНКЦИЯ: строит маршрут + считает цену
+function calcRouteAndPrice() {
     const from = document.getElementById("fromAddress").value.trim();
     const to = document.getElementById("toAddress").value.trim();
     const result = document.getElementById("calcResult");
@@ -175,6 +184,15 @@ function calcPrice() {
         return;
     }
 
+    if (!ymapsReady) {
+        result.textContent = "Карта загружается…";
+        return;
+    }
+
+    result.textContent = "Строим маршрут и считаем стоимость…";
+
+    if (route) map.geoObjects.remove(route);
+
     ymaps.route([from, to]).then(r => {
         route = r;
         map.geoObjects.add(route);
@@ -182,6 +200,8 @@ function calcPrice() {
 
         const meters = route.getLength();
         const km = Math.round(meters / 1000);
+
+        // Расчёт цены
         const carType = parseFloat(document.getElementById("carType").value);
 
         const basePerKm = 60;
@@ -196,11 +216,28 @@ function calcPrice() {
         let price = km * basePerKm * carType;
         if (price < minPrice) price = minPrice;
 
-        result.textContent = "Цена эвакуации: ~ " + Math.round(price) + " ₽";
+        result.textContent =
+            "Расстояние: ~ " + km + " км. Цена эвакуации: ~ " + Math.round(price) + " ₽";
     }).catch(() => {
         result.textContent = "Маршрут не найден. Уточните адреса.";
     });
 }
+
+// Авто‑заполнение адреса "Откуда"
+function autoFillFrom() {
+    ymaps.geolocation.get().then(function (res) {
+        var userCoords = res.geoObjects.get(0).geometry.getCoordinates();
+
+        ymaps.geocode(userCoords).then(function (geo) {
+            var address = geo.geoObjects.get(0).getAddressLine();
+            document.getElementById("fromAddress").value = address;
+        });
+    });
+}
+
+// =========================
+// ЗАЯВКА
+// =========================
 
 function submitForm() {
     window.location.href = "tel:+79888717018";
@@ -211,7 +248,7 @@ function sendWhatsApp() {
 }
 
 function sendTelegram() {
-    window.open("https://t.me/", "_blank");
+    window.open("https://t.me/", "_blank"); // добавишь позже
 }
 </script>
 
