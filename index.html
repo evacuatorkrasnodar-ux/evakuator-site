@@ -12,14 +12,16 @@ let deferredPrompt;
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
-  document.getElementById("installBtn").style.display = "flex";
+  const btn = document.getElementById("installBtn");
+  if (btn) btn.style.display = "flex";
 });
 function installApp() {
   if (deferredPrompt) {
     deferredPrompt.prompt();
     deferredPrompt.userChoice.then(() => {
       deferredPrompt = null;
-      document.getElementById("installBtn").style.display = "none";
+      const btn = document.getElementById("installBtn");
+      if (btn) btn.style.display = "none";
     });
   }
 }
@@ -34,16 +36,6 @@ if ('serviceWorker' in navigator) {
 <style>
 body { margin:0; background:#0a0a0a; font-family:Arial,sans-serif; color:#fff; }
 .container { max-width:900px; margin:auto; padding:20px; }
-
-h1 { color:#f7c600; margin:0; }
-
-.phone-top {
-  text-align:center;
-  font-size:22px;
-  font-weight:bold;
-  color:#fff;
-  margin-top:5px;
-}
 
 #installBtn {
   display:none;
@@ -165,13 +157,12 @@ input, select {
 
 <div class="container">
 
-<!-- Шапка -->
-<div style="display:flex; align-items:center; justify-content:center; gap:10px;">
-  <img src="img/evakuator.png" alt="Эвакуатор" style="width:60px; height:auto;">
-  <h1>Эвакуатор Краснодар 24/7</h1>
+<!-- ЛОГОТИП -->
+<div style="display:flex; align-items:center; justify-content:center; margin-bottom:10px;">
+  <img src="img/logo.png" alt="Логотип" style="width:240px; height:auto;">
 </div>
 
-<p class="phone-top">
+<p style="text-align:center; font-size:22px; font-weight:bold; color:#f7c600;">
   📞 <a href="tel:+79888717018" style="color:#f7c600; text-decoration:none;">+7 (988) 871‑70‑18</a>
 </p>
 
@@ -209,9 +200,9 @@ input, select {
   </div>
 
   <button class="calc-btn" onclick="calcSimplePrice()">Рассчитать стоимость</button>
-  <button class="nav-btn" onclick="showRoute()">Показать маршрут</button>
+  <button class="nav-btn" onclick="showRoute()">Показать маршрут на карте</button>
 
-  <div id="calcResult">Введите адреса и нажмите «Рассчитать стоимость».</div>
+  <div id="calcResult">Введите расстояние или адреса и нажмите «Рассчитать стоимость».</div>
   <div id="map"></div>
 </section>
 
@@ -228,7 +219,7 @@ input, select {
   </div>
 </section>
 
-<!-- Отзывы и рейтинг -->
+<!-- Отзывы -->
 <section class="section">
   <h2>Отзывы клиентов</h2>
   <div class="review">«Очень быстро приехали, аккуратно погрузили, цена честная. Рекомендую!» — Сергей</div>
@@ -236,5 +227,100 @@ input, select {
   <div class="review">«Лучший эвакуатор в Краснодаре. Приехали за 20 минут.» — Михаил</div>
 </section>
 
+<!-- Рейтинг и Авито -->
 <section class="section">
-  <h
+  <h2>Рейтинг и площадки</h2>
+
+  <div style="display:flex; gap:6px; margin-bottom:12px;">
+    <img src="img/star.png" style="width:28px;" alt="★">
+    <img src="img/star.png" style="width:28px;" alt="★">
+    <img src="img/star.png" style="width:28px;" alt="★">
+    <img src="img/star.png" style="width:28px;" alt="★">
+    <img src="img/star.png" style="width:28px;" alt="★">
+  </div>
+
+  <div class="avito-block">
+    <img src="img/avito.png" style="width:120px; height:auto;" alt="Avito">
+    <a href="https://www.avito.ru/" target="_blank" style="color:#fff; font-size:16px; font-weight:bold; text-decoration:none;">
+      Наш эвакуатор на Авито
+    </a>
+  </div>
+</section>
+
+</div>
+
+<script>
+// карта
+ymaps.ready(function() {
+  window.map2 = new ymaps.Map("map", {
+    center: [45.035470, 38.975313],
+    zoom: 10,
+    controls: ['zoomControl']
+  });
+});
+
+// простой расчёт стоимости
+function calcSimplePrice() {
+  const from = document.getElementById("fromAddress").value.trim();
+  const to = document.getElementById("toAddress").value.trim();
+  const carType = parseFloat(document.getElementById("carType").value);
+  const result = document.getElementById("calcResult");
+
+  let km = 10;
+
+  const text = (from + " " + to).toLowerCase();
+  const match = text.match(/(\d+)\s*км/);
+  if (match) km = parseInt(match[1], 10);
+
+  const basePerKm = 60;
+  const minCar = 1700;
+  const minCross = 1900;
+  const minTruck = 2200;
+
+  let minPrice = minCar;
+  if (carType === 1.1) minPrice = minCross;
+  if (carType === 1.3) minPrice = minTruck;
+
+  let price = km * basePerKm * carType;
+  if (price < minPrice) price = minPrice;
+
+  result.textContent = `Примерная дистанция: ~ ${km} км. Цена эвакуации: ~ ${Math.round(price)} ₽`;
+}
+
+// маршрут на карте
+function showRoute() {
+  const from = document.getElementById("fromAddress").value.trim();
+  const to = document.getElementById("toAddress").value.trim();
+  const result = document.getElementById("calcResult");
+
+  if (!from || !to) {
+    result.textContent = "Введите оба адреса, чтобы показать маршрут.";
+    return;
+  }
+
+  result.textContent = "Строим маршрут на карте…";
+
+  ymaps.route([from, to]).then(function(route) {
+    map2.geoObjects.removeAll();
+    map2.geoObjects.add(route);
+    map2.setBounds(route.getBounds(), { checkZoomRange: true });
+    result.textContent = "Маршрут показан на карте.";
+  }, function() {
+    result.textContent = "❌ Маршрут не найден. Проверьте адреса.";
+  });
+}
+
+// звонок
+function submitForm() {
+  window.location.href = "tel:+79888717018";
+}
+function sendWhatsApp() {
+  window.open("https://wa.me/79888717018", "_blank");
+}
+function sendTelegram() {
+  window.open("https://t.me/", "_blank");
+}
+</script>
+
+</body>
+</html>
