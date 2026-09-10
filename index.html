@@ -6,50 +6,11 @@
 <title>Эвакуатор Краснодар 24/7</title>
 
 <link rel="manifest" href="manifest.json">
-<script>
-let deferredPrompt;
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  document.getElementById("installBtn").style.display = "flex";
-});
-function installApp() {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(() => {
-      deferredPrompt = null;
-      document.getElementById("installBtn").style.display = "none";
-    });
-  }
-}
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('service-worker.js');
-}
-</script>
-
 <script src="https://api-maps.yandex.ru/2.1/?apikey=fc0f9182-0eee-4e83-bed3-8e561c88c4d5&lang=ru_RU"></script>
 
 <style>
 body { margin:0; background:#0a0a0a; font-family:Arial,sans-serif; color:#fff; }
 .container { max-width:900px; margin:auto; padding:20px; }
-
-#installBtn {
-  display:none;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  width:100%;
-  padding:14px;
-  background:#0088ff;
-  border:none;
-  border-radius:10px;
-  font-size:18px;
-  font-weight:bold;
-  color:#fff;
-  margin:20px 0;
-  cursor:pointer;
-}
-#installBtn img { width:22px; height:22px; }
 
 .section {
   background:#111;
@@ -58,6 +19,8 @@ body { margin:0; background:#0a0a0a; font-family:Arial,sans-serif; color:#fff; }
   margin-bottom:20px;
   border:1px solid #2a2a2a;
 }
+
+h2 { color:#f7c600; margin-bottom:15px; }
 
 .adv-grid {
   display:grid;
@@ -72,17 +35,11 @@ body { margin:0; background:#0a0a0a; font-family:Arial,sans-serif; color:#fff; }
   display:flex;
   align-items:center;
   gap:12px;
+  transition:0.3s;
 }
+.adv-card:hover { background:#222; border-color:#555; }
 .adv-icon { font-size:26px; }
 .adv-text { font-size:16px; line-height:1.3; }
-
-.review, .adv-item {
-  background:#1a1a1a;
-  padding:15px;
-  border-radius:12px;
-  border:1px solid #333;
-  margin-bottom:12px;
-}
 
 .calc-row { display:flex; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
 input, select {
@@ -94,7 +51,6 @@ input, select {
   color:#fff;
   font-size:15px;
 }
-
 .calc-btn {
   width:100%;
   padding:14px;
@@ -106,15 +62,8 @@ input, select {
   cursor:pointer;
   color:#000;
 }
-
 #calcResult { margin-top:10px; font-size:18px; color:#f7c600; }
-
-#map {
-  width:100%;
-  height:250px;
-  border-radius:15px;
-  margin-top:15px;
-}
+#map { width:100%; height:250px; border-radius:15px; margin-top:15px; }
 
 .form-submit {
   width:100%;
@@ -171,60 +120,24 @@ input, select {
   📞 <a href="tel:+79888717018" style="color:#f7c600; text-decoration:none;">+7 (988) 871‑70‑18</a>
 </p>
 
-<button id="installBtn" onclick="installApp()">
-  <img src="img/install.png" alt="Установить">
-  Установить приложение
-</button>
-
 <!-- Почему выбирают нас -->
 <section class="section">
   <h2>Почему выбирают нас</h2>
-
   <div class="adv-grid">
-
-    <div class="adv-card">
-      <div class="adv-icon">🚚</div>
-      <div class="adv-text">Подача эвакуатора от 15 минут</div>
-    </div>
-
-    <div class="adv-card">
-      <div class="adv-icon">💳</div>
-      <div class="adv-text">Оплата картой или наличными</div>
-    </div>
-
-    <div class="adv-card">
-      <div class="adv-icon">🛠</div>
-      <div class="adv-text">Аккуратная погрузка без повреждений</div>
-    </div>
-
-    <div class="adv-card">
-      <div class="adv-icon">📍</div>
-      <div class="adv-text">Работаем по Краснодару и всему краю</div>
-    </div>
-
-    <div class="adv-card">
-      <div class="adv-icon">🔧</div>
-      <div class="adv-text">Перевозка любых авто: легковые, кроссоверы, грузовые</div>
-    </div>
-
-    <div class="adv-card">
-      <div class="adv-icon">⬇️</div>
-      <div class="adv-text">Низкий клиренс — эвакуатор на пневмоподушках для премиум‑авто</div>
-    </div>
-
+    <div class="adv-card"><div class="adv-icon">🚚</div><div class="adv-text">Подача эвакуатора от 15 минут</div></div>
+    <div class="adv-card"><div class="adv-icon">💳</div><div class="adv-text">Оплата картой или наличными</div></div>
+    <div class="adv-card"><div class="adv-icon">🛠</div><div class="adv-text">Аккуратная погрузка без повреждений</div></div>
+    <div class="adv-card"><div class="adv-icon">📍</div><div class="adv-text">Работаем по Краснодару и всему краю</div></div>
+    <div class="adv-card"><div class="adv-icon">🔧</div><div class="adv-text">Перевозка любых авто: легковые, кроссоверы, грузовые</div></div>
+    <div class="adv-card"><div class="adv-icon">⬇️</div><div class="adv-text">Низкий клиренс — эвакуатор на пневмоподушках для премиум‑авто</div></div>
   </div>
 </section>
 
 <!-- Калькулятор -->
 <section class="section">
-  <h2>Расчёт стоимости (реальный)</h2>
-
-  <div class="calc-row">
-    <input type="text" id="fromAddress" placeholder="Откуда забрать">
-  </div>
-  <div class="calc-row">
-    <input type="text" id="toAddress" placeholder="Куда отвезти">
-  </div>
+  <h2>Расчёт стоимости</h2>
+  <div class="calc-row"><input type="text" id="fromAddress" placeholder="Откуда забрать"></div>
+  <div class="calc-row"><input type="text" id="toAddress" placeholder="Куда отвезти"></div>
   <div class="calc-row">
     <select id="carType">
       <option value="1.0">Легковой автомобиль</option>
@@ -232,9 +145,7 @@ input, select {
       <option value="1.3">Малый грузовик</option>
     </select>
   </div>
-
   <button class="calc-btn" onclick="calcRealPrice()">Рассчитать стоимость</button>
-
   <div id="calcResult">Введите адреса и нажмите «Рассчитать стоимость».</div>
   <div id="map"></div>
 </section>
@@ -263,85 +174,4 @@ input, select {
 
 <!-- Рейтинг и Авито -->
 <section class="section">
-  <h2>Рейтинг и площадки</h2>
-
-  <div style="display:flex; gap:6px; margin-bottom:12px;">
-    <img src="img/star.png" style="width:28px;" alt="★">
-    <img src="img/star.png" style="width:28px;" alt="★">
-    <img src="img/star.png" style="width:28px;" alt="★">
-    <img src="img/star.png" style="width:28px;" alt="★">
-    <img src="img/star.png" style="width:28px;" alt="★">
-  </div>
-
-  <div class="avito-block">
-    <img src="img/avito.png" style="width:120px; height:auto;" alt="Avito">
-    <a href="https://www.avito.ru/" target="_blank" style="color:#fff; font-size:16px; font-weight:bold; text-decoration:none;">
-      Наш эвакуатор на Авито
-    </a>
-  </div>
-</section>
-
-</div>
-
-<script>
-ymaps.ready(function() {
-  window.map2 = new ymaps.Map("map", {
-    center: [45.035470, 38.975313],
-    zoom: 10,
-    controls: ['zoomControl']
-  });
-});
-
-function calcRealPrice() {
-  const from = document.getElementById("fromAddress").value.trim();
-  const to = document.getElementById("toAddress").value.trim();
-  const carType = parseFloat(document.getElementById("carType").value);
-  const result = document.getElementById("calcResult");
-
-  if (!from || !to) {
-    result.textContent = "Введите оба адреса.";
-    return;
-  }
-
-  ymaps.route([from, to]).then(function(route) {
-    map2.geoObjects.removeAll();
-    map2.geoObjects.add(route);
-    map2.setBounds(route.getBounds(), { checkZoomRange: true });
-
-    const distance = route.getLength() / 1000;
-
-    const basePerKm = 60;
-    const minCar = 1700;
-    const minCross = 1900;
-    const minTruck = 2200;
-
-    let minPrice = minCar;
-    if (carType === 1.1) minPrice = minCross;
-    if (carType === 1.3) minPrice = minTruck;
-
-    let price = distance * basePerKm * carType;
-    if (price < minPrice) price = minPrice;
-
-    result.textContent = `Расстояние: ${distance.toFixed(1)} км. Стоимость: ~ ${Math.round(price)} ₽`;
-
-  }, function() {
-    result.textContent = "❌ Маршрут не найден. Проверьте адреса.";
-  });
-}
-
-function submitForm() {
-  window.location.href = "tel:+79888717018";
-}
-function sendWhatsApp() {
-  window.open("https://wa.me/79888717018", "_blank");
-}
-function sendTelegram() {
-  window.open("https://t.me/", "_blank");
-}
-function sendVK() {
-  window.open("https://vk.com/", "_blank");
-}
-</script>
-
-</body>
-</html>
+  <h2
