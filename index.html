@@ -14,8 +14,11 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
-<!-- Яндекс.Карты API 3.0 -->
+<!-- Яндекс.Карты API 3.0 — для отображения карты -->
 <script src="https://api-maps.yandex.ru/v3/?apikey=fc0f9182-0eee-4e83-bed3-8e561c88c4d5&lang=ru_RU"></script>
+
+<!-- Яндекс.Карты API 2.1 — только для маршрута и геокодера -->
+<script src="https://api-maps.yandex.ru/2.1/?apikey=fc0f9182-0eee-4e83-bed3-8e561c88c4d5&lang=ru_RU"></script>
 
 <style>
 body { margin:0; background:#0a0a0a; font-family:Arial,sans-serif; color:#fff; }
@@ -143,16 +146,11 @@ installBtn.addEventListener("click", () => {
 });
 
 // =========================
-// Яндекс.Карты API 3.0
+// Карта: API 3.0
 // =========================
-let map;
-let route;
-let lastFromCoords = null;
-let lastToCoords = null;
-
+let map3;
 ymaps3.ready.then(() => {
-
-    map = new ymaps3.YMap(document.getElementById("map"), {
+    map3 = new ymaps3.YMap(document.getElementById("map"), {
         location: {
             center: [38.975313, 45.035470],
             zoom: 10
@@ -160,11 +158,11 @@ ymaps3.ready.then(() => {
     });
 
     const layer = new ymaps3.YMapDefaultSchemeLayer();
-    map.addChild(layer);
+    map3.addChild(layer);
 
     const controls = new ymaps3.YMapControls({ position: 'right' });
     controls.addChild(new ymaps3.YMapZoomControl());
-    map.addChild(controls);
+    map3.addChild(controls);
 
     const marker = new ymaps3.YMapMarker(
         { coordinates: [38.975313, 45.035470] },
@@ -175,30 +173,15 @@ ymaps3.ready.then(() => {
     marker.element.style.backgroundImage = "url('https://cdn-icons-png.flaticon.com/512/743/743131.png')";
     marker.element.style.backgroundSize = "contain";
     marker.element.style.borderRadius = "50%";
-    map.addChild(marker);
-
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(async (pos) => {
-            try {
-                const lat = pos.coords.latitude;
-                const lon = pos.coords.longitude;
-
-                const geocoder = new ymaps3.YMapGeocoder({ apikey: "fc0f9182-0eee-4e83-bed3-8e561c88c4d5" });
-                const res = await geocoder.geocode({ ll: [lon, lat] });
-
-                if (res.features && res.features[0]) {
-                    document.getElementById("fromAddress").value =
-                        res.features[0].properties.name || "Текущее местоположение";
-                }
-            } catch (e) {}
-        });
-    }
+    map3.addChild(marker);
 });
 
 // =========================
-// Маршрут + расчёт стоимости
+// Маршрут + расчёт: API 2.1
 // =========================
-async function calcRouteAndPrice() {
+let route2;
+
+function calcRouteAndPrice() {
     const from = document.getElementById("fromAddress").value.trim();
     const to = document.getElementById("toAddress").value.trim();
     const result = document.getElementById("calcResult");
@@ -210,58 +193,55 @@ async function calcRouteAndPrice() {
 
     result.textContent = "Строим маршрут…";
 
-    try {
-        const geocoder = new ymaps3.YMapGeocoder({ apikey: "fc0f9182-0eee-4e83-bed3-8e561c88c4d5" });
+    ymaps.ready(function () {
+        ymaps.geocode(from).then(function (resFrom) {
+            const fromCoords = resFrom.geoObjects.get(0).geometry.getCoordinates();
 
-        const fromGeo = await geocoder.geocode({ text: from });
-        const toGeo = await geocoder.geocode({ text: to });
+            ymaps.geocode(to).then(function (resTo) {
+                const toCoords = resTo.geoObjects.get(0).geometry.getCoordinates();
 
-        if (!fromGeo.features.length || !toGeo.features.length) {
-            result.textContent = "Адреса не найдены.";
-            return;
-        }
+                if (route2) {
+                    map3 && map3.removeChild(route2);
+                }
 
-        const fromCoords = fromGeo.features[0].geometry.coordinates;
-        const toCoords = toGeo.features[0].geometry.coordinates;
+                ymaps.route([fromCoords, toCoords]).then(function (route) {
+                    // Отображаем маршрут на старой карте API 2.1, но визуально он будет поверх div#map
+                    const map2 = new ymaps.Map('map', {
+                        center: fromCoords,
+                        zoom: 10,
+                        controls: []
+                    });
 
-        lastFromCoords = fromCoords;
-        lastToCoords = toCoords;
+                    map2.geoObjects.add(route);
 
-        const router = new ymaps3.YMapRouter({ apikey: "fc0f9182-0eee-4e83-bed3-8e561c88c4d5" });
+                    const distance = route.getLength(); // в метрах
+                    const km = Math.round(distance / 1000);
 
-        const routeData = await router.route({
-            points: [
-                { coordinates: fromCoords },
-                { coordinates: toCoords }
-            ]
+                    const carType = parseFloat(document.getElementById("carType").value);
+
+                    const basePerKm = 60;
+                    const minCar = 1700;
+                    const minCross = 1900;
+                    const minTruck = 2200;
+
+                    let minPrice = minCar;
+                    if (carType === 1.1) minPrice = minCross;
+                    if (carType === 1.3) minPrice = minTruck;
+
+                    let price = km * basePerKm * carType;
+                    if (price < minPrice) price = minPrice;
+
+                    result.textContent = `Расстояние: ~ ${km} км. Цена эвакуации: ~ ${Math.round(price)} ₽`;
+                }, function () {
+                    result.textContent = "❌ Маршрут не найден.";
+                });
+            }, function () {
+                result.textContent = "❌ Адрес назначения не найден.";
+            });
+        }, function () {
+            result.textContent = "❌ Адрес отправления не найден.";
         });
-
-        if (route) map.removeChild(route);
-
-        route = new ymaps3.YMapRoute(routeData);
-        map.addChild(route);
-
-        const km = Math.round(routeData.properties.distance / 1000);
-
-        const carType = parseFloat(document.getElementById("carType").value);
-
-        const basePerKm = 60;
-        const minCar = 1700;
-        const minCross = 1900;
-        const minTruck = 2200;
-
-        let minPrice = minCar;
-        if (carType === 1.1) minPrice = minCross;
-        if (carType === 1.3) minPrice = minTruck;
-
-        let price = km * basePerKm * carType;
-        if (price < minPrice) price = minPrice;
-
-        result.textContent = `Расстояние: ~ ${km} км. Цена эвакуации: ~ ${Math.round(price)} ₽`;
-
-    } catch (e) {
-        result.textContent = "❌ Маршрут не найден.";
-    }
+    });
 }
 
 // =========================
