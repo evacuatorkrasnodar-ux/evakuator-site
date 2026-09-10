@@ -156,8 +156,8 @@ input, select {
 <!-- ШАПКА: ЛОГОТИП СЛЕВА, НАЗВАНИЕ ПО ЦЕНТРУ -->
 <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
 
-  <!-- ЛОГОТИП СЛЕВА (увеличенный, но аккуратный) -->
-  <img src="img/logo.png" alt="Логотип" style="height:140px; width:auto;">
+  <!-- ЛОГОТИП ×2 -->
+  <img src="img/logo.png" alt="Логотип" style="height:280px; width:auto;">
 
   <!-- НАЗВАНИЕ ПО ЦЕНТРУ -->
   <div style="flex:1; text-align:center;">
@@ -206,7 +206,6 @@ input, select {
   </div>
 
   <button class="calc-btn" onclick="calcSimplePrice()">Рассчитать стоимость</button>
-  <button class="nav-btn" onclick="showRoute()">Показать маршрут на карте</button>
 
   <div id="calcResult">Введите расстояние или адреса и нажмите «Рассчитать стоимость».</div>
   <div id="map"></div>
@@ -288,28 +287,6 @@ function calcSimplePrice() {
   if (price < minPrice) price = minPrice;
 
   result.textContent = `Примерная дистанция: ~ ${km} км. Цена эвакуации: ~ ${Math.round(price)} ₽`;
-}
-
-function showRoute() {
-  const from = document.getElementById("fromAddress").value.trim();
-  const to = document.getElementById("toAddress").value.trim();
-  const result = document.getElementById("calcResult");
-
-  if (!from || !to) {
-    result.textContent = "Введите оба адреса, чтобы показать маршрут.";
-    return;
-  }
-
-  result.textContent = "Строим маршрут на карте…";
-
-  ymaps.route([from, to]).then(function(route) {
-    map2.geoObjects.removeAll();
-    map2.geoObjects.add(route);
-    map2.setBounds(route.getBounds(), { checkZoomRange: true });
-    result.textContent = "Маршрут показан на карте.";
-  }, function() {
-    result.textContent = "❌ Маршрут не найден. Проверьте адреса.";
-  });
 }
 
 function submitForm() {
