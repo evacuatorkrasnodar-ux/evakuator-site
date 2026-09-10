@@ -56,6 +56,13 @@ body {
   text-shadow:0 0 20px rgba(255,255,255,0.3);
 }
 
+/* Номер телефона в шапке */
+.header-phone {
+  margin-top:12px;
+  font-size:24px;
+  font-weight:600;
+}
+
 /* Анимация шапки */
 @keyframes fadeIn {
   from { opacity:0; transform:translateY(20px); }
@@ -72,16 +79,17 @@ body {
   font-weight:700;
   border:none;
   border-radius:18px;
-  margin:20px 0;
-  box-shadow:0 0 25px rgba(255,255,255,0.4);
+  margin:15px 0;
+  box-shadow:0 0 20px rgba(255,255,255,0.25);
   transition:0.3s;
   text-align:center;
   display:block;
   text-decoration:none;
+  box-sizing:border-box;
 }
 .uber-btn:hover {
-  box-shadow:0 0 40px rgba(255,255,255,0.7);
-  transform:translateY(-3px);
+  box-shadow:0 0 30px rgba(255,255,255,0.5);
+  transform:translateY(-2px);
 }
 
 /* Секции */
@@ -101,6 +109,12 @@ body {
   margin-bottom:20px;
   font-size:28px;
   font-weight:700;
+}
+
+/* Анимация Uber Motion */
+@keyframes uberFade {
+  0% { opacity:0; transform:translateY(10px); }
+  100% { opacity:1; transform:translateY(0); }
 }
 
 /* Калькулятор */
@@ -181,17 +195,11 @@ input, select {
   border:1px solid rgba(255,255,255,0.1);
 }
 
-/* Анимация Uber Motion для списка */
-@keyframes uberFade {
-  0% { opacity:0; transform:translateY(10px); }
-  100% { opacity:1; transform:translateY(0); }
-}
-
 /* Адаптив под iPhone */
 @media (max-width:600px) {
   .header img { height:160px; }
   .header-title h1 { font-size:30px; }
-  .call-btn { font-size:22px; }
+  .uber-btn { font-size:20px; }
 }
 </style>
 </head>
@@ -204,6 +212,14 @@ input, select {
     <img src="img/logo.png" alt="Логотип">
     <div class="header-title">
       <h1>Эвакуатор Краснодар 24/7</h1>
+
+      <!-- Номер телефона наверху -->
+      <div class="header-phone">
+        📞 <a href="tel:+79888717018" style="color:#fff; text-decoration:none;">
+          +7 (988) 871‑70‑18
+        </a>
+      </div>
+
     </div>
   </div>
 
@@ -213,76 +229,29 @@ input, select {
   <!-- Кнопка вызвать эвакуатор -->
   <a href="tel:+79888717018" class="uber-btn">🚨 Вызвать эвакуатор</a>
 
-  <!-- Почему выбирают нас (Uber Eats + Uber Motion) -->
+  <!-- Почему выбирают нас -->
   <section class="section">
     <h2>Почему выбирают нас</h2>
 
-    <div style="
-      font-size:21px;
-      line-height:1.75;
-      padding:5px 0;
-      letter-spacing:0.2px;
-    ">
-
-      <div style="
-        padding:14px 0;
-        border-bottom:1px solid rgba(255,255,255,0.10);
-        opacity:0.95;
-        animation:uberFade 0.6s ease forwards;
-        animation-delay:0.05s;
-      ">
+    <div style="font-size:21px; line-height:1.75; letter-spacing:0.2px;">
+      <div style="padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.10); opacity:0.95; animation:uberFade 0.6s ease forwards; animation-delay:0.05s;">
         Подача эвакуатора от 15 минут
       </div>
-
-      <div style="
-        padding:14px 0;
-        border-bottom:1px solid rgba(255,255,255,0.10);
-        opacity:0.95;
-        animation:uberFade 0.6s ease forwards;
-        animation-delay:0.15s;
-      ">
+      <div style="padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.10); opacity:0.95; animation:uberFade 0.6s ease forwards; animation-delay:0.15s;">
         Оплата картой или наличными
       </div>
-
-      <div style="
-        padding:14px 0;
-        border-bottom:1px solid rgba(255,255,255,0.10);
-        opacity:0.95;
-        animation:uberFade 0.6s ease forwards;
-        animation-delay:0.25s;
-      ">
+      <div style="padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.10); opacity:0.95; animation:uberFade 0.6s ease forwards; animation-delay:0.25s;">
         Аккуратная погрузка без повреждений
       </div>
-
-      <div style="
-        padding:14px 0;
-        border-bottom:1px solid rgba(255,255,255,0.10);
-        opacity:0.95;
-        animation:uberFade 0.6s ease forwards;
-        animation-delay:0.35s;
-      ">
+      <div style="padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.10); opacity:0.95; animation:uberFade 0.6s ease forwards; animation-delay:0.35s;">
         Работаем по Краснодару и всему краю
       </div>
-
-      <div style="
-        padding:14px 0;
-        border-bottom:1px solid rgba(255,255,255,0.10);
-        opacity:0.95;
-        animation:uberFade 0.6s ease forwards;
-        animation-delay:0.45s;
-      ">
+      <div style="padding:14px 0; border-bottom:1px solid rgba(255,255,255,0.10); opacity:0.95; animation:uberFade 0.6s ease forwards; animation-delay:0.45s;">
         Перевозка любых авто: легковые, кроссоверы, грузовые
       </div>
-
-      <div style="
-        padding:14px 0;
-        opacity:0.95;
-        animation:uberFade 0.6s ease forwards;
-        animation-delay:0.55s;
-      ">
+      <div style="padding:14px 0; opacity:0.95; animation:uberFade 0.6s ease forwards; animation-delay:0.55s;">
         Низкий клиренс — эвакуатор на пневмоподушках для премиум‑авто
       </div>
-
     </div>
   </section>
 
