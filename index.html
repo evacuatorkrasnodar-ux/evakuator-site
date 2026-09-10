@@ -9,6 +9,23 @@
 <!-- PWA -->
 <link rel="manifest" href="manifest.json">
 <script>
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById("installBtn").style.display = "block";
+});
+
+function installApp() {
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(() => {
+            deferredPrompt = null;
+            document.getElementById("installBtn").style.display = "none";
+        });
+    }
+}
+
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('service-worker.js');
 }
@@ -30,15 +47,7 @@ h1 { text-align:center; color:#f7c600; margin-bottom:10px; }
   border:1px solid #2a2a2a;
 }
 
-.review {
-  background:#1a1a1a;
-  padding:15px;
-  border-radius:12px;
-  border:1px solid #333;
-  margin-bottom:12px;
-}
-
-.adv-item {
+.review, .adv-item {
   background:#1a1a1a;
   padding:15px;
   border-radius:12px;
@@ -74,6 +83,20 @@ input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
   gap:10px;
   margin-bottom:20px;
 }
+
+#installBtn {
+  display:none;
+  width:100%;
+  padding:14px;
+  background:#0088ff;
+  border:none;
+  border-radius:10px;
+  font-size:18px;
+  font-weight:bold;
+  color:#fff;
+  margin-bottom:20px;
+  cursor:pointer;
+}
 </style>
 
 </head>
@@ -83,7 +106,21 @@ input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
 
 <h1>Эвакуатор Краснодар 24/7</h1>
 
-<!-- ======== ВВЕРХУ ТОЛЬКО КАЛЬКУЛЯТОР ======== -->
+<!-- Кнопка установки приложения -->
+<button id="installBtn" onclick="installApp()">Установить приложение</button>
+
+<!-- ======== ВЕРХ САЙТА — ТОЛЬКО «ПОЧЕМУ ВЫБИРАЮТ НАС» ======== -->
+
+<section class="section">
+  <h2>Почему выбирают нас</h2>
+  <div class="adv-item">🚚 Подача эвакуатора от 15 минут</div>
+  <div class="adv-item">💳 Оплата картой или наличными</div>
+  <div class="adv-item">🛠 Аккуратная погрузка без повреждений</div>
+  <div class="adv-item">📍 Работаем по Краснодару и краю</div>
+  <div class="adv-item">🔧 Перевозка любых авто: легковые, кроссоверы, грузовые</div>
+</section>
+
+<!-- ======== КАЛЬКУЛЯТОР ======== -->
 
 <section class="section">
   <h2>Расчёт стоимости</h2>
@@ -138,16 +175,7 @@ input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
   </div>
 </section>
 
-<!-- ======== ВСЕ БЛОКИ ПЕРЕНЕСЕНЫ ВНИЗ ======== -->
-
-<section class="section">
-  <h2>Почему выбирают нас</h2>
-  <div class="adv-item">🚚 Подача эвакуатора от 15 минут</div>
-  <div class="adv-item">💳 Оплата картой или наличными</div>
-  <div class="adv-item">🛠 Аккуратная погрузка без повреждений</div>
-  <div class="adv-item">📍 Работаем по Краснодару и краю</div>
-  <div class="adv-item">🔧 Перевозка любых авто: легковые, кроссоверы, грузовые</div>
-</section>
+<!-- ======== НИЗ САЙТА — ОТЗЫВЫ, РЕЙТИНГ, АВИТО ======== -->
 
 <section class="section">
   <h2>Отзывы клиентов</h2>
@@ -160,11 +188,11 @@ input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
   <h2>Рейтинг и площадки</h2>
 
   <div style="display:flex; gap:4px; margin-bottom:12px;">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg" style="width:26px; filter:invert(70%) sepia(90%) saturate(700%) hue-rotate(1deg);">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg" style="width:26px; filter:invert(70%) sepia(90%) saturate(700%) hue-rotate(1deg);">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg" style="width:26px; filter:invert(70%) sepia(90%) saturate(700%) hue-rotate(1deg);">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg" style="width:26px; filter:invert(70%) sepia(90%) saturate(700%) hue-rotate(1deg);">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg" style="width:26px; filter:invert(70%) sepia(90%) saturate(700%) hue-rotate(1deg);">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg" style="width:26px;">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg" style="width:26px;">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg" style="width:26px;">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg" style="width:26px;">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg" style="width:26px;">
   </div>
 
   <div class="avito-block">
