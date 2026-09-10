@@ -14,28 +14,45 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Эвакуатор Краснодар 24/7</title>
 
+<!-- Favicon -->
+<link rel="icon" type="image/png" href="icon.png">
+
 <!-- Яндекс.Карты -->
 <script src="https://api-maps.yandex.ru/2.1/?apikey=fc0f9182-0eee-4e83-bed3-8e561c88c4d5&lang=ru_RU"></script>
 
 <style>
 body { margin:0; background:#0a0a0a; font-family:Arial,sans-serif; color:#fff; }
 .container { max-width:900px; margin:auto; padding:20px; }
-h1 { text-align:center; color:#f7c600; margin-bottom:10px; }
+h1 { text-align:center; color:#f7c600; margin-bottom:10px; display:flex; justify-content:center; align-items:center; gap:10px; }
+h1 img { width:32px; height:32px; }
+
 .install-btn { width:100%; padding:14px; background:#0088ff; border:none; border-radius:10px;
                font-size:18px; font-weight:bold; cursor:pointer; margin-bottom:20px; display:none; }
+
 .calc-block { background:#111; padding:20px; border-radius:15px; border:1px solid #333; margin-bottom:20px; }
 .calc-row { display:flex; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
 input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
                 background:#1a1a1a; color:#fff; font-size:15px; }
+
 .calc-btn { width:100%; padding:14px; background:linear-gradient(135deg,#f7c600,#ff7b00);
-            border:none; border-radius:10px; font-size:18px; font-weight:bold; cursor:pointer; color:#000; }
+            border:none; border-radius:10px; font-size:18px; font-weight:bold; cursor:pointer; color:#000;
+            display:flex; align-items:center; justify-content:center; gap:10px; }
+.calc-btn img { width:24px; height:24px; }
+
 #calcResult { margin-top:10px; font-size:18px; color:#f7c600; }
 #map { width:100%; height:250px; border-radius:15px; margin-top:15px; }
+
 .form-block { background:#111; padding:20px; border-radius:15px; border:1px solid #333; }
 .form-submit { width:100%; padding:14px; background:linear-gradient(135deg,#ff7b00,#f7c600);
-               border:none; border-radius:10px; font-size:18px; font-weight:bold; cursor:pointer; color:#000; margin-top:10px; }
+               border:none; border-radius:10px; font-size:18px; font-weight:bold; cursor:pointer; color:#000;
+               display:flex; align-items:center; justify-content:center; gap:10px; }
+.form-submit img { width:24px; height:24px; }
+
 .messengers { display:flex; gap:10px; margin-top:10px; }
-.msg-btn { flex:1; padding:12px; border-radius:10px; border:none; font-size:16px; font-weight:bold; cursor:pointer; }
+.msg-btn { flex:1; padding:12px; border-radius:10px; border:none; font-size:16px; font-weight:bold; cursor:pointer;
+           display:flex; align-items:center; justify-content:center; gap:10px; }
+.msg-btn img { width:24px; height:24px; }
+
 .whatsapp { background:#25D366; color:#000; }
 .telegram { background:#0088cc; color:#fff; }
 </style>
@@ -44,7 +61,11 @@ input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
 <body>
 
 <div class="container">
-<h1>Эвакуатор Краснодар 24/7</h1>
+
+<h1>
+    <img src="icon.png" alt="Эвакуатор">
+    Эвакуатор Краснодар 24/7
+</h1>
 
 <button class="install-btn" id="installBtn">📱 Сохранить на главный экран</button>
 
@@ -67,8 +88,13 @@ input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
         </select>
     </div>
 
-    <button class="calc-btn" onclick="detectRouteDistance()">Определить расстояние</button>
-    <button class="calc-btn" style="margin-top:8px;background:#f7c600;" onclick="calcPrice()">Рассчитать цену</button>
+    <button class="calc-btn" onclick="detectRouteDistance()">
+        <img src="icon.png"> Определить расстояние
+    </button>
+
+    <button class="calc-btn" style="margin-top:8px;background:#f7c600;" onclick="calcPrice()">
+        <img src="icon.png"> Рассчитать цену
+    </button>
 
     <div id="calcResult">Введите адреса и нажмите «Определить расстояние».</div>
 
@@ -90,11 +116,17 @@ input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
         <input id="details" type="text" placeholder="Откуда → Куда, авто, ситуация">
     </div>
 
-    <button class="form-submit" onclick="submitForm()">Позвонить</button>
+    <button class="form-submit" onclick="submitForm()">
+        <img src="icon.png"> Позвонить
+    </button>
 
     <div class="messengers">
-        <button class="msg-btn whatsapp" onclick="sendWhatsApp()">WhatsApp</button>
-        <button class="msg-btn telegram" onclick="sendTelegram()">Telegram</button>
+        <button class="msg-btn whatsapp" onclick="sendWhatsApp()">
+            <img src="icon.png"> WhatsApp
+        </button>
+        <button class="msg-btn telegram" onclick="sendTelegram()">
+            <img src="icon.png"> Telegram
+        </button>
     </div>
 </div>
 </div>
@@ -137,7 +169,7 @@ ymaps.ready(() => {
         balloonContent: 'Эвакуатор Краснодар 24/7'
     }, {
         iconLayout: 'default#image',
-        iconImageHref: 'https://cdn-icons-png.flaticon.com/512/743/743131.png',
+        iconImageHref: 'icon.png',
         iconImageSize: [40, 40],
         iconImageOffset: [-20, -20]
     });
@@ -167,7 +199,6 @@ ymaps.ready(() => {
 
     map.controls.add(navButton);
 
-    // Авто‑заполнение адреса
     autoFillFrom();
 });
 
@@ -211,10 +242,6 @@ function detectRouteDistance() {
     });
 }
 
-// =========================
-// Авто‑заполнение адреса
-// =========================
-
 function autoFillFrom() {
     ymaps.geolocation.get().then(function (res) {
         var userCoords = res.geoObjects.get(0).geometry.getCoordinates();
@@ -225,10 +252,6 @@ function autoFillFrom() {
         });
     });
 }
-
-// =========================
-// РАСЧЁТ ЦЕНЫ
-// =========================
 
 function calcPrice() {
     const km = parseFloat(document.getElementById("distance")?.value || "0");
@@ -255,10 +278,6 @@ function calcPrice() {
         "Цена эвакуации: ~ " + Math.round(price) + " ₽";
 }
 
-// =========================
-// ЗАЯВКА
-// =========================
-
 function submitForm() {
     window.location.href = "tel:+79888717018";
 }
@@ -268,7 +287,7 @@ function sendWhatsApp() {
 }
 
 function sendTelegram() {
-    window.open("https://t.me/", "_blank"); // добавишь позже
+    window.open("https://t.me/", "_blank");
 }
 </script>
 
