@@ -13,7 +13,7 @@ let deferredPrompt;
 window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
-    document.getElementById("installBtn").style.display = "block";
+    document.getElementById("installBtn").style.display = "flex";
 });
 
 function installApp() {
@@ -46,6 +46,28 @@ h1 { text-align:center; color:#f7c600; margin-bottom:5px; }
   font-weight:bold;
   color:#fff;
   margin-top:0;
+}
+
+#installBtn {
+  display:none;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  width:100%;
+  padding:14px;
+  background:#0088ff;
+  border:none;
+  border-radius:10px;
+  font-size:18px;
+  font-weight:bold;
+  color:#fff;
+  margin-bottom:20px;
+  cursor:pointer;
+}
+
+#installBtn img {
+  width:22px;
+  height:22px;
 }
 
 .section {
@@ -145,19 +167,6 @@ input, select {
   margin-bottom:20px;
 }
 
-#installBtn {
-  display:none;
-  width:100%;
-  padding:14px;
-  background:#0088ff;
-  border:none;
-  border-radius:10px;
-  font-size:18px;
-  font-weight:bold;
-  color:#fff;
-  margin-bottom:20px;
-  cursor:pointer;
-}
 </style>
 
 </head>
@@ -171,7 +180,10 @@ input, select {
   📞 <a href="tel:+79888717018" style="color:#f7c600; text-decoration:none;">+7 (988) 871‑70‑18</a>
 </p>
 
-<button id="installBtn" onclick="installApp()">Установить приложение</button>
+<button id="installBtn" onclick="installApp()">
+  <img src="https://cdn-icons-png.flaticon.com/512/992/992651.png">
+  Установить приложение
+</button>
 
 <!-- ======== ВЕРХ — ПОЧЕМУ ВЫБИРАЮТ НАС ======== -->
 
@@ -282,8 +294,8 @@ function init() {
     });
 }
 
-// Расчёт маршрута и стоимости
-function calcRouteAndPrice() {
+// Новый стабильный расчёт маршрута (REST API)
+async function calcRouteAndPrice() {
     const from = document.getElementById("fromAddress").value.trim();
     const to = document.getElementById("toAddress").value.trim();
     const result = document.getElementById("calcResult");
@@ -295,13 +307,38 @@ function calcRouteAndPrice() {
 
     result.textContent = "Строим маршрут…";
 
-    ymaps.route([from, to]).then(function(route) {
-        map2.geoObjects.removeAll();
-        map2.geoObjects.add(route);
-        map2.setBounds(route.getBounds(), { checkZoomRange: true });
+    // Геокодирование
+    const geocode = async (addr) => {
+        const url = `https://geocode-maps.yandex.ru/1.x/?apikey=fc0f9182-0eee-4e83-bed3-8e561c88c4d5&format=json&geocode=${encodeURIComponent(addr)}`;
+        const r = await fetch(url);
+        const d = await r.json();
+        try {
+            const pos = d.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos.split(" ");
+            return [parseFloat(pos[1]), parseFloat(pos[0])]; // lat, lon
+        } catch {
+            return null;
+        }
+    };
 
-        const distance = route.getLength(); // в метрах
-        const km = Math.round(distance / 1000);
+    const fromCoords = await geocode(from);
+    const toCoords = await geocode(to);
+
+    if (!fromCoords || !toCoords) {
+        result.textContent = "❌ Адреса не найдены.";
+        return;
+    }
+
+    // Маршрут через REST API
+    const routeUrl =
+        `https://router.maps.yandex.net/v1/route?apikey=fc0f9182-0eee-4e83-bed3-8e561c88c4d5&` +
+        `waypoints=${fromCoords[0]},${fromCoords[1]}|${toCoords[0]},${toCoords[1]}&mode=driving`;
+
+    const routeResp = await fetch(routeUrl);
+    const routeData = await routeResp.json();
+
+    try {
+        const meters = routeData.routes[0].legs[0].distance.value;
+        const km = Math.round(meters / 1000);
 
         const carType = parseFloat(document.getElementById("carType").value);
 
@@ -318,9 +355,17 @@ function calcRouteAndPrice() {
         if (price < minPrice) price = minPrice;
 
         result.textContent = `Расстояние: ~ ${km} км. Цена эвакуации: ~ ${Math.round(price)} ₽`;
-    }, function() {
-        result.textContent = "❌ Маршрут не найден. Проверьте адреса.";
-    });
+
+        // Маркеры
+        map2.geoObjects.removeAll();
+        map2.geoObjects.add(new ymaps.Placemark(fromCoords));
+        map2.geoObjects.add(new ymaps.Placemark(toCoords));
+
+        map2.setCenter(fromCoords, 11);
+
+    } catch (e) {
+        result.textContent = "❌ Маршрут не найден.";
+    }
 }
 
 // Навигатор
