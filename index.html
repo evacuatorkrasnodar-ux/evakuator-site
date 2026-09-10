@@ -20,8 +20,7 @@
 <style>
 body { margin:0; background:#0a0a0a; font-family:Arial,sans-serif; color:#fff; }
 .container { max-width:900px; margin:auto; padding:20px; }
-h1 { text-align:center; color:#f7c600; margin-bottom:10px; display:flex; justify-content:center; align-items:center; gap:10px; }
-h1 img { width:40px; height:40px; }
+h1 { text-align:center; color:#f7c600; margin-bottom:10px; }
 
 .install-btn { width:100%; padding:14px; background:#0088ff; border:none; border-radius:10px;
                font-size:18px; font-weight:bold; cursor:pointer; margin-bottom:20px; display:none; }
@@ -51,10 +50,7 @@ input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
 <body>
 
 <div class="container">
-<h1>
-    <img src="evacuator.png" alt="Эвакуатор">
-    Эвакуатор Краснодар 24/7
-</h1>
+<h1>Эвакуатор Краснодар 24/7</h1>
 
 <button class="install-btn" id="installBtn">📱 Сохранить на главный экран</button>
 
@@ -77,9 +73,10 @@ input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
         </select>
     </div>
 
-    <button class="calc-btn" onclick="calcPrice()">Рассчитать цену</button>
+    <button class="calc-btn" onclick="detectRouteDistance()">Определить расстояние</button>
+    <button class="calc-btn" style="margin-top:8px;background:#f7c600;" onclick="calcPrice()">Рассчитать цену</button>
 
-    <div id="calcResult">Введите адреса и нажмите «Рассчитать цену».</div>
+    <div id="calcResult">Введите адреса и нажмите «Определить расстояние».</div>
 
     <div id="map"></div>
 </div>
@@ -109,6 +106,7 @@ input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
 </div>
 
 <script>
+// PWA
 let deferredPrompt;
 const installBtn = document.getElementById("installBtn");
 
@@ -123,6 +121,7 @@ installBtn.addEventListener("click", () => {
     deferredPrompt.prompt();
 });
 
+// Яндекс.Карты
 let map, route;
 let ymapsReady = false;
 
@@ -133,6 +132,7 @@ ymaps.ready(() => {
         zoom: 9
     });
 
+    // Иконка эвакуатора только на карте
     var evacIcon = new ymaps.Placemark([45.035470, 38.975313], {
         balloonContent: 'Эвакуатор Краснодар 24/7'
     }, {
@@ -143,20 +143,11 @@ ymaps.ready(() => {
     });
 
     map.geoObjects.add(evacIcon);
+
     autoFillFrom();
 });
 
-function autoFillFrom() {
-    ymaps.geolocation.get().then(function (res) {
-        var userCoords = res.geoObjects.get(0).geometry.getCoordinates();
-        ymaps.geocode(userCoords).then(function (geo) {
-            var address = geo.geoObjects.get(0).getAddressLine();
-            document.getElementById("fromAddress").value = address;
-        });
-    });
-}
-
-function calcPrice() {
+function detectRouteDistance() {
     const from = document.getElementById("fromAddress").value.trim();
     const to = document.getElementById("toAddress").value.trim();
     const result = document.getElementById("calcResult");
@@ -166,6 +157,15 @@ function calcPrice() {
         return;
     }
 
+    result.textContent = "Строим маршрут…";
+
+    if (!ymapsReady) {
+        result.textContent = "Карта загружается…";
+        return;
+    }
+
+    if (route) map.geoObjects.remove(route);
+
     ymaps.route([from, to]).then(r => {
         route = r;
         map.geoObjects.add(route);
@@ -173,24 +173,54 @@ function calcPrice() {
 
         const meters = route.getLength();
         const km = Math.round(meters / 1000);
-        const carType = parseFloat(document.getElementById("carType").value);
 
-        const basePerKm = 60;
-        const minCar = 1700;
-        const minCross = 1900;
-        const minTruck = 2200;
+        document.getElementById("distance")?.remove();
+        const hidden = document.createElement("input");
+        hidden.type = "hidden";
+        hidden.id = "distance";
+        hidden.value = km;
+        document.body.appendChild(hidden);
 
-        let minPrice = minCar;
-        if (carType === 1.1) minPrice = minCross;
-        if (carType === 1.3) minPrice = minTruck;
-
-        let price = km * basePerKm * carType;
-        if (price < minPrice) price = minPrice;
-
-        result.textContent = "Цена эвакуации: ~ " + Math.round(price) + " ₽";
+        result.textContent = "Расстояние: ~ " + km + " км";
     }).catch(() => {
         result.textContent = "Маршрут не найден. Уточните адреса.";
     });
+}
+
+function autoFillFrom() {
+    ymaps.geolocation.get().then(function (res) {
+        var userCoords = res.geoObjects.get(0).geometry.getCoordinates();
+
+        ymaps.geocode(userCoords).then(function (geo) {
+            var address = geo.geoObjects.get(0).getAddressLine();
+            document.getElementById("fromAddress").value = address;
+        });
+    });
+}
+
+function calcPrice() {
+    const km = parseFloat(document.getElementById("distance")?.value || "0");
+    const carType = parseFloat(document.getElementById("carType").value);
+
+    if (!km) {
+        document.getElementById("calcResult").textContent = "Сначала определите расстояние.";
+        return;
+    }
+
+    const basePerKm = 60;
+    const minCar = 1700;
+    const minCross = 1900;
+    const minTruck = 2200;
+
+    let minPrice = minCar;
+    if (carType === 1.1) minPrice = minCross;
+    if (carType === 1.3) minPrice = minTruck;
+
+    let price = km * basePerKm * carType;
+    if (price < minPrice) price = minPrice;
+
+    document.getElementById("calcResult").textContent =
+        "Цена эвакуации: ~ " + Math.round(price) + " ₽";
 }
 
 function submitForm() {
