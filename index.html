@@ -2,20 +2,20 @@
 <html lang="ru">
 <head> 
 
-<script>
-  if (window.location.hostname === "www.evakuator-krd.online") {
-    window.location.href = "https://evakuator-krd.online" + window.location.pathname;
-  }
-</script> 
-    
-<link rel="manifest" href="manifest.json">
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Эвакуатор Краснодар 24/7</title>
 
-<!-- Яндекс.Карты -->
-<script src="https://api-maps.yandex.ru/2.1/?apikey=fc0f9182-0eee-4e83-bed3-8e561c88c4d5&lang=ru_RU"></script>
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js');
+  }
+</script>
+
+<!-- Яндекс.Карты API 3.0 -->
+<script src="https://api-maps.yandex.ru/v3/?apikey=fc0f9182-0eee-4e83-bed3-8e561c88c4d5&lang=ru_RU"></script>
 
 <style>
 body { margin:0; background:#0a0a0a; font-family:Arial,sans-serif; color:#fff; }
@@ -47,6 +47,9 @@ input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
 .msg-btn { flex:1; padding:12px; border-radius:10px; border:none; font-size:16px; font-weight:bold; cursor:pointer; }
 .whatsapp { background:#25D366; color:#000; }
 .telegram { background:#0088cc; color:#fff; }
+
+.nav-btn { width:100%; padding:12px; margin-top:10px; border-radius:10px; border:none;
+           background:#222; color:#fff; font-size:15px; cursor:pointer; }
 </style>
 
 </head>
@@ -66,6 +69,7 @@ input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
         </div>
     </div>
 
+    <!-- PWA кнопка -->
     <button class="install-btn" id="installBtn">📱 Сохранить на главный экран</button>
 
     <div class="calc-block">
@@ -87,8 +91,9 @@ input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
             </select>
         </div>
 
-        <!-- ОДНА КНОПКА: строит маршрут + считает цену -->
         <button class="calc-btn" onclick="calcRouteAndPrice()">Рассчитать стоимость</button>
+
+        <button class="nav-btn" onclick="openInNavigator()">Открыть маршрут в навигаторе</button>
 
         <div id="calcResult">Введите адреса и нажмите «Рассчитать стоимость».</div>
 
@@ -123,7 +128,6 @@ input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
 // =========================
 // PWA кнопка установки
 // =========================
-
 let deferredPrompt;
 const installBtn = document.getElementById("installBtn");
 
@@ -139,42 +143,67 @@ installBtn.addEventListener("click", () => {
 });
 
 // =========================
-// Яндекс.Карты + подсказки адресов
+// Яндекс.Карты API 3.0
 // =========================
+let map;
+let route;
+let lastFromCoords = null;
+let lastToCoords = null;
 
-let map, route;
-let ymapsReady = false;
-
-ymaps.ready(() => {
-    ymapsReady = true;
-
-    map = new ymaps.Map("map", {
-        center: [45.035470, 38.975313],
-        zoom: 9
+ymaps3.ready.then(() => {
+    // Создаём карту
+    map = new ymaps3.YMap(document.getElementById("map"), {
+        location: {
+            center: [38.975313, 45.035470], // Краснодар
+            zoom: 10
+        }
     });
 
-    // Иконка эвакуатора
-    var evacIcon = new ymaps.Placemark([45.035470, 38.975313], {
-        balloonContent: 'Эвакуатор Краснодар 24/7'
-    }, {
-        iconLayout: 'default#image',
-        iconImageHref: 'https://cdn-icons-png.flaticon.com/512/743/743131.png',
-        iconImageSize: [40, 40],
-        iconImageOffset: [-20, -20]
-    });
+    // Слой карты
+    const layer = new ymaps3.YMapDefaultLayer();
+    map.addChild(layer);
 
-    map.geoObjects.add(evacIcon);
+    // Контролы
+    const controls = new ymaps3.YMapControls({ position: 'right' });
+    controls.addChild(new ymaps3.YMapZoomControl());
+    map.addChild(controls);
 
-    // Подсказки адресов (как в такси)
-    var fromSuggest = new ymaps.SuggestView('fromAddress');
-    var toSuggest = new ymaps.SuggestView('toAddress');
+    // Маркер эвакуатора
+    const marker = new ymaps3.YMapMarker(
+        { coordinates: [38.975313, 45.035470] },
+        document.createElement("div")
+    );
+    marker.element.style.width = "40px";
+    marker.element.style.height = "40px";
+    marker.element.style.backgroundImage = "url('https://cdn-icons-png.flaticon.com/512/743/743131.png')";
+    marker.element.style.backgroundSize = "contain";
+    marker.element.style.borderRadius = "50%";
+    map.addChild(marker);
 
-    // Авто‑заполнение "Откуда" по геолокации
-    autoFillFrom();
+    // Авто‑заполнение "Откуда" по геолокации (через браузер)
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(async (pos) => {
+            try {
+                const lat = pos.coords.latitude;
+                const lon = pos.coords.longitude;
+
+                const geocoder = new ymaps3.YMapGeocoder({ apikey: "fc0f9182-0eee-4e83-bed3-8e561c88c4d5" });
+                const res = await geocoder.geocode({ ll: [lon, lat] });
+                if (res.features && res.features[0]) {
+                    document.getElementById("fromAddress").value =
+                        res.features[0].properties.name || "Текущее местоположение";
+                }
+            } catch (e) {
+                console.log("Ошибка геокодера геолокации", e);
+            }
+        });
+    }
 });
 
-// ОДНА ФУНКЦИЯ: строит маршрут + считает цену
-function calcRouteAndPrice() {
+// =========================
+// Маршрут + расчёт стоимости
+// =========================
+async function calcRouteAndPrice() {
     const from = document.getElementById("fromAddress").value.trim();
     const to = document.getElementById("toAddress").value.trim();
     const result = document.getElementById("calcResult");
@@ -184,24 +213,61 @@ function calcRouteAndPrice() {
         return;
     }
 
-    if (!ymapsReady) {
-        result.textContent = "Карта загружается…";
+    if (!map) {
+        result.textContent = "Карта ещё загружается…";
         return;
     }
 
     result.textContent = "Строим маршрут и считаем стоимость…";
 
-    if (route) map.geoObjects.remove(route);
+    try {
+        const geocoder = new ymaps3.YMapGeocoder({ apikey: "fc0f9182-0eee-4e83-bed3-8e561c88c4d5" });
 
-    ymaps.route([from, to]).then(r => {
-        route = r;
-        map.geoObjects.add(route);
-        map.setBounds(route.getBounds());
+        const fromGeo = await geocoder.geocode({ text: from });
+        const toGeo = await geocoder.geocode({ text: to });
 
-        const meters = route.getLength();
-        const km = Math.round(meters / 1000);
+        if (!fromGeo.features.length || !toGeo.features.length) {
+            result.textContent = "Адреса не найдены. Уточните.";
+            return;
+        }
 
-        // Расчёт цены
+        const fromCoords = fromGeo.features[0].geometry.coordinates;
+        const toCoords = toGeo.features[0].geometry.coordinates;
+
+        lastFromCoords = fromCoords;
+        lastToCoords = toCoords;
+
+        const router = new ymaps3.YMapRouter({ apikey: "fc0f9182-0eee-4e83-bed3-8e561c88c4d5" });
+
+        const routeData = await router.route({
+            points: [
+                { coordinates: fromCoords },
+                { coordinates: toCoords }
+            ]
+        });
+
+        if (route) {
+            map.removeChild(route);
+        }
+
+        route = new ymaps3.YMapRoute(routeData);
+        map.addChild(route);
+
+        // Центрируем карту по маршруту
+        if (routeData.properties && routeData.properties.bbox) {
+            const bbox = routeData.properties.bbox;
+            const centerLon = (bbox[0][0] + bbox[1][0]) / 2;
+            const centerLat = (bbox[0][1] + bbox[1][1]) / 2;
+            map.update({
+                location: {
+                    center: [centerLon, centerLat],
+                    zoom: 10
+                }
+            });
+        }
+
+        const km = Math.round(routeData.properties.distance / 1000);
+
         const carType = parseFloat(document.getElementById("carType").value);
 
         const basePerKm = 60;
@@ -218,27 +284,33 @@ function calcRouteAndPrice() {
 
         result.textContent =
             "Расстояние: ~ " + km + " км. Цена эвакуации: ~ " + Math.round(price) + " ₽";
-    }).catch(() => {
-        result.textContent = "Маршрут не найден. Уточните адреса.";
-    });
-}
 
-// Авто‑заполнение адреса "Откуда"
-function autoFillFrom() {
-    ymaps.geolocation.get().then(function (res) {
-        var userCoords = res.geoObjects.get(0).geometry.getCoordinates();
-
-        ymaps.geocode(userCoords).then(function (geo) {
-            var address = geo.geoObjects.get(0).getAddressLine();
-            document.getElementById("fromAddress").value = address;
-        });
-    });
+    } catch (e) {
+        console.error(e);
+        result.textContent = "❌ Маршрут не найден. Уточните адреса.";
+    }
 }
 
 // =========================
-// ЗАЯВКА
+// Открыть маршрут в навигаторе
 // =========================
+function openInNavigator() {
+    const from = document.getElementById("fromAddress").value.trim();
+    const to = document.getElementById("toAddress").value.trim();
 
+    if (!from || !to) return;
+
+    const url = "https://yandex.ru/maps/?rtext=" +
+        encodeURIComponent(from) + "~" +
+        encodeURIComponent(to) +
+        "&rtt=auto";
+
+    window.open(url, "_blank");
+}
+
+// =========================
+// Заявка и мессенджеры
+// =========================
 function submitForm() {
     window.location.href = "tel:+79888717018";
 }
@@ -248,36 +320,8 @@ function sendWhatsApp() {
 }
 
 function sendTelegram() {
-    window.open("https://t.me/", "_blank"); // добавишь позже
+    window.open("https://t.me/", "_blank");
 }
-</script>
-<script>
-// ======== ТЕСТ РАБОТЫ ЯНДЕКС КАРТ ========
-
-ymaps.ready(function () {
-    console.log("YM Ready: API загружен");
-
-    // Пробуем построить тестовый маршрут
-    ymaps.route(["Краснодар", "Анапа"]).then(function (route) {
-        console.log("Маршрут построен — ключ работает");
-        const testBox = document.createElement("div");
-        testBox.style.padding = "10px";
-        testBox.style.margin = "10px 0";
-        testBox.style.background = "#113311";
-        testBox.style.border = "1px solid #44aa44";
-        testBox.innerText = "✔ Яндекс.Карты работают. Маршрут строится.";
-        document.body.appendChild(testBox);
-    }).catch(function (err) {
-        console.log("Ошибка маршрута:", err);
-        const testBox = document.createElement("div");
-        testBox.style.padding = "10px";
-        testBox.style.margin = "10px 0";
-        testBox.style.background = "#331111";
-        testBox.style.border = "1px solid #aa4444";
-        testBox.innerText = "❌ Маршрут НЕ строится. Ключ или домен не разрешён.";
-        document.body.appendChild(testBox);
-    });
-});
 </script>
 
 </body>
