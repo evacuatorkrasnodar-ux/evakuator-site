@@ -322,4 +322,141 @@ input, select {
       <select id="carType">
         <option value="1.0">Легковой автомобиль</option>
         <option value="1.1">Кроссовер / минивэн</option>
-        <option value="1.3">
+        <option value="1.3">Малый грузовик</option>
+      </select>
+    </div>
+    <button class="uber-btn" onclick="calcRealPrice()">Рассчитать стоимость</button>
+    <div id="calcResult">Введите адреса и нажмите «Рассчитать стоимость».</div>
+    <div id="map"></div>
+  </section>
+
+  <!-- Отзывы -->
+  <section class="section">
+    <h2>Отзывы клиентов</h2>
+    <div class="review">«Очень быстро приехали, аккуратно погрузили, цена честная. Рекомендую!» — Сергей</div>
+    <div class="review">«Выручили ночью, спасибо большое! Машину доставили без единой царапины.» — Анна</div>
+    <div class="review">«Лучший эвакуатор в Краснодаре. Приехали за 20 минут.» — Михаил</div>
+  </section>
+
+  <!-- Footer -->
+  <div class="footer">
+    📞 Эвакуатор Краснодар — 
+    <a href="tel:+79888717018" style="color:#fff; text-decoration:none;">
+      +7 (988) 871‑70‑18
+    </a>
+  </div>
+
+</div>
+
+<script>
+let deferredPrompt;
+
+// ANDROID — установка приложения
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const btn = document.getElementById("installBtn");
+  if (btn) btn.style.display = "block";
+});
+
+function installApp() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(() => {
+      deferredPrompt = null;
+      const btn = document.getElementById("installBtn");
+      if (btn) btn.style.display = "none";
+    });
+  }
+}
+
+// iPHONE — показываем инструкцию вместо кнопки
+const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+window.addEventListener("DOMContentLoaded", () => {
+  const installBtn = document.getElementById("installBtn");
+
+  if (isIOS) {
+    installBtn.style.display = "none";
+
+    const iosTip = document.createElement("div");
+    iosTip.style.background = "rgba(255,255,255,0.08)";
+    iosTip.style.backdropFilter = "blur(12px)";
+    iosTip.style.padding = "16px";
+    iosTip.style.borderRadius = "16px";
+    iosTip.style.marginTop = "14px";
+    iosTip.style.fontSize = "18px";
+    iosTip.style.lineHeight = "1.5";
+
+    iosTip.innerHTML = `
+      📱 <b>Установить приложение на iPhone:</b><br><br>
+      1. Нажмите <b>Поделиться</b> (кнопка со стрелкой внизу Safari)<br>
+      2. Выберите <b>«На экран Домой»</b><br>
+      3. Нажмите <b>Добавить</b>
+    `;
+
+    installBtn.parentNode.insertBefore(iosTip, installBtn.nextSibling);
+  }
+});
+
+ymaps.ready(function() {
+  window.map2 = new ymaps.Map("map", {
+    center: [45.035470, 38.975313],
+    zoom: 10,
+    controls: ['zoomControl']
+  });
+});
+
+function calcRealPrice() {
+  const from = document.getElementById("fromAddress").value.trim();
+  const to = document.getElementById("toAddress").value.trim();
+  const carType = parseFloat(document.getElementById("carType").value);
+  const result = document.getElementById("calcResult");
+
+  if (!from || !to) {
+    result.textContent = "Введите оба адреса.";
+    return;
+  }
+
+  ymaps.route([from, to]).then(function(route) {
+    map2.geoObjects.removeAll();
+    map2.geoObjects.add(route);
+    map2.setBounds(route.getBounds(), { checkZoomRange: true });
+
+    const distance = route.getLength() / 1000;
+
+    const basePerKm = 60;
+    const minCar = 1700;
+    const minCross = 1900;
+    const minTruck = 2200;
+
+    let minPrice = minCar;
+    if (carType === 1.1) minPrice = minCross;
+    if (carType === 1.3) minPrice = minTruck;
+
+    let price = distance * basePerKm * carType;
+    if (price < minPrice) price = minPrice;
+
+    result.textContent = `Расстояние: ${distance.toFixed(1)} км. Стоимость: ~ ${Math.round(price)} ₽`;
+
+  }, function() {
+    result.textContent = "❌ Маршрут не найден. Проверьте адреса.";
+  });
+}
+
+function submitForm() {
+  window.location.href = "tel:+79888717018";
+}
+function sendWhatsApp() {
+  window.open("https://wa.me/79888717018", "_blank");
+}
+function sendTelegram() {
+  window.open("https://t.me/", "_blank");
+}
+function sendVK() {
+  window.open("https://vk.com/", "_blank");
+}
+</script>
+
+</body>
+</html>
