@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Эвакуатор Краснодар 24/7</title>
@@ -11,41 +10,39 @@
 <script>
 let deferredPrompt;
 window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    document.getElementById("installBtn").style.display = "flex";
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById("installBtn").style.display = "flex";
 });
-
 function installApp() {
-    if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then(() => {
-            deferredPrompt = null;
-            document.getElementById("installBtn").style.display = "none";
-        });
-    }
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(() => {
+      deferredPrompt = null;
+      document.getElementById("installBtn").style.display = "none";
+    });
+  }
 }
-
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js');
+  navigator.serviceWorker.register('service-worker.js');
 }
 </script>
 
-<!-- Яндекс.Карты API 2.1 -->
+<!-- Яндекс.Карты API -->
 <script src="https://api-maps.yandex.ru/2.1/?apikey=fc0f9182-0eee-4e83-bed3-8e561c88c4d5&lang=ru_RU"></script>
 
 <style>
 body { margin:0; background:#0a0a0a; font-family:Arial,sans-serif; color:#fff; }
 .container { max-width:900px; margin:auto; padding:20px; }
 
-h1 { text-align:center; color:#f7c600; margin-bottom:5px; }
+h1 { color:#f7c600; margin:0; }
 
 .phone-top {
   text-align:center;
   font-size:22px;
   font-weight:bold;
   color:#fff;
-  margin-top:0;
+  margin-top:5px;
 }
 
 #installBtn {
@@ -61,14 +58,10 @@ h1 { text-align:center; color:#f7c600; margin-bottom:5px; }
   font-size:18px;
   font-weight:bold;
   color:#fff;
-  margin-bottom:20px;
+  margin:20px 0;
   cursor:pointer;
 }
-
-#installBtn img {
-  width:22px;
-  height:22px;
-}
+#installBtn img { width:22px; height:22px; }
 
 .section {
   background:#111;
@@ -166,27 +159,28 @@ input, select {
   gap:10px;
   margin-bottom:20px;
 }
-
 </style>
-
 </head>
 <body>
 
 <div class="container">
 
-<h1>Эвакуатор Краснодар 24/7</h1>
+<!-- Шапка -->
+<div style="display:flex; align-items:center; justify-content:center; gap:10px;">
+  <img src="img/evakuator.png" alt="Эвакуатор" style="width:60px; height:auto;">
+  <h1>Эвакуатор Краснодар 24/7</h1>
+</div>
 
 <p class="phone-top">
   📞 <a href="tel:+79888717018" style="color:#f7c600; text-decoration:none;">+7 (988) 871‑70‑18</a>
 </p>
 
 <button id="installBtn" onclick="installApp()">
-  <img src="https://cdn-icons-png.flaticon.com/512/992/992651.png">
+  <img src="img/install.png" alt="Установить">
   Установить приложение
 </button>
 
-<!-- ======== ВЕРХ — ПОЧЕМУ ВЫБИРАЮТ НАС ======== -->
-
+<!-- Почему выбирают нас -->
 <section class="section">
   <h2>Почему выбирают нас</h2>
   <div class="adv-item">🚚 Подача эвакуатора от 15 минут</div>
@@ -196,63 +190,45 @@ input, select {
   <div class="adv-item">🔧 Перевозка любых авто: легковые, кроссоверы, грузовые</div>
 </section>
 
-<!-- ======== КАЛЬКУЛЯТОР ======== -->
-
+<!-- Калькулятор -->
 <section class="section">
   <h2>Расчёт стоимости</h2>
 
   <div class="calc-row">
-      <input type="text" id="fromAddress" placeholder="Откуда забрать">
+    <input type="text" id="fromAddress" placeholder="Откуда забрать">
   </div>
-
   <div class="calc-row">
-      <input type="text" id="toAddress" placeholder="Куда отвезти">
+    <input type="text" id="toAddress" placeholder="Куда отвезти">
   </div>
-
   <div class="calc-row">
-      <select id="carType">
-          <option value="1.0">Легковой автомобиль</option>
-          <option value="1.1">Кроссовер / минивэн</option>
-          <option value="1.3">Малый грузовик</option>
-      </select>
+    <select id="carType">
+      <option value="1.0">Легковой автомобиль</option>
+      <option value="1.1">Кроссовер / минивэн</option>
+      <option value="1.3">Малый грузовик</option>
+    </select>
   </div>
 
-  <button class="calc-btn" onclick="calcRouteAndPrice()">Рассчитать стоимость</button>
-
-  <button class="nav-btn" onclick="openInNavigator()">Открыть маршрут в навигаторе</button>
+  <button class="calc-btn" onclick="calcSimplePrice()">Рассчитать стоимость</button>
+  <button class="nav-btn" onclick="showRoute()">Показать маршрут</button>
 
   <div id="calcResult">Введите адреса и нажмите «Рассчитать стоимость».</div>
-
   <div id="map"></div>
 </section>
 
-<!-- ======== ЗАЯВКА ======== -->
-
+<!-- Быстрая заявка -->
 <section class="section">
   <h2>Быстрая заявка</h2>
-
-  <div class="calc-row">
-      <input id="name" type="text" placeholder="Ваше имя">
-  </div>
-
-  <div class="calc-row">
-      <input id="phone" type="tel" placeholder="Ваш телефон">
-  </div>
-
-  <div class="calc-row">
-      <input id="details" type="text" placeholder="Откуда → Куда, авто, ситуация">
-  </div>
-
+  <div class="calc-row"><input id="name" type="text" placeholder="Ваше имя"></div>
+  <div class="calc-row"><input id="phone" type="tel" placeholder="Ваш телефон"></div>
+  <div class="calc-row"><input id="details" type="text" placeholder="Откуда → Куда, авто, ситуация"></div>
   <button class="form-submit" onclick="submitForm()">Позвонить</button>
-
   <div class="messengers">
-      <button class="msg-btn whatsapp" onclick="sendWhatsApp()">WhatsApp</button>
-      <button class="msg-btn telegram" onclick="sendTelegram()">Telegram</button>
+    <button class="msg-btn whatsapp" onclick="sendWhatsApp()">WhatsApp</button>
+    <button class="msg-btn telegram" onclick="sendTelegram()">Telegram</button>
   </div>
 </section>
 
-<!-- ======== НИЗ — ОТЗЫВЫ, РЕЙТИНГ, АВИТО ======== -->
-
+<!-- Отзывы и рейтинг -->
 <section class="section">
   <h2>Отзывы клиентов</h2>
   <div class="review">«Очень быстро приехали, аккуратно погрузили, цена честная. Рекомендую!» — Сергей</div>
@@ -261,141 +237,4 @@ input, select {
 </section>
 
 <section class="section">
-  <h2>Рейтинг и площадки</h2>
-
-  <div style="display:flex; gap:6px; margin-bottom:12px;">
-    <img src="https://i.imgur.com/9yG7qfM.png" style="width:28px;">
-    <img src="https://i.imgur.com/9yG7qfM.png" style="width:28px;">
-    <img src="https://i.imgur.com/9yG7qfM.png" style="width:28px;">
-    <img src="https://i.imgur.com/9yG7qfM.png" style="width:28px;">
-    <img src="https://i.imgur.com/9yG7qfM.png" style="width:28px;">
-  </div>
-
-  <div class="avito-block">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Avito_logo_2022.svg" style="width:120px; height:auto;">
-    <a href="https://www.avito.ru/" target="_blank" style="color:#fff; font-size:16px; font-weight:bold; text-decoration:none;">
-      Наш эвакуатор на Авито
-    </a>
-  </div>
-</section>
-
-</div>
-
-<script>
-// Инициализация карты
-ymaps.ready(init);
-let map2;
-
-function init() {
-    map2 = new ymaps.Map("map", {
-        center: [45.035470, 38.975313],
-        zoom: 10,
-        controls: ['zoomControl']
-    });
-}
-
-// Новый стабильный расчёт маршрута (REST API)
-async function calcRouteAndPrice() {
-    const from = document.getElementById("fromAddress").value.trim();
-    const to = document.getElementById("toAddress").value.trim();
-    const result = document.getElementById("calcResult");
-
-    if (!from || !to) {
-        result.textContent = "Введите оба адреса.";
-        return;
-    }
-
-    result.textContent = "Строим маршрут…";
-
-    // Геокодирование
-    const geocode = async (addr) => {
-        const url = `https://geocode-maps.yandex.ru/1.x/?apikey=fc0f9182-0eee-4e83-bed3-8e561c88c4d5&format=json&geocode=${encodeURIComponent(addr)}`;
-        const r = await fetch(url);
-        const d = await r.json();
-        try {
-            const pos = d.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos.split(" ");
-            return [parseFloat(pos[1]), parseFloat(pos[0])]; // lat, lon
-        } catch {
-            return null;
-        }
-    };
-
-    const fromCoords = await geocode(from);
-    const toCoords = await geocode(to);
-
-    if (!fromCoords || !toCoords) {
-        result.textContent = "❌ Адреса не найдены.";
-        return;
-    }
-
-    // Маршрут через REST API
-    const routeUrl =
-        `https://router.maps.yandex.net/v1/route?apikey=fc0f9182-0eee-4e83-bed3-8e561c88c4d5&` +
-        `waypoints=${fromCoords[0]},${fromCoords[1]}|${toCoords[0]},${toCoords[1]}&mode=driving`;
-
-    const routeResp = await fetch(routeUrl);
-    const routeData = await routeResp.json();
-
-    try {
-        const meters = routeData.routes[0].legs[0].distance.value;
-        const km = Math.round(meters / 1000);
-
-        const carType = parseFloat(document.getElementById("carType").value);
-
-        const basePerKm = 60;
-        const minCar = 1700;
-        const minCross = 1900;
-        const minTruck = 2200;
-
-        let minPrice = minCar;
-        if (carType === 1.1) minPrice = minCross;
-        if (carType === 1.3) minPrice = minTruck;
-
-        let price = km * basePerKm * carType;
-        if (price < minPrice) price = minPrice;
-
-        result.textContent = `Расстояние: ~ ${km} км. Цена эвакуации: ~ ${Math.round(price)} ₽`;
-
-        // Маркеры
-        map2.geoObjects.removeAll();
-        map2.geoObjects.add(new ymaps.Placemark(fromCoords));
-        map2.geoObjects.add(new ymaps.Placemark(toCoords));
-
-        map2.setCenter(fromCoords, 11);
-
-    } catch (e) {
-        result.textContent = "❌ Маршрут не найден.";
-    }
-}
-
-// Навигатор
-function openInNavigator() {
-    const from = document.getElementById("fromAddress").value.trim();
-    const to = document.getElementById("toAddress").value.trim();
-
-    if (!from || !to) return;
-
-    const url = "https://yandex.ru/maps/?rtext=" +
-        encodeURIComponent(from) + "~" +
-        encodeURIComponent(to) +
-        "&rtt=auto";
-
-    window.open(url, "_blank");
-}
-
-// Заявка
-function submitForm() {
-    window.location.href = "tel:+79888717018";
-}
-
-function sendWhatsApp() {
-    window.open("https://wa.me/79888717018", "_blank");
-}
-
-function sendTelegram() {
-    window.open("https://t.me/", "_blank");
-}
-</script>
-
-</body>
-</html>
+  <h
