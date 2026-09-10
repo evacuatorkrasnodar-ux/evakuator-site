@@ -59,6 +59,23 @@ body { margin:0; background:#0a0a0a; font-family:Arial,sans-serif; color:#fff; }
   border:1px solid #2a2a2a;
 }
 
+.adv-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.adv-card {
+  background:#1a1a1a;
+  border:1px solid #333;
+  padding:15px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.adv-icon { font-size:26px; }
+.adv-text { font-size:16px; line-height:1.3; }
+
 .review, .adv-item {
   background:#1a1a1a;
   padding:15px;
@@ -124,6 +141,7 @@ input, select {
 }
 .whatsapp { background:#25D366; color:#000; }
 .telegram { background:#0088cc; color:#fff; }
+.vk { background:#4a76a8; color:#fff; }
 
 .avito-block {
   background:#111;
@@ -141,19 +159,12 @@ input, select {
 
 <div class="container">
 
-<!-- ШАПКА: ЛОГОТИП СЛЕВА, НАЗВАНИЕ ПО ЦЕНТРУ -->
+<!-- ШАПКА -->
 <div style="display:flex; align-items:center; gap:20px; margin-bottom:10px;">
-
-  <!-- ЛОГОТИП ×2 -->
   <img src="img/logo.png" alt="Логотип" style="height:260px; width:auto;">
-
-  <!-- НАЗВАНИЕ ПО ЦЕНТРУ -->
   <div style="flex:1; text-align:center;">
-    <h1 style="color:#f7c600; font-size:36px; margin:0;">
-      Эвакуатор Краснодар 24/7
-    </h1>
+    <h1 style="color:#f7c600; font-size:36px; margin:0;">Эвакуатор Краснодар 24/7</h1>
   </div>
-
 </div>
 
 <p style="text-align:center; font-size:22px; font-weight:bold; color:#f7c600;">
@@ -168,11 +179,40 @@ input, select {
 <!-- Почему выбирают нас -->
 <section class="section">
   <h2>Почему выбирают нас</h2>
-  <div class="adv-item">🚚 Подача эвакуатора от 15 минут</div>
-  <div class="adv-item">💳 Оплата картой или наличными</div>
-  <div class="adv-item">🛠 Аккуратная погрузка без повреждений</div>
-  <div class="adv-item">📍 Работаем по Краснодару и краю</div>
-  <div class="adv-item">🔧 Перевозка любых авто: легковые, кроссоверы, грузовые</div>
+
+  <div class="adv-grid">
+
+    <div class="adv-card">
+      <div class="adv-icon">🚚</div>
+      <div class="adv-text">Подача эвакуатора от 15 минут</div>
+    </div>
+
+    <div class="adv-card">
+      <div class="adv-icon">💳</div>
+      <div class="adv-text">Оплата картой или наличными</div>
+    </div>
+
+    <div class="adv-card">
+      <div class="adv-icon">🛠</div>
+      <div class="adv-text">Аккуратная погрузка без повреждений</div>
+    </div>
+
+    <div class="adv-card">
+      <div class="adv-icon">📍</div>
+      <div class="adv-text">Работаем по Краснодару и всему краю</div>
+    </div>
+
+    <div class="adv-card">
+      <div class="adv-icon">🔧</div>
+      <div class="adv-text">Перевозка любых авто: легковые, кроссоверы, грузовые</div>
+    </div>
+
+    <div class="adv-card">
+      <div class="adv-icon">⬇️</div>
+      <div class="adv-text">Низкий клиренс — эвакуатор на пневмоподушках для премиум‑авто</div>
+    </div>
+
+  </div>
 </section>
 
 <!-- Калькулятор -->
@@ -209,6 +249,7 @@ input, select {
   <div class="messengers">
     <button class="msg-btn whatsapp" onclick="sendWhatsApp()">WhatsApp</button>
     <button class="msg-btn telegram" onclick="sendTelegram()">Telegram</button>
+    <button class="msg-btn vk" onclick="sendVK()">ВКонтакте</button>
   </div>
 </section>
 
@@ -267,7 +308,7 @@ function calcRealPrice() {
     map2.geoObjects.add(route);
     map2.setBounds(route.getBounds(), { checkZoomRange: true });
 
-    const distance = route.getLength() / 1000; // км
+    const distance = route.getLength() / 1000;
 
     const basePerKm = 60;
     const minCar = 1700;
@@ -296,6 +337,9 @@ function sendWhatsApp() {
 }
 function sendTelegram() {
   window.open("https://t.me/", "_blank");
+}
+function sendVK() {
+  window.open("https://vk.com/", "_blank");
 }
 </script>
 
