@@ -14,10 +14,10 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
-<!-- Яндекс.Карты API 3.0 — для отображения карты -->
+<!-- Яндекс.Карты API 3.0 -->
 <script src="https://api-maps.yandex.ru/v3/?apikey=fc0f9182-0eee-4e83-bed3-8e561c88c4d5&lang=ru_RU"></script>
 
-<!-- Яндекс.Карты API 2.1 — только для маршрута и геокодера -->
+<!-- Яндекс.Карты API 2.1 (маршрут + геокодер) -->
 <script src="https://api-maps.yandex.ru/2.1/?apikey=fc0f9182-0eee-4e83-bed3-8e561c88c4d5&lang=ru_RU"></script>
 
 <style>
@@ -25,16 +25,34 @@ body { margin:0; background:#0a0a0a; font-family:Arial,sans-serif; color:#fff; }
 .container { max-width:900px; margin:auto; padding:20px; }
 h1 { text-align:center; color:#f7c600; margin-bottom:10px; }
 
-.install-btn { width:100%; padding:14px; background:#0088ff; border:none; border-radius:10px;
-               font-size:18px; font-weight:bold; cursor:pointer; margin-bottom:20px; display:none; }
+/* Блоки */
+.section {
+  background:#111;
+  padding:20px;
+  border-radius:14px;
+  margin-bottom:20px;
+  border:1px solid #2a2a2a;
+}
 
-.top-info { display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; flex-wrap:wrap; }
-.rating { display:flex; align-items:center; gap:8px; }
-.stars { color:#f7c600; font-size:18px; }
-.avito { display:flex; align-items:center; gap:6px; font-size:14px; }
-.avito-icon { width:20px; height:20px; border-radius:4px; background:#00aaff; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:bold; }
+/* Отзывы */
+.review {
+  background:#1a1a1a;
+  padding:15px;
+  border-radius:12px;
+  border:1px solid #333;
+  margin-bottom:12px;
+}
 
-.calc-block { background:#111; padding:20px; border-radius:15px; border:1px solid #333; margin-bottom:20px; }
+/* Преимущества */
+.adv-item {
+  background:#1a1a1a;
+  padding:15px;
+  border-radius:12px;
+  border:1px solid #333;
+  margin-bottom:12px;
+}
+
+/* Калькулятор */
 .calc-row { display:flex; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
 input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
                 background:#1a1a1a; color:#fff; font-size:15px; }
@@ -43,7 +61,7 @@ input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
 #calcResult { margin-top:10px; font-size:18px; color:#f7c600; }
 #map { width:100%; height:250px; border-radius:15px; margin-top:15px; }
 
-.form-block { background:#111; padding:20px; border-radius:15px; border:1px solid #333; }
+/* Заявка */
 .form-submit { width:100%; padding:14px; background:linear-gradient(135deg,#ff7b00,#f7c600);
                border:none; border-radius:10px; font-size:18px; font-weight:bold; cursor:pointer; color:#000; margin-top:10px; }
 .messengers { display:flex; gap:10px; margin-top:10px; }
@@ -59,94 +77,120 @@ input, select { flex:1; padding:12px; border-radius:10px; border:1px solid #444;
 <body>
 
 <div class="container">
-    <h1>Эвакуатор Краснодар 24/7</h1>
 
-    <div class="top-info">
-        <div class="rating">
-            <span class="stars">★★★★★</span>
-            <span>Рейтинг 4.9</span>
-        </div>
-        <div class="avito">
-            <div class="avito-icon">A</div>
-            <span>Эвакуатор на Авито</span>
-        </div>
+<h1>Эвакуатор Краснодар 24/7</h1>
+
+<!-- ⭐ Красивый блок рейтинга + Авито -->
+<section class="section" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+
+  <div style="display:flex; align-items:center; gap:12px;">
+    <div style="display:flex; gap:4px;">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg" style="width:26px; filter:invert(71%) sepia(94%) saturate(748%) hue-rotate(1deg) brightness(103%) contrast(102%);">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg" style="width:26px; filter:invert(71%) sepia(94%) saturate(748%) hue-rotate(1deg) brightness(103%) contrast(102%);">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg" style="width:26px; filter:invert(71%) sepia(94%) saturate(748%) hue-rotate(1deg) brightness(103%) contrast(102%);">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg" style="width:26px; filter:invert(71%) sepia(94%) saturate(748%) hue-rotate(1deg) brightness(103%) contrast(102%);">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg" style="width:26px; filter:invert(71%) sepia(94%) saturate(748%) hue-rotate(1deg) brightness(103%) contrast(102%);">
     </div>
 
-    <!-- PWA кнопка -->
-    <button class="install-btn" id="installBtn">📱 Сохранить на главный экран</button>
-
-    <div class="calc-block">
-        <h2>Расчёт стоимости</h2>
-
-        <div class="calc-row">
-            <input type="text" id="fromAddress" placeholder="Откуда забрать">
-        </div>
-
-        <div class="calc-row">
-            <input type="text" id="toAddress" placeholder="Куда отвезти">
-        </div>
-
-        <div class="calc-row">
-            <select id="carType">
-                <option value="1.0">Легковой автомобиль</option>
-                <option value="1.1">Кроссовер / минивэн</option>
-                <option value="1.3">Малый грузовик</option>
-            </select>
-        </div>
-
-        <button class="calc-btn" onclick="calcRouteAndPrice()">Рассчитать стоимость</button>
-
-        <button class="nav-btn" onclick="openInNavigator()">Открыть маршрут в навигаторе</button>
-
-        <div id="calcResult">Введите адреса и нажмите «Рассчитать стоимость».</div>
-
-        <div id="map"></div>
+    <div style="font-size:18px; color:#f7c600; font-weight:bold;">
+      Рейтинг 4.9 / 5
     </div>
+  </div>
 
-    <div class="form-block">
-        <h2>Быстрая заявка</h2>
+  <a href="https://www.avito.ru/" target="_blank" style="
+    display:flex;
+    align-items:center;
+    gap:10px;
+    text-decoration:none;
+    background:#1a1a1a;
+    padding:10px 16px;
+    border-radius:10px;
+    border:1px solid #333;
+  ">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Avito_logo.svg" style="width:32px;">
+    <span style="color:#fff; font-size:16px; font-weight:bold;">Мы на Авито</span>
+  </a>
 
-        <div class="calc-row">
-            <input id="name" type="text" placeholder="Ваше имя">
-        </div>
+</section>
 
-        <div class="calc-row">
-            <input id="phone" type="tel" placeholder="Ваш телефон">
-        </div>
+<!-- ⭐ Преимущества -->
+<section class="section">
+  <h2>Почему выбирают нас</h2>
 
-        <div class="calc-row">
-            <input id="details" type="text" placeholder="Откуда → Куда, авто, ситуация">
-        </div>
+  <div class="adv-item">🚚 Подача эвакуатора от 15 минут</div>
+  <div class="adv-item">💳 Оплата картой или наличными</div>
+  <div class="adv-item">🛠 Аккуратная погрузка без повреждений</div>
+  <div class="adv-item">📍 Работаем по Краснодару и краю</div>
+  <div class="adv-item">🔧 Перевозка любых авто: легковые, кроссоверы, грузовые</div>
+</section>
 
-        <button class="form-submit" onclick="submitForm()">Позвонить</button>
+<!-- ⭐ Отзывы -->
+<section class="section">
+  <h2>Отзывы клиентов</h2>
 
-        <div class="messengers">
-            <button class="msg-btn whatsapp" onclick="sendWhatsApp()">WhatsApp</button>
-            <button class="msg-btn telegram" onclick="sendTelegram()">Telegram</button>
-        </div>
-    </div>
+  <div class="review">«Очень быстро приехали, аккуратно погрузили, цена честная. Рекомендую!» — Сергей</div>
+  <div class="review">«Выручили ночью, спасибо большое! Машину доставили без единой царапины.» — Анна</div>
+  <div class="review">«Лучший эвакуатор в Краснодаре. Приехали за 20 минут.» — Михаил</div>
+</section>
+
+<!-- ⭐ Калькулятор -->
+<section class="section">
+  <h2>Расчёт стоимости</h2>
+
+  <div class="calc-row">
+      <input type="text" id="fromAddress" placeholder="Откуда забрать">
+  </div>
+
+  <div class="calc-row">
+      <input type="text" id="toAddress" placeholder="Куда отвезти">
+  </div>
+
+  <div class="calc-row">
+      <select id="carType">
+          <option value="1.0">Легковой автомобиль</option>
+          <option value="1.1">Кроссовер / минивэн</option>
+          <option value="1.3">Малый грузовик</option>
+      </select>
+  </div>
+
+  <button class="calc-btn" onclick="calcRouteAndPrice()">Рассчитать стоимость</button>
+
+  <button class="nav-btn" onclick="openInNavigator()">Открыть маршрут в навигаторе</button>
+
+  <div id="calcResult">Введите адреса и нажмите «Рассчитать стоимость».</div>
+
+  <div id="map"></div>
+</section>
+
+<!-- ⭐ Заявка -->
+<section class="section">
+  <h2>Быстрая заявка</h2>
+
+  <div class="calc-row">
+      <input id="name" type="text" placeholder="Ваше имя">
+  </div>
+
+  <div class="calc-row">
+      <input id="phone" type="tel" placeholder="Ваш телефон">
+  </div>
+
+  <div class="calc-row">
+      <input id="details" type="text" placeholder="Откуда → Куда, авто, ситуация">
+  </div>
+
+  <button class="form-submit" onclick="submitForm()">Позвонить</button>
+
+  <div class="messengers">
+      <button class="msg-btn whatsapp" onclick="sendWhatsApp()">WhatsApp</button>
+      <button class="msg-btn telegram" onclick="sendTelegram()">Telegram</button>
+  </div>
+</section>
+
 </div>
 
 <script>
 // =========================
-// PWA кнопка установки
-// =========================
-let deferredPrompt;
-const installBtn = document.getElementById("installBtn");
-
-window.addEventListener("beforeinstallprompt", (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    installBtn.style.display = "block";
-});
-
-installBtn.addEventListener("click", () => {
-    installBtn.style.display = "none";
-    deferredPrompt.prompt();
-});
-
-// =========================
-// Карта: API 3.0
+// Карта API 3.0
 // =========================
 let map3;
 ymaps3.ready.then(() => {
@@ -163,24 +207,11 @@ ymaps3.ready.then(() => {
     const controls = new ymaps3.YMapControls({ position: 'right' });
     controls.addChild(new ymaps3.YMapZoomControl());
     map3.addChild(controls);
-
-    const marker = new ymaps3.YMapMarker(
-        { coordinates: [38.975313, 45.035470] },
-        document.createElement("div")
-    );
-    marker.element.style.width = "40px";
-    marker.element.style.height = "40px";
-    marker.element.style.backgroundImage = "url('https://cdn-icons-png.flaticon.com/512/743/743131.png')";
-    marker.element.style.backgroundSize = "contain";
-    marker.element.style.borderRadius = "50%";
-    map3.addChild(marker);
 });
 
 // =========================
-// Маршрут + расчёт: API 2.1
+// Маршрут API 2.1
 // =========================
-let route2;
-
 function calcRouteAndPrice() {
     const from = document.getElementById("fromAddress").value.trim();
     const to = document.getElementById("toAddress").value.trim();
@@ -200,12 +231,8 @@ function calcRouteAndPrice() {
             ymaps.geocode(to).then(function (resTo) {
                 const toCoords = resTo.geoObjects.get(0).geometry.getCoordinates();
 
-                if (route2) {
-                    map3 && map3.removeChild(route2);
-                }
-
                 ymaps.route([fromCoords, toCoords]).then(function (route) {
-                    // Отображаем маршрут на старой карте API 2.1, но визуально он будет поверх div#map
+
                     const map2 = new ymaps.Map('map', {
                         center: fromCoords,
                         zoom: 10,
@@ -214,7 +241,7 @@ function calcRouteAndPrice() {
 
                     map2.geoObjects.add(route);
 
-                    const distance = route.getLength(); // в метрах
+                    const distance = route.getLength();
                     const km = Math.round(distance / 1000);
 
                     const carType = parseFloat(document.getElementById("carType").value);
@@ -232,20 +259,17 @@ function calcRouteAndPrice() {
                     if (price < minPrice) price = minPrice;
 
                     result.textContent = `Расстояние: ~ ${km} км. Цена эвакуации: ~ ${Math.round(price)} ₽`;
+
                 }, function () {
                     result.textContent = "❌ Маршрут не найден.";
                 });
-            }, function () {
-                result.textContent = "❌ Адрес назначения не найден.";
             });
-        }, function () {
-            result.textContent = "❌ Адрес отправления не найден.";
         });
     });
 }
 
 // =========================
-// Открыть маршрут в навигаторе
+// Навигатор
 // =========================
 function openInNavigator() {
     const from = document.getElementById("fromAddress").value.trim();
@@ -262,7 +286,7 @@ function openInNavigator() {
 }
 
 // =========================
-// Заявка и мессенджеры
+// Заявка
 // =========================
 function submitForm() {
     window.location.href = "tel:+79888717018";
