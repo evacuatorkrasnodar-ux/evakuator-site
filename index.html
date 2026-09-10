@@ -62,6 +62,26 @@ body {
   to { opacity:1; transform:translateY(0); }
 }
 
+/* Кнопка установить приложение */
+#installBtn {
+  display:none;
+  width:100%;
+  padding:18px;
+  background:#fff;
+  color:#000;
+  font-size:22px;
+  font-weight:700;
+  border:none;
+  border-radius:18px;
+  margin:20px 0;
+  box-shadow:0 0 25px rgba(255,255,255,0.4);
+  transition:0.3s;
+}
+#installBtn:hover {
+  box-shadow:0 0 40px rgba(255,255,255,0.7);
+  transform:translateY(-3px);
+}
+
 /* Кнопка вызвать эвакуатор */
 .call-btn {
   display:block;
@@ -132,6 +152,7 @@ body {
 .adv-text {
   font-size:18px;
   line-height:1.4;
+  color:#fff;
 }
 
 /* Калькулятор */
@@ -230,6 +251,20 @@ input, select {
   font-size:18px;
 }
 
+/* Footer */
+.footer {
+  text-align:center;
+  margin-top:30px;
+  padding:20px;
+  font-size:22px;
+  font-weight:700;
+  color:#fff;
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(10px);
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,0.1);
+}
+
 /* Адаптив под iPhone */
 @media (max-width:600px) {
   .header img { height:160px; }
@@ -250,6 +285,9 @@ input, select {
     <h1>Эвакуатор Краснодар 24/7</h1>
   </div>
 </div>
+
+<!-- Кнопка установить приложение -->
+<button id="installBtn" onclick="installApp()">📲 Установить приложение</button>
 
 <!-- Кнопка вызвать эвакуатор -->
 <a href="tel:+79888717018" class="call-btn">🚨 Вызвать эвакуатор</a>
@@ -306,9 +344,32 @@ input, select {
   <div class="review">«Лучший эвакуатор в Краснодаре. Приехали за 20 минут.» — Михаил</div>
 </section>
 
+<!-- Footer -->
+<div class="footer">
+  📞 Эвакуатор Краснодар — <a href="tel:+79888717018" style="color:#fff; text-decoration:none;">+7 (988) 871‑70‑18</a>
+</div>
+
 </div>
 
 <script>
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById("installBtn").style.display = "block";
+});
+
+function installApp() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(() => {
+      deferredPrompt = null;
+      document.getElementById("installBtn").style.display = "none";
+    });
+  }
+}
+
 ymaps.ready(function() {
   window.map2 = new ymaps.Map("map", {
     center: [45.035470, 38.975313],
