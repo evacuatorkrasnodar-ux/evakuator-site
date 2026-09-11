@@ -449,13 +449,31 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-ymaps.ready(function() {
-  window.map2 = new ymaps.Map("map", {
-    center: [45.035470, 38.975313],
-    zoom: 10,
-    controls: ['zoomControl']
-  });
+// ======== АВТОПОДСКАЗКИ АДРЕСОВ + КАРТА ========
+
+ymaps.ready(function () {
+
+    // Подсказки для поля "Откуда"
+    const suggestFrom = new ymaps.SuggestView('fromAddress', {
+        results: 8,
+        width: '100%'
+    });
+
+    // Подсказки для поля "Куда"
+    const suggestTo = new ymaps.SuggestView('toAddress', {
+        results: 8,
+        width: '100%'
+    });
+
+    // Карта
+    window.map2 = new ymaps.Map("map", {
+        center: [45.035470, 38.975313],
+        zoom: 10,
+        controls: ['zoomControl']
+    });
 });
+
+// ======== РАСЧЁТ МАРШРУТА ========
 
 function calcRealPrice() {
   const from = document.getElementById("fromAddress").value.trim();
@@ -469,6 +487,7 @@ function calcRealPrice() {
   }
 
   ymaps.route([from, to]).then(function(route) {
+
     map2.geoObjects.removeAll();
     map2.geoObjects.add(route);
     map2.setBounds(route.getBounds(), { checkZoomRange: true });
