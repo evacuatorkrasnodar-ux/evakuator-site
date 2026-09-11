@@ -41,7 +41,7 @@ body {
   100% { opacity:1; transform:translateY(0); }
 }
 
-/* Шапка — НЕ трогаем, только добавляем fade */
+/* Шапка — НЕ трогаем, только фикс заголовка */
 .header {
   background:rgba(20,20,20,0.7);
   backdrop-filter:blur(20px);
@@ -65,10 +65,11 @@ body {
 }
 
 .header-title h1 {
-  font-size:22px;
-  line-height:1.1;
+  font-size:26px;       /* фикс для iPhone */
+  line-height:1.05;
   margin:0;
   font-weight:700;
+  white-space:nowrap;   /* запрещает перенос */
 }
 
 .header-phone {
@@ -199,39 +200,8 @@ input, select {
 
 /* ANDROID FIX */
 @media screen and (max-width:900px) and (pointer:coarse) {
-  .header {
-    padding:10px;
-    gap:10px;
-  }
-
-  .header img {
-    height:90px;
-  }
-
   .header-title h1 {
-    font-size:20px;
-  }
-
-  .header-phone {
-    font-size:16px;
-  }
-
-  .uber-btn {
-    font-size:18px;
-    padding:14px;
-  }
-
-  input, select {
-    font-size:17px;
-    padding:12px;
-  }
-
-  #map {
-    height:240px;
-  }
-
-  .section {
-    padding:18px;
+    font-size:22px;   /* фикс для Android */
   }
 }
 </style>
