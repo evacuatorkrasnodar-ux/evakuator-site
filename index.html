@@ -41,7 +41,7 @@ body {
   100% { opacity:1; transform:translateY(0); }
 }
 
-/* Шапка — НЕ трогаем, только фикс заголовка */
+/* Шапка — фиксируем заголовок и логотип */
 .header {
   background:rgba(20,20,20,0.7);
   backdrop-filter:blur(20px);
@@ -55,7 +55,7 @@ body {
 }
 
 .header img {
-  height:110px;
+  height:120px; /* фикс логотипа */
   width:auto;
 }
 
@@ -65,11 +65,11 @@ body {
 }
 
 .header-title h1 {
-  font-size:26px;       /* фикс для iPhone */
+  font-size:24px; /* универсальный размер */
   line-height:1.05;
   margin:0;
   font-weight:700;
-  white-space:nowrap;   /* запрещает перенос */
+  white-space:nowrap; /* не переносится */
 }
 
 .header-phone {
@@ -78,7 +78,7 @@ body {
   font-weight:600;
 }
 
-/* Кнопки + подсвечивание */
+/* Кнопки + подсветка */
 .uber-btn {
   width:100%;
   padding:16px;
@@ -201,15 +201,15 @@ input, select {
 /* ANDROID FIX */
 @media screen and (max-width:900px) and (pointer:coarse) {
   .header-title h1 {
-    font-size:22px;   /* фикс для Android */
+    font-size:21px; /* ровно на Android */
   }
 }
 
 /* iPhone FIX — чтобы заголовок не вылазил */
 @supports (-webkit-touch-callout: none) {
   .header-title h1 {
-    font-size:23px;
-    letter-spacing:-0.5px;
+    font-size:22px; /* ровно на iPhone */
+    letter-spacing:-0.3px;
   }
 }
 </style>
@@ -273,7 +273,7 @@ input, select {
     <div id="map"></div>
   </section>
 
-  <!-- СОЦСЕТИ ПОД КАРТОЙ -->
+  <!-- СОЦСЕТИ -->
   <section class="section fade">
     <h2>Мы в соцсетях</h2>
 
