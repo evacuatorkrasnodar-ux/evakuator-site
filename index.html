@@ -10,6 +10,7 @@
 <script src="https://api-maps.yandex.ru/2.1/?apikey=fc0f9182-0eee-4e83-bed3-8e561c88c4d5&lang=ru_RU"></script>
 
 <style>
+/* ГЛОБАЛЬНОЕ — ОБЩЕЕ ДЛЯ ВСЕХ */
 * {
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
@@ -18,98 +19,54 @@
 body {
   margin:0;
   background:#000;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial;
+  font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
   color:#fff;
   overflow-x:hidden;
 }
 
-/* ШИРОКИЙ САЙТ */
 .container {
-  width:100%;
-  max-width:100%;
-  margin:0;
-  padding:12px;
+  max-width:900px;
+  margin:auto;
+  padding:16px;
 }
 
-/* Глобальная плавная анимация */
-.fade {
-  opacity:0;
-  transform:translateY(20px);
-  animation:fadeUp .7s ease forwards;
-}
-
-@keyframes fadeUp {
-  0% { opacity:0; transform:translateY(20px); }
-  100% { opacity:1; transform:translateY(0); }
-}
-
-/* НОВАЯ ИДЕАЛЬНАЯ ШАПКА */
+/* ШАПКА — ОСНОВНАЯ (ANDROID/ПК) */
 .header {
-  width:100%;
+  background:rgba(20,20,20,0.7);
+  backdrop-filter:blur(20px);
+  padding:20px;
+  border-radius:22px;
+  box-shadow:0 0 30px rgba(0,0,0,0.7);
   display:flex;
   align-items:center;
-  gap:16px;
-  background:rgba(20,20,20,0.75);
-  padding:16px;
-  border-radius:20px;
-  box-shadow:0 0 25px rgba(0,0,0,0.55);
-  overflow:hidden;
+  gap:18px;
+  margin-bottom:20px;
 }
 
-/* ЛОГОТИП — КРУПНЫЙ */
-.header-logo {
+.header img {
   height:150px;
+  width:auto;
   flex-shrink:0;
-  border-radius:16px;
 }
 
-/* ТЕКСТОВЫЙ БЛОК */
-.header-text {
+.header-title {
   flex:1;
-  min-width:0;
+  text-align:center;
 }
 
-/* ЭВАКУАТОР КРАСНОДАР — КРУПНО */
-.header-title-main {
+.header-title h1 {
   font-size:28px;
-  font-weight:800;
-  white-space:nowrap;
-}
-
-/* 24/7 — ОТДЕЛЬНО */
-.header-title-sub {
-  font-size:20px;
+  margin:0;
   font-weight:700;
-  color:#ffcc00;
-  margin-top:4px;
 }
 
-/* ТЕЛЕФОН — ВСЕГДА В ОДНУ СТРОКУ */
 .header-phone {
-  margin-top:10px;
-  font-size:22px;
-  font-weight:700;
-  white-space:nowrap;
+  margin-top:8px;
+  font-size:20px;
+  font-weight:600;
 }
 
-.header-phone a {
-  color:#fff;
-  text-decoration:none;
-}
-
-/* iPhone FIX */
-@supports (-webkit-touch-callout:none) {
-  .header-title-main { font-size:24px; }
-  .header-logo { height:130px; }
-}
-
-/* Android FIX */
-@media (max-width:900px) and (pointer:coarse) {
-  .header-title-main { font-size:23px; }
-  .header-logo { height:125px; }
-}
-
-/* Кнопки */
+/* КНОПКИ */
 .uber-btn {
   width:100%;
   padding:16px;
@@ -125,26 +82,13 @@ body {
   text-align:center;
   display:block;
   text-decoration:none;
-  position:relative;
-  overflow:hidden;
 }
 
-.uber-btn::after {
-  content:"";
-  position:absolute;
-  top:0;
-  left:-100%;
-  width:100%;
-  height:100%;
-  background:rgba(255,255,255,0.25);
-  transition:0.4s;
+.uber-btn:hover {
+  transform:translateY(-2px);
 }
 
-.uber-btn:hover::after {
-  left:0;
-}
-
-/* Секции */
+/* СЕКЦИИ */
 .section {
   background:rgba(20,20,20,0.6);
   backdrop-filter:blur(15px);
@@ -159,23 +103,21 @@ body {
   margin-bottom:16px;
 }
 
-/* Анимация преимуществ */
+/* Анимация Uber Motion */
+@keyframes uberFade {
+  0% { opacity:0; transform:translateY(10px); }
+  100% { opacity:1; transform:translateY(0); }
+}
+
 .adv-item {
   padding:12px 0;
   border-bottom:1px solid rgba(255,255,255,0.10);
   font-size:19px;
-  opacity:0;
-  animation:fadeUp .7s ease forwards;
+  opacity:0.95;
+  animation:uberFade 0.6s ease forwards;
 }
 
-.adv-item:nth-child(1) { animation-delay:0.1s; }
-.adv-item:nth-child(2) { animation-delay:0.2s; }
-.adv-item:nth-child(3) { animation-delay:0.3s; }
-.adv-item:nth-child(4) { animation-delay:0.4s; }
-.adv-item:nth-child(5) { animation-delay:0.5s; }
-.adv-item:nth-child(6) { animation-delay:0.6s; }
-
-/* Калькулятор */
+/* КАЛЬКУЛЯТОР */
 .calc-row {
   display:flex;
   gap:10px;
@@ -187,8 +129,8 @@ input, select {
   flex:1;
   padding:14px;
   border-radius:14px;
-  border:1px solid rgba(255,255,255,0.25);
-  background:#111;
+  border:1px solid rgba(255,255,255,0.15);
+  background:rgba(255,255,255,0.05);
   color:#fff;
   font-size:18px;
 }
@@ -198,19 +140,14 @@ input, select {
   font-size:20px;
 }
 
-/* Карта */
 #map {
   width:100%;
-  height:260px;
+  height:240px;
   border-radius:18px;
   margin-top:16px;
-  opacity:0;
-  transform:translateY(20px);
-  transition:opacity .7s ease,transform .7s ease;
-  filter:brightness(.75) contrast(1.15);
 }
 
-/* Отзывы */
+/* ОТЗЫВЫ */
 .review {
   background:rgba(255,255,255,0.05);
   padding:16px;
@@ -219,7 +156,7 @@ input, select {
   font-size:18px;
 }
 
-/* Футер */
+/* ФУТЕР */
 .footer {
   text-align:center;
   padding:16px;
@@ -229,10 +166,156 @@ input, select {
   margin-top:20px;
 }
 
-.footer a {
-  color:#fff;
-  text-decoration:none;
-  white-space:nowrap;
+/* ============================= */
+/*        ОТДЕЛЬНЫЙ iPHONE       */
+/* ============================= */
+
+@supports (-webkit-touch-callout: none) {
+
+  body {
+    background:#000;
+  }
+
+  .header {
+    padding:14px;
+    border-radius:18px;
+    gap:12px;
+    box-shadow:none;
+  }
+
+  .header img {
+    height:110px;
+  }
+
+  .header-title h1 {
+    font-size:22px;
+  }
+
+  .header-phone {
+    font-size:18px;
+  }
+
+  .uber-btn {
+    padding:12px;
+    font-size:17px;
+    border-radius:14px;
+    margin:10px 0;
+    box-shadow:none;
+  }
+
+  .section {
+    padding:16px;
+    border-radius:18px;
+    box-shadow:none;
+  }
+
+  .section h2 {
+    font-size:20px;
+  }
+
+  .adv-item {
+    font-size:17px;
+    padding:10px 0;
+  }
+
+  input, select {
+    padding:12px;
+    font-size:16px;
+    border-radius:12px;
+  }
+
+  #map {
+    height:200px;
+    border-radius:14px;
+  }
+
+  .review {
+    padding:14px;
+    font-size:16px;
+    border-radius:12px;
+  }
+
+  .footer {
+    padding:14px;
+    font-size:18px;
+    border-radius:14px;
+  }
+}
+
+/* ============================= */
+/*        ОТДЕЛЬНЫЙ ANDROID      */
+/* ============================= */
+
+@media screen and (max-width:900px) and (pointer:coarse) and (min-device-width:360px) {
+
+  body {
+    background:#000;
+  }
+
+  .header {
+    padding:18px;
+    border-radius:20px;
+    gap:14px;
+    box-shadow:0 0 18px rgba(0,0,0,0.6);
+  }
+
+  .header img {
+    height:130px;
+  }
+
+  .header-title h1 {
+    font-size:26px;
+  }
+
+  .header-phone {
+    font-size:19px;
+  }
+
+  .uber-btn {
+    padding:14px;
+    font-size:19px;
+    border-radius:14px;
+    margin:12px 0;
+    box-shadow:0 0 14px rgba(255,255,255,0.18);
+  }
+
+  .section {
+    padding:18px;
+    border-radius:20px;
+    box-shadow:0 0 14px rgba(0,0,0,0.4);
+  }
+
+  .section h2 {
+    font-size:22px;
+  }
+
+  .adv-item {
+    font-size:18px;
+    padding:10px 0;
+  }
+
+  input, select {
+    padding:12px;
+    font-size:17px;
+    border-radius:12px;
+  }
+
+  #map {
+    height:220px;
+    border-radius:16px;
+  }
+
+  .review {
+    padding:14px;
+    font-size:17px;
+    border-radius:12px;
+  }
+
+  .footer {
+    padding:14px;
+    font-size:19px;
+    border-radius:14px;
+  }
 }
 </style>
 </head>
@@ -241,47 +324,50 @@ input, select {
 
 <div class="container">
 
-  <!-- НОВАЯ ИДЕАЛЬНАЯ ШАПКА -->
-  <div class="header fade">
-    <img src="img/logo.png" alt="Логотип" class="header-logo">
+  <!-- ШАПКА -->
+  <div class="header">
+    <img src="img/logo.png" alt="Логотип">
+    <div class="header-title">
+      <h1>Эвакуатор Краснодар 24/7</h1>
 
-    <div class="header-text">
-      <div class="header-title-main">Эвакуатор Краснодар</div>
-      <div class="header-title-sub">24/7</div>
-
+      <!-- Номер телефона наверху -->
       <div class="header-phone">
-        📞 <a href="tel:+79888717018">+7 (988) 871‑70‑18</a>
+        📞 <a href="tel:+79888717018" style="color:#fff; text-decoration:none;">
+          +7 (988) 871‑70‑18
+        </a>
       </div>
+
     </div>
   </div>
 
-  <button id="installBtn" class="uber-btn fade" onclick="installApp()">📲 Установить приложение</button>
+  <!-- Кнопка установить приложение -->
+  <button id="installBtn" class="uber-btn" onclick="installApp()">📲 Установить приложение</button>
 
-  <a href="tel:+79888717018" class="uber-btn fade">🚨 Вызвать эвакуатор</a>
+  <!-- Кнопка вызвать эвакуатор -->
+  <a href="tel:+79888717018" class="uber-btn">🚨 Вызвать эвакуатор</a>
 
-  <!-- НАШИ ПРЕИМУЩЕСТВА -->
-  <section class="section fade">
-    <h2>Наши преимущества</h2>
+  <!-- Почему выбирают нас -->
+  <section class="section">
+    <h2>Почему выбирают нас</h2>
 
-    <div class="adv-item">Подача эвакуатора от 15 минут</div>
-    <div class="adv-item">Аккуратная погрузка без повреждений</div>
-    <div class="adv-item">Пневмоподушки — идеально для премиальных авто с низкой посадкой</div>
-    <div class="adv-item">Работаем по Краснодару и краю</div>
-    <div class="adv-item">Оплата картой или наличными</div>
-    <div class="adv-item">Перевозка любых авто: легковые, кроссоверы, грузовые</div>
+    <div class="adv-item" style="animation-delay:0.05s;">Подача эвакуатора от 15 минут</div>
+    <div class="adv-item" style="animation-delay:0.15s;">Оплата картой или наличными</div>
+    <div class="adv-item" style="animation-delay:0.25s;">Аккуратная погрузка без повреждений</div>
+    <div class="adv-item" style="animation-delay:0.35s;">Работаем по Краснодару и всему краю</div>
+    <div class="adv-item" style="animation-delay:0.45s;">Перевозка любых авто: легковые, кроссоверы, грузовые</div>
+    <div class="adv-item" style="animation-delay:0.55s;">Низкий клиренс — эвакуатор на пневмоподушках</div>
+
   </section>
 
-  <section class="section fade">
+  <!-- Калькулятор -->
+  <section class="section">
     <h2>Расчёт стоимости</h2>
-
     <div class="calc-row">
       <input type="text" id="fromAddress" placeholder="Откуда забрать">
     </div>
-
     <div class="calc-row">
       <input type="text" id="toAddress" placeholder="Куда отвезти">
     </div>
-
     <div class="calc-row">
       <select id="carType">
         <option value="1.0">Легковой автомобиль</option>
@@ -289,71 +375,54 @@ input, select {
         <option value="1.3">Малый грузовик</option>
       </select>
     </div>
-
-    <button class="uber-btn fade" onclick="calcRealPrice()">Рассчитать стоимость</button>
-
+    <button class="uber-btn" onclick="calcRealPrice()">Рассчитать стоимость</button>
     <div id="calcResult">Введите адреса и нажмите «Рассчитать стоимость».</div>
-
     <div id="map"></div>
   </section>
 
-  <!-- СОЦСЕТИ -->
-  <section class="section fade">
-    <h2>Мы в соцсетях</h2>
-
-    <a href="https://t.me/evakuator_krasnodar"
-       style="display:block;background:#0088cc;color:#fff;padding:14px 20px;border-radius:14px;
-              text-decoration:none;font-size:20px;font-weight:700;margin-bottom:12px;text-align:center;">
-       ✈️ Telegram
-    </a>
-
-    <a href="https://wa.me/79888717018"
-       style="display:block;background:#25D366;color:#fff;padding:14px 20px;border-radius:14px;
-              text-decoration:none;font-size:20px;font-weight:700;margin-bottom:12px;text-align:center;">
-       💬 WhatsApp
-    </a>
-
-    <a href="https://mah.ru/"
-       style="display:block;background:#ff6600;color:#fff;padding:14px 20px;border-radius:14px;
-              text-decoration:none;font-size:20px;font-weight:700;margin-bottom:12px;text-align:center;">
-       🟠 МАХ
-    </a>
-
-    <a href="https://vk.com/evakuator_krasnodar"
-       style="display:block;background:#0077ff;color:#fff;padding:14px 20px;border-radius:14px;
-              text-decoration:none;font-size:20px;font-weight:700;margin-bottom:12px;text-align:center;">
-       🔵 VK
-    </a>
-  </section>
-
-  <section class="section fade">
+  <!-- Отзывы -->
+  <section class="section">
     <h2>Отзывы клиентов</h2>
-    <div class="review">«Очень быстро приехали, аккуратно погрузили, цена честная.» — Сергей</div>
+    <div class="review">«Очень быстро приехали, аккуратно погрузили, цена честная. Рекомендую!» — Сергей</div>
     <div class="review">«Выручили ночью, спасибо большое! Машину доставили без единой царапины.» — Анна</div>
     <div class="review">«Лучший эвакуатор в Краснодаре. Приехали за 20 минут.» — Михаил</div>
   </section>
 
-  <div class="footer fade">
-    📞 Эвакуатор Краснодар —
-    <a href="tel:+79888717018">+7 (988) 871‑70‑18</a>
+  <!-- Footer -->
+  <div class="footer">
+    📞 Эвакуатор Краснодар — 
+    <a href="tel:+79888717018" style="color:#fff; text-decoration:none;">
+      +7 (988) 871‑70‑18
+    </a>
   </div>
 
 </div>
 
 <script>
 let deferredPrompt;
-const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-let map2;
 
-// PWA установка
+// ANDROID — установка приложения
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
   const btn = document.getElementById("installBtn");
-  if (btn && !isIOS) btn.style.display = "block";
+  if (btn) btn.style.display = "block";
 });
 
-// iPhone инструкция
+function installApp() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(() => {
+      deferredPrompt = null;
+      const btn = document.getElementById("installBtn");
+      if (btn) btn.style.display = "none";
+    });
+  }
+}
+
+// iPHONE — показываем инструкцию вместо кнопки
+const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
 window.addEventListener("DOMContentLoaded", () => {
   const installBtn = document.getElementById("installBtn");
 
@@ -371,7 +440,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     iosTip.innerHTML = `
       📱 <b>Установить приложение на iPhone:</b><br><br>
-      1. Нажмите <b>Поделиться</b><br>
+      1. Нажмите <b>Поделиться</b> (кнопка со стрелкой внизу Safari)<br>
       2. Выберите <b>«На экран Домой»</b><br>
       3. Нажмите <b>Добавить</b>
     `;
@@ -380,107 +449,62 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-function installApp() {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(() => {
-      deferredPrompt = null;
-      const btn = document.getElementById("installBtn");
-      if (btn) btn.style.display = "none";
-    });
-  }
-}
-
-// Яндекс.Карты
-ymaps.ready(function () {
-  map2 = new ymaps.Map("map", {
+ymaps.ready(function() {
+  window.map2 = new ymaps.Map("map", {
     center: [45.035470, 38.975313],
-    zoom: 11,
+    zoom: 10,
     controls: ['zoomControl']
   });
-
-  const mapEl = document.getElementById("map");
-  mapEl.style.opacity = "1";
-  mapEl.style.transform = "translateY(0)";
-
-  ["fromAddress", "toAddress"].forEach(id => {
-    const el = document.getElementById(id);
-    el.addEventListener("blur", () => {
-      let v = el.value.trim();
-      if (v && !v.toLowerCase().includes("краснодар")) {
-        el.value = "Краснодар, " + v;
-      }
-    });
-  });
-
-  function onlyKrasnodar(item) {
-    return item.value.includes("Краснодар");
-  }
-
-  new ymaps.SuggestView('fromAddress', {
-    provider: {
-      suggest: r => ymaps.suggest("Краснодар, " + r).then(i => i.filter(onlyKrasnodar))
-    },
-    results: 8
-  });
-
-  new ymaps.SuggestView('toAddress', {
-    provider: {
-      suggest: r => ymaps.suggest("Краснодар, " + r).then(i => i.filter(onlyKrasnodar))
-    },
-    results: 8
-  });
 });
-
-// Расчёт стоимости
-function safeRoute(from, to) {
-  const result = document.getElementById("calcResult");
-
-  ymaps.geocode(from).then(resFrom => {
-    const pointFrom = resFrom.geoObjects.get(0);
-    if (!pointFrom) {
-      result.textContent = "Адрес отправления не найден.";
-      return;
-    }
-
-    ymaps.geocode(to).then(resTo => {
-      const pointTo = resTo.geoObjects.get(0);
-      if (!pointTo) {
-        result.textContent = "Адрес назначения не найден.";
-        return;
-      }
-
-      const coordsFrom = pointFrom.geometry.getCoordinates();
-      const coordsTo = pointTo.geometry.getCoordinates();
-
-      ymaps.route([coordsFrom, coordsTo]).then(route => {
-
-        const distance = route.getLength() / 1000;
-
-        const basePerKm = 85; // реалистично
-        const carType = parseFloat(document.getElementById("carType").value);
-        const minPrice = carType === 1.3 ? 2200 : carType === 1.1 ? 1900 : 1700;
-
-        let price = distance * basePerKm * carType;
-        if (price < minPrice) price = minPrice + 400;
-
-        result.textContent = `Расстояние: ${distance.toFixed(1)} км. Стоимость: ~ ${Math.round(price)} ₽`;
-
-      });
-    });
-  });
-}
 
 function calcRealPrice() {
   const from = document.getElementById("fromAddress").value.trim();
   const to = document.getElementById("toAddress").value.trim();
+  const carType = parseFloat(document.getElementById("carType").value);
+  const result = document.getElementById("calcResult");
 
   if (!from || !to) {
-    document.getElementById("calcResult").textContent = "Введите оба адреса.";
+    result.textContent = "Введите оба адреса.";
     return;
   }
 
-  safeRoute(from, to);
+  ymaps.route([from, to]).then(function(route) {
+    map2.geoObjects.removeAll();
+    map2.geoObjects.add(route);
+    map2.setBounds(route.getBounds(), { checkZoomRange: true });
+
+    const distance = route.getLength() / 1000;
+
+    const basePerKm = 60;
+    const minCar = 1700;
+    const minCross = 1900;
+    const minTruck = 2200;
+
+    let minPrice = minCar;
+    if (carType === 1.1) minPrice = minCross;
+    if (carType === 1.3) minPrice = minTruck;
+
+    let price = distance * basePerKm * carType;
+    if (price < minPrice) price = minPrice;
+
+    result.textContent = `Расстояние: ${distance.toFixed(1)} км. Стоимость: ~ ${Math.round(price)} ₽`;
+
+  }, function() {
+    result.textContent = "❌ Маршрут не найден. Проверьте адреса.";
+  });
+}
+
+function submitForm() {
+  window.location.href = "tel:+79888717018";
+}
+function sendWhatsApp() {
+  window.open("https://wa.me/79888717018", "_blank");
+}
+function sendTelegram() {
+  window.open("https://t.me/", "_blank");
+}
+function sendVK() {
+  window.open("https://vk.com/", "_blank");
 }
 </script>
 
