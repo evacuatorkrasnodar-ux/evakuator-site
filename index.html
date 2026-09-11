@@ -10,6 +10,7 @@
 <script src="https://api-maps.yandex.ru/2.1/?apikey=fc0f9182-0eee-4e83-bed3-8e561c88c4d5&lang=ru_RU"></script>
 
 <style>
+/* ГЛОБАЛЬНОЕ */
 * {
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
@@ -29,7 +30,7 @@ body {
   padding:16px;
 }
 
-/* ШАПКА — базовая */
+/* ШАПКА */
 .header {
   background:rgba(20,20,20,0.7);
   backdrop-filter:blur(20px);
@@ -65,7 +66,7 @@ body {
   font-weight:600;
 }
 
-/* Кнопки */
+/* КНОПКИ */
 .uber-btn {
   width:100%;
   padding:16px;
@@ -87,7 +88,7 @@ body {
   transform:translateY(-2px);
 }
 
-/* Секции */
+/* СЕКЦИИ */
 .section {
   background:rgba(20,20,20,0.6);
   backdrop-filter:blur(15px);
@@ -115,7 +116,7 @@ body {
   animation:uberFade 0.6s ease forwards;
 }
 
-/* Калькулятор */
+/* КАЛЬКУЛЯТОР */
 .calc-row {
   display:flex;
   gap:10px;
@@ -138,14 +139,18 @@ input, select {
   font-size:20px;
 }
 
+/* ТЁМНАЯ КАРТА UBER */
 #map {
   width:100%;
-  height:240px;
+  height:260px;
   border-radius:18px;
   margin-top:16px;
+  opacity:0;
+  transform:translateY(20px);
+  transition:opacity 0.8s ease, transform 0.8s ease;
 }
 
-/* Отзывы */
+/* ОТЗЫВЫ */
 .review {
   background:rgba(255,255,255,0.05);
   padding:16px;
@@ -154,7 +159,7 @@ input, select {
   font-size:18px;
 }
 
-/* Футер */
+/* ФУТЕР */
 .footer {
   text-align:center;
   padding:16px;
@@ -175,13 +180,13 @@ input, select {
   .section h2 { font-size:20px; }
   .adv-item { font-size:17px; padding:10px 0; }
   input, select { padding:12px; font-size:16px; border-radius:12px; }
-  #map { height:200px; border-radius:14px; }
+  #map { height:220px; border-radius:14px; }
   .review { padding:14px; font-size:16px; border-radius:12px; }
   .footer { padding:14px; font-size:18px; border-radius:14px; }
 }
 
 /* Android */
-@media screen and (max-width:900px) and (pointer:coarse) and (min-device-width:360px) {
+@media screen and (max-width:900px) and (pointer:coarse) {
   .header { padding:18px; border-radius:20px; gap:14px; box-shadow:0 0 18px rgba(0,0,0,0.6); }
   .header img { height:130px; }
   .header-title h1 { font-size:26px; }
@@ -191,7 +196,7 @@ input, select {
   .section h2 { font-size:22px; }
   .adv-item { font-size:18px; padding:10px 0; }
   input, select { padding:12px; font-size:17px; border-radius:12px; }
-  #map { height:220px; border-radius:16px; }
+  #map { height:240px; border-radius:16px; }
   .review { padding:14px; font-size:17px; border-radius:12px; }
   .footer { padding:14px; font-size:19px; border-radius:14px; }
 }
@@ -219,12 +224,12 @@ input, select {
 
   <section class="section">
     <h2>Почему выбирают нас</h2>
-    <div class="adv-item" style="animation-delay:0.05s;">Подача эвакуатора от 15 минут</div>
-    <div class="adv-item" style="animation-delay:0.15s;">Оплата картой или наличными</div>
-    <div class="adv-item" style="animation-delay:0.25s;">Аккуратная погрузка без повреждений</div>
-    <div class="adv-item" style="animation-delay:0.35s;">Работаем по Краснодару и всему краю</div>
-    <div class="adv-item" style="animation-delay:0.45s;">Перевозка любых авто: легковые, кроссоверы, грузовые</div>
-    <div class="adv-item" style="animation-delay:0.55s;">Низкий клиренс — эвакуатор на пневмоподушках</div>
+    <div class="adv-item">Подача эвакуатора от 15 минут</div>
+    <div class="adv-item">Оплата картой или наличными</div>
+    <div class="adv-item">Аккуратная погрузка без повреждений</div>
+    <div class="adv-item">Работаем по Краснодару и всему краю</div>
+    <div class="adv-item">Перевозка любых авто: легковые, кроссоверы, грузовые</div>
+    <div class="adv-item">Низкий клиренс — эвакуатор на пневмоподушках</div>
   </section>
 
   <section class="section">
@@ -249,7 +254,7 @@ input, select {
 
   <section class="section">
     <h2>Отзывы клиентов</h2>
-    <div class="review">«Очень быстро приехали, аккуратно погрузили, цена честная. Рекомендую!» — Сергей</div>
+    <div class="review">«Очень быстро приехали, аккуратно погрузили, цена честная.» — Сергей</div>
     <div class="review">«Выручили ночью, спасибо большое! Машину доставили без единой царапины.» — Анна</div>
     <div class="review">«Лучший эвакуатор в Краснодаре. Приехали за 20 минут.» — Михаил</div>
   </section>
@@ -268,7 +273,9 @@ let deferredPrompt;
 const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 let map2;
 
-// PWA
+// =========================
+// PWA УСТАНОВКА
+// =========================
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
@@ -287,11 +294,14 @@ function installApp() {
   }
 }
 
-// iOS подсказка установки
+// =========================
+// iOS ПОДСКАЗКА УСТАНОВКИ
+// =========================
 window.addEventListener("DOMContentLoaded", () => {
   const installBtn = document.getElementById("installBtn");
   if (isIOS && installBtn) {
     installBtn.style.display = "none";
+
     const iosTip = document.createElement("div");
     iosTip.style.background = "rgba(255,255,255,0.08)";
     iosTip.style.backdropFilter = "blur(12px)";
@@ -300,31 +310,87 @@ window.addEventListener("DOMContentLoaded", () => {
     iosTip.style.marginTop = "14px";
     iosTip.style.fontSize = "18px";
     iosTip.style.lineHeight = "1.5";
+
     iosTip.innerHTML = `
       📱 <b>Установить приложение на iPhone:</b><br><br>
-      1. Нажмите <b>Поделиться</b> (кнопка со стрелкой внизу Safari)<br>
+      1. Нажмите <b>Поделиться</b><br>
       2. Выберите <b>«На экран Домой»</b><br>
       3. Нажмите <b>Добавить</b>
     `;
+
     installBtn.parentNode.insertBefore(iosTip, installBtn.nextSibling);
   }
 });
 
-// Яндекс.Карты: карта + подсказки
+// =========================
+// ЯНДЕКС КАРТА + ТЁМНАЯ ТЕМА UBER + АНИМАЦИЯ
+// =========================
 ymaps.ready(function () {
-  // карта
+
   map2 = new ymaps.Map("map", {
     center: [45.035470, 38.975313],
-    zoom: 10,
+    zoom: 11,
     controls: ['zoomControl']
   });
 
-  // подсказки
-  new ymaps.SuggestView('fromAddress', { results: 8 });
-  new ymaps.SuggestView('toAddress', { results: 8 });
+  // Анимация появления карты
+  setTimeout(() => {
+    const mapEl = document.getElementById("map");
+    mapEl.style.opacity = "1";
+    mapEl.style.transform = "translateY(0)";
+  }, 300);
+
+  // Тёмная линия маршрута Uber
+  const darkRoute = {
+    strokeColor: "#ffffff",
+    strokeWidth: 6,
+    strokeOpacity: 0.9
+  };
+
+  // =========================
+  // ПОДСКАЗКИ АДРЕСОВ + АВТОДОБАВЛЕНИЕ «КРАСНОДАР»
+  // =========================
+
+  function fixCity(inputId) {
+    const el = document.getElementById(inputId);
+    el.addEventListener("blur", () => {
+      let v = el.value.trim();
+      if (v.length > 0 && !v.toLowerCase().includes("краснодар")) {
+        el.value = "Краснодар, " + v;
+      }
+    });
+  }
+
+  fixCity("fromAddress");
+  fixCity("toAddress");
+
+  function onlyKrasnodar(item) {
+    return item.value.includes("Краснодар");
+  }
+
+  new ymaps.SuggestView('fromAddress', {
+    provider: {
+      suggest: function (request) {
+        return ymaps.suggest("Краснодар, " + request).then(items => items.filter(onlyKrasnodar));
+      }
+    },
+    results: 8
+  });
+
+  new ymaps.SuggestView('toAddress', {
+    provider: {
+      suggest: function (request) {
+        return ymaps.suggest("Краснодар, " + request).then(items => items.filter(onlyKrasnodar));
+      }
+    },
+    results: 8
+  });
+
 });
 
-// расчёт маршрута
+// =========================
+// РАСЧЁТ МАРШРУТА
+// =========================
 function calcRealPrice() {
   const from = document.getElementById("fromAddress").value.trim();
   const to = document.getElementById("toAddress").value.trim();
@@ -336,13 +402,19 @@ function calcRealPrice() {
     return;
   }
 
-  if (!map2 || !ymaps) {
-    result.textContent = "Карта ещё загружается, попробуйте через пару секунд.";
-    return;
-  }
-
   ymaps.route([from, to]).then(function(route) {
+
     map2.geoObjects.removeAll();
+
+    // Тёмная линия маршрута Uber
+    route.getPaths().each(function (path) {
+      path.options.set({
+        strokeColor: "#ffffff",
+        strokeWidth: 6,
+        strokeOpacity: 0.9
+      });
+    });
+
     map2.geoObjects.add(route);
     map2.setBounds(route.getBounds(), { checkZoomRange: true });
 
@@ -367,9 +439,9 @@ function calcRealPrice() {
   });
 }
 
-function submitForm() {
-  window.location.href = "tel:+79888717018";
-}
+// =========================
+// МЕССЕНДЖЕРЫ
+// =========================
 function sendWhatsApp() {
   window.open("https://wa.me/79888717018", "_blank");
 }
