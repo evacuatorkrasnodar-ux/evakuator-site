@@ -101,6 +101,20 @@ body {
   margin-bottom:16px;
 }
 
+/* Анимация преимуществ */
+@keyframes fadeInAdv {
+  0% { opacity:0; transform:translateY(10px); }
+  100% { opacity:1; transform:translateY(0); }
+}
+
+.adv-item {
+  padding:12px 0;
+  border-bottom:1px solid rgba(255,255,255,0.10);
+  font-size:19px;
+  opacity:0;
+  animation:fadeInAdv 0.6s ease forwards;
+}
+
 /* Калькулятор */
 .calc-row {
   display:flex;
@@ -164,6 +178,35 @@ select option:checked {
   border-radius:18px;
   margin-top:20px;
 }
+
+/* ANDROID FIX */
+@media screen and (max-width:900px) and (pointer:coarse) {
+  .header-phone {
+    font-size:18px;
+  }
+
+  .header-title h1 {
+    font-size:24px;
+  }
+
+  .uber-btn {
+    font-size:18px;
+    padding:14px;
+  }
+
+  input, select {
+    font-size:17px;
+    padding:12px;
+  }
+
+  #map {
+    height:240px;
+  }
+
+  .section {
+    padding:18px;
+  }
+}
 </style>
 </head>
 
@@ -191,8 +234,10 @@ select option:checked {
   <!-- НАШИ ПРЕИМУЩЕСТВА -->
   <section class="section">
     <h2>Наши преимущества</h2>
+
     <div class="adv-item">Подача эвакуатора от 15 минут</div>
     <div class="adv-item">Аккуратная погрузка без повреждений</div>
+    <div class="adv-item">Пневмоподушки — идеально для премиальных авто с низкой посадкой</div>
     <div class="adv-item">Работаем по Краснодару и краю</div>
     <div class="adv-item">Оплата картой или наличными</div>
     <div class="adv-item">Перевозка любых авто: легковые, кроссоверы, грузовые</div>
