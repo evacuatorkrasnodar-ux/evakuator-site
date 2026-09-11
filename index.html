@@ -10,7 +10,6 @@
 <script src="https://api-maps.yandex.ru/2.1/?apikey=fc0f9182-0eee-4e83-bed3-8e561c88c4d5&lang=ru_RU"></script>
 
 <style>
-/* ГЛОБАЛЬНОЕ — ОБЩЕЕ ДЛЯ ВСЕХ */
 * {
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
@@ -30,7 +29,7 @@ body {
   padding:16px;
 }
 
-/* ШАПКА — ОСНОВНАЯ (ANDROID/ПК) */
+/* ШАПКА — базовая */
 .header {
   background:rgba(20,20,20,0.7);
   backdrop-filter:blur(20px);
@@ -66,7 +65,7 @@ body {
   font-weight:600;
 }
 
-/* КНОПКИ */
+/* Кнопки */
 .uber-btn {
   width:100%;
   padding:16px;
@@ -88,7 +87,7 @@ body {
   transform:translateY(-2px);
 }
 
-/* СЕКЦИИ */
+/* Секции */
 .section {
   background:rgba(20,20,20,0.6);
   backdrop-filter:blur(15px);
@@ -103,7 +102,6 @@ body {
   margin-bottom:16px;
 }
 
-/* Анимация Uber Motion */
 @keyframes uberFade {
   0% { opacity:0; transform:translateY(10px); }
   100% { opacity:1; transform:translateY(0); }
@@ -117,7 +115,7 @@ body {
   animation:uberFade 0.6s ease forwards;
 }
 
-/* КАЛЬКУЛЯТОР */
+/* Калькулятор */
 .calc-row {
   display:flex;
   gap:10px;
@@ -147,7 +145,7 @@ input, select {
   margin-top:16px;
 }
 
-/* ОТЗЫВЫ */
+/* Отзывы */
 .review {
   background:rgba(255,255,255,0.05);
   padding:16px;
@@ -156,7 +154,7 @@ input, select {
   font-size:18px;
 }
 
-/* ФУТЕР */
+/* Футер */
 .footer {
   text-align:center;
   padding:16px;
@@ -166,156 +164,36 @@ input, select {
   margin-top:20px;
 }
 
-/* ============================= */
-/*        ОТДЕЛЬНЫЙ iPHONE       */
-/* ============================= */
-
+/* iPhone */
 @supports (-webkit-touch-callout: none) {
-
-  body {
-    background:#000;
-  }
-
-  .header {
-    padding:14px;
-    border-radius:18px;
-    gap:12px;
-    box-shadow:none;
-  }
-
-  .header img {
-    height:110px;
-  }
-
-  .header-title h1 {
-    font-size:22px;
-  }
-
-  .header-phone {
-    font-size:18px;
-  }
-
-  .uber-btn {
-    padding:12px;
-    font-size:17px;
-    border-radius:14px;
-    margin:10px 0;
-    box-shadow:none;
-  }
-
-  .section {
-    padding:16px;
-    border-radius:18px;
-    box-shadow:none;
-  }
-
-  .section h2 {
-    font-size:20px;
-  }
-
-  .adv-item {
-    font-size:17px;
-    padding:10px 0;
-  }
-
-  input, select {
-    padding:12px;
-    font-size:16px;
-    border-radius:12px;
-  }
-
-  #map {
-    height:200px;
-    border-radius:14px;
-  }
-
-  .review {
-    padding:14px;
-    font-size:16px;
-    border-radius:12px;
-  }
-
-  .footer {
-    padding:14px;
-    font-size:18px;
-    border-radius:14px;
-  }
+  .header { padding:14px; border-radius:18px; gap:12px; box-shadow:none; }
+  .header img { height:110px; }
+  .header-title h1 { font-size:22px; }
+  .header-phone { font-size:18px; }
+  .uber-btn { padding:12px; font-size:17px; border-radius:14px; margin:10px 0; box-shadow:none; }
+  .section { padding:16px; border-radius:18px; box-shadow:none; }
+  .section h2 { font-size:20px; }
+  .adv-item { font-size:17px; padding:10px 0; }
+  input, select { padding:12px; font-size:16px; border-radius:12px; }
+  #map { height:200px; border-radius:14px; }
+  .review { padding:14px; font-size:16px; border-radius:12px; }
+  .footer { padding:14px; font-size:18px; border-radius:14px; }
 }
 
-/* ============================= */
-/*        ОТДЕЛЬНЫЙ ANDROID      */
-/* ============================= */
-
+/* Android */
 @media screen and (max-width:900px) and (pointer:coarse) and (min-device-width:360px) {
-
-  body {
-    background:#000;
-  }
-
-  .header {
-    padding:18px;
-    border-radius:20px;
-    gap:14px;
-    box-shadow:0 0 18px rgba(0,0,0,0.6);
-  }
-
-  .header img {
-    height:130px;
-  }
-
-  .header-title h1 {
-    font-size:26px;
-  }
-
-  .header-phone {
-    font-size:19px;
-  }
-
-  .uber-btn {
-    padding:14px;
-    font-size:19px;
-    border-radius:14px;
-    margin:12px 0;
-    box-shadow:0 0 14px rgba(255,255,255,0.18);
-  }
-
-  .section {
-    padding:18px;
-    border-radius:20px;
-    box-shadow:0 0 14px rgba(0,0,0,0.4);
-  }
-
-  .section h2 {
-    font-size:22px;
-  }
-
-  .adv-item {
-    font-size:18px;
-    padding:10px 0;
-  }
-
-  input, select {
-    padding:12px;
-    font-size:17px;
-    border-radius:12px;
-  }
-
-  #map {
-    height:220px;
-    border-radius:16px;
-  }
-
-  .review {
-    padding:14px;
-    font-size:17px;
-    border-radius:12px;
-  }
-
-  .footer {
-    padding:14px;
-    font-size:19px;
-    border-radius:14px;
-  }
+  .header { padding:18px; border-radius:20px; gap:14px; box-shadow:0 0 18px rgba(0,0,0,0.6); }
+  .header img { height:130px; }
+  .header-title h1 { font-size:26px; }
+  .header-phone { font-size:19px; }
+  .uber-btn { padding:14px; font-size:19px; border-radius:14px; margin:12px 0; box-shadow:0 0 14px rgba(255,255,255,0.18); }
+  .section { padding:18px; border-radius:20px; box-shadow:0 0 14px rgba(0,0,0,0.4); }
+  .section h2 { font-size:22px; }
+  .adv-item { font-size:18px; padding:10px 0; }
+  input, select { padding:12px; font-size:17px; border-radius:12px; }
+  #map { height:220px; border-radius:16px; }
+  .review { padding:14px; font-size:17px; border-radius:12px; }
+  .footer { padding:14px; font-size:19px; border-radius:14px; }
 }
 </style>
 </head>
@@ -324,42 +202,31 @@ input, select {
 
 <div class="container">
 
-  <!-- ШАПКА -->
   <div class="header">
     <img src="img/logo.png" alt="Логотип">
     <div class="header-title">
       <h1>Эвакуатор Краснодар 24/7</h1>
-
-      <!-- Номер телефона наверху -->
       <div class="header-phone">
         📞 <a href="tel:+79888717018" style="color:#fff; text-decoration:none;">
           +7 (988) 871‑70‑18
         </a>
       </div>
-
     </div>
   </div>
 
-  <!-- Кнопка установить приложение -->
   <button id="installBtn" class="uber-btn" onclick="installApp()">📲 Установить приложение</button>
-
-  <!-- Кнопка вызвать эвакуатор -->
   <a href="tel:+79888717018" class="uber-btn">🚨 Вызвать эвакуатор</a>
 
-  <!-- Почему выбирают нас -->
   <section class="section">
     <h2>Почему выбирают нас</h2>
-
     <div class="adv-item" style="animation-delay:0.05s;">Подача эвакуатора от 15 минут</div>
     <div class="adv-item" style="animation-delay:0.15s;">Оплата картой или наличными</div>
     <div class="adv-item" style="animation-delay:0.25s;">Аккуратная погрузка без повреждений</div>
     <div class="adv-item" style="animation-delay:0.35s;">Работаем по Краснодару и всему краю</div>
     <div class="adv-item" style="animation-delay:0.45s;">Перевозка любых авто: легковые, кроссоверы, грузовые</div>
     <div class="adv-item" style="animation-delay:0.55s;">Низкий клиренс — эвакуатор на пневмоподушках</div>
-
   </section>
 
-  <!-- Калькулятор -->
   <section class="section">
     <h2>Расчёт стоимости</h2>
     <div class="calc-row">
@@ -380,7 +247,6 @@ input, select {
     <div id="map"></div>
   </section>
 
-  <!-- Отзывы -->
   <section class="section">
     <h2>Отзывы клиентов</h2>
     <div class="review">«Очень быстро приехали, аккуратно погрузили, цена честная. Рекомендую!» — Сергей</div>
@@ -388,9 +254,8 @@ input, select {
     <div class="review">«Лучший эвакуатор в Краснодаре. Приехали за 20 минут.» — Михаил</div>
   </section>
 
-  <!-- Footer -->
   <div class="footer">
-    📞 Эвакуатор Краснодар — 
+    📞 Эвакуатор Краснодар —
     <a href="tel:+79888717018" style="color:#fff; text-decoration:none;">
       +7 (988) 871‑70‑18
     </a>
@@ -400,13 +265,15 @@ input, select {
 
 <script>
 let deferredPrompt;
+const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+let map2;
 
-// ANDROID — установка приложения
+// PWA
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
   const btn = document.getElementById("installBtn");
-  if (btn) btn.style.display = "block";
+  if (btn && !isIOS) btn.style.display = "block";
 });
 
 function installApp() {
@@ -420,15 +287,11 @@ function installApp() {
   }
 }
 
-// iPHONE — показываем инструкцию вместо кнопки
-const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-
+// iOS подсказка установки
 window.addEventListener("DOMContentLoaded", () => {
   const installBtn = document.getElementById("installBtn");
-
-  if (isIOS) {
+  if (isIOS && installBtn) {
     installBtn.style.display = "none";
-
     const iosTip = document.createElement("div");
     iosTip.style.background = "rgba(255,255,255,0.08)";
     iosTip.style.backdropFilter = "blur(12px)";
@@ -437,44 +300,31 @@ window.addEventListener("DOMContentLoaded", () => {
     iosTip.style.marginTop = "14px";
     iosTip.style.fontSize = "18px";
     iosTip.style.lineHeight = "1.5";
-
     iosTip.innerHTML = `
       📱 <b>Установить приложение на iPhone:</b><br><br>
       1. Нажмите <b>Поделиться</b> (кнопка со стрелкой внизу Safari)<br>
       2. Выберите <b>«На экран Домой»</b><br>
       3. Нажмите <b>Добавить</b>
     `;
-
     installBtn.parentNode.insertBefore(iosTip, installBtn.nextSibling);
   }
 });
 
-// ======== АВТОПОДСКАЗКИ АДРЕСОВ + КАРТА ========
-
+// Яндекс.Карты: карта + подсказки
 ymaps.ready(function () {
+  // карта
+  map2 = new ymaps.Map("map", {
+    center: [45.035470, 38.975313],
+    zoom: 10,
+    controls: ['zoomControl']
+  });
 
-    // Подсказки для поля "Откуда"
-    const suggestFrom = new ymaps.SuggestView('fromAddress', {
-        results: 8,
-        width: '100%'
-    });
-
-    // Подсказки для поля "Куда"
-    const suggestTo = new ymaps.SuggestView('toAddress', {
-        results: 8,
-        width: '100%'
-    });
-
-    // Карта
-    window.map2 = new ymaps.Map("map", {
-        center: [45.035470, 38.975313],
-        zoom: 10,
-        controls: ['zoomControl']
-    });
+  // подсказки
+  new ymaps.SuggestView('fromAddress', { results: 8 });
+  new ymaps.SuggestView('toAddress', { results: 8 });
 });
 
-// ======== РАСЧЁТ МАРШРУТА ========
-
+// расчёт маршрута
 function calcRealPrice() {
   const from = document.getElementById("fromAddress").value.trim();
   const to = document.getElementById("toAddress").value.trim();
@@ -486,8 +336,12 @@ function calcRealPrice() {
     return;
   }
 
-  ymaps.route([from, to]).then(function(route) {
+  if (!map2 || !ymaps) {
+    result.textContent = "Карта ещё загружается, попробуйте через пару секунд.";
+    return;
+  }
 
+  ymaps.route([from, to]).then(function(route) {
     map2.geoObjects.removeAll();
     map2.geoObjects.add(route);
     map2.setBounds(route.getBounds(), { checkZoomRange: true });
