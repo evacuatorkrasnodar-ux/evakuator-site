@@ -139,7 +139,7 @@ input, select {
   font-size:20px;
 }
 
-/* ТЁМНАЯ КАРТА UBER */
+/* ТЁМНАЯ КАРТА UBER + АНИМАЦИЯ */
 #map {
   width:100%;
   height:260px;
@@ -339,13 +339,6 @@ ymaps.ready(function () {
     mapEl.style.opacity = "1";
     mapEl.style.transform = "translateY(0)";
   }, 300);
-
-  // Тёмная линия маршрута Uber
-  const darkRoute = {
-    strokeColor: "#ffffff",
-    strokeWidth: 6,
-    strokeOpacity: 0.9
-  };
 
   // =========================
   // ПОДСКАЗКИ АДРЕСОВ + АВТОДОБАВЛЕНИЕ «КРАСНОДАР»
