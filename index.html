@@ -204,6 +204,14 @@ input, select {
     font-size:22px;   /* фикс для Android */
   }
 }
+
+/* iPhone FIX — чтобы заголовок не вылазил */
+@supports (-webkit-touch-callout: none) {
+  .header-title h1 {
+    font-size:23px;
+    letter-spacing:-0.5px;
+  }
+}
 </style>
 </head>
 
@@ -321,6 +329,33 @@ window.addEventListener('beforeinstallprompt', (e) => {
   deferredPrompt = e;
   const btn = document.getElementById("installBtn");
   if (btn && !isIOS) btn.style.display = "block";
+});
+
+// iPhone инструкция вместо кнопки
+window.addEventListener("DOMContentLoaded", () => {
+  const installBtn = document.getElementById("installBtn");
+
+  if (isIOS) {
+    installBtn.style.display = "none";
+
+    const iosTip = document.createElement("div");
+    iosTip.style.background = "rgba(255,255,255,0.08)";
+    iosTip.style.backdropFilter = "blur(12px)";
+    iosTip.style.padding = "16px";
+    iosTip.style.borderRadius = "16px";
+    iosTip.style.marginTop = "14px";
+    iosTip.style.fontSize = "18px";
+    iosTip.style.lineHeight = "1.5";
+
+    iosTip.innerHTML = `
+      📱 <b>Установить приложение на iPhone:</b><br><br>
+      1. Нажмите <b>Поделиться</b> (кнопка со стрелкой внизу Safari)<br>
+      2. Выберите <b>«На экран Домой»</b><br>
+      3. Нажмите <b>Добавить</b>
+    `;
+
+    installBtn.parentNode.insertBefore(iosTip, installBtn.nextSibling);
+  }
 });
 
 function installApp() {
