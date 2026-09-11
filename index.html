@@ -10,6 +10,7 @@
 <script src="https://api-maps.yandex.ru/2.1/?apikey=fc0f9182-0eee-4e83-bed3-8e561c88c4d5&lang=ru_RU"></script>
 
 <style>
+/* ГЛОБАЛЬНОЕ */
 * {
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
@@ -29,7 +30,7 @@ body {
   padding:16px;
 }
 
-/* Шапка */
+/* ШАПКА */
 .header {
   background:rgba(20,20,20,0.7);
   backdrop-filter:blur(20px);
@@ -65,7 +66,7 @@ body {
   font-weight:600;
 }
 
-/* Кнопки */
+/* КНОПКИ */
 .uber-btn {
   width:100%;
   padding:16px;
@@ -87,7 +88,7 @@ body {
   transform:translateY(-2px);
 }
 
-/* Секции */
+/* СЕКЦИИ */
 .section {
   background:rgba(20,20,20,0.6);
   backdrop-filter:blur(15px);
@@ -115,7 +116,7 @@ body {
   animation:uberFade 0.6s ease forwards;
 }
 
-/* Калькулятор */
+/* КАЛЬКУЛЯТОР */
 .calc-row {
   display:flex;
   gap:10px;
@@ -127,32 +128,18 @@ input, select {
   flex:1;
   padding:14px;
   border-radius:14px;
-  border:1px solid rgba(255,255,255,0.25);
-  background:#111;
+  border:1px solid rgba(255,255,255,0.15);
+  background:rgba(255,255,255,0.05);
   color:#fff;
   font-size:18px;
 }
 
-select {
-  appearance:none;
-  background-image:linear-gradient(135deg,#fff 0,#fff 40%,transparent 40%);
-  background-repeat:no-repeat;
-  background-position:right 14px center;
-  background-size:10px 6px;
-}
-
-select:focus, input:focus {
-  outline:none;
-  border-color:#fff;
-}
-
-/* Текст результата */
 #calcResult {
   margin-top:12px;
   font-size:20px;
 }
 
-/* Карта: тёмная + анимация */
+/* ТЁМНАЯ КАРТА UBER + АНИМАЦИЯ */
 #map {
   width:100%;
   height:260px;
@@ -160,11 +147,10 @@ select:focus, input:focus {
   margin-top:16px;
   opacity:0;
   transform:translateY(20px);
-  transition:opacity 0.6s ease, transform 0.6s ease;
-  filter:brightness(0.75) contrast(1.15);
+  transition:opacity 0.8s ease, transform 0.8s ease;
 }
 
-/* Отзывы */
+/* ОТЗЫВЫ */
 .review {
   background:rgba(255,255,255,0.05);
   padding:16px;
@@ -173,7 +159,7 @@ select:focus, input:focus {
   font-size:18px;
 }
 
-/* Футер */
+/* ФУТЕР */
 .footer {
   text-align:center;
   padding:16px;
@@ -287,7 +273,9 @@ let deferredPrompt;
 const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 let map2;
 
-// PWA
+// =========================
+// PWA УСТАНОВКА
+// =========================
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
@@ -306,11 +294,14 @@ function installApp() {
   }
 }
 
-// iOS подсказка установки
+// =========================
+// iOS ПОДСКАЗКА УСТАНОВКИ
+// =========================
 window.addEventListener("DOMContentLoaded", () => {
   const installBtn = document.getElementById("installBtn");
   if (isIOS && installBtn) {
     installBtn.style.display = "none";
+
     const iosTip = document.createElement("div");
     iosTip.style.background = "rgba(255,255,255,0.08)";
     iosTip.style.backdropFilter = "blur(12px)";
@@ -319,30 +310,40 @@ window.addEventListener("DOMContentLoaded", () => {
     iosTip.style.marginTop = "14px";
     iosTip.style.fontSize = "18px";
     iosTip.style.lineHeight = "1.5";
+
     iosTip.innerHTML = `
       📱 <b>Установить приложение на iPhone:</b><br><br>
       1. Нажмите <b>Поделиться</b><br>
       2. Выберите <b>«На экран Домой»</b><br>
       3. Нажмите <b>Добавить</b>
     `;
+
     installBtn.parentNode.insertBefore(iosTip, installBtn.nextSibling);
   }
 });
 
-// Яндекс.Карты
+// =========================
+// ЯНДЕКС КАРТА + ТЁМНАЯ ТЕМА UBER + АНИМАЦИЯ
+// =========================
 ymaps.ready(function () {
+
   map2 = new ymaps.Map("map", {
     center: [45.035470, 38.975313],
     zoom: 11,
     controls: ['zoomControl']
   });
 
-  // анимация появления карты
-  const mapEl = document.getElementById("map");
-  mapEl.style.opacity = "1";
-  mapEl.style.transform = "translateY(0)";
+  // Анимация появления карты
+  setTimeout(() => {
+    const mapEl = document.getElementById("map");
+    mapEl.style.opacity = "1";
+    mapEl.style.transform = "translateY(0)";
+  }, 300);
 
-  // автодобавление "Краснодар"
+  // =========================
+  // ПОДСКАЗКИ АДРЕСОВ + АВТОДОБАВЛЕНИЕ «КРАСНОДАР»
+  // =========================
+
   function fixCity(inputId) {
     const el = document.getElementById(inputId);
     el.addEventListener("blur", () => {
@@ -352,10 +353,10 @@ ymaps.ready(function () {
       }
     });
   }
+
   fixCity("fromAddress");
   fixCity("toAddress");
 
-  // подсказки только по Краснодару
   function onlyKrasnodar(item) {
     return item.value.includes("Краснодар");
   }
@@ -377,9 +378,12 @@ ymaps.ready(function () {
     },
     results: 8
   });
+
 });
 
-// расчёт маршрута
+// =========================
+// РАСЧЁТ МАРШРУТА
+// =========================
 function calcRealPrice() {
   const from = document.getElementById("fromAddress").value.trim();
   const to = document.getElementById("toAddress").value.trim();
@@ -392,9 +396,10 @@ function calcRealPrice() {
   }
 
   ymaps.route([from, to]).then(function(route) {
+
     map2.geoObjects.removeAll();
 
-    // тёмная линия маршрута (как в Uber)
+    // Тёмная линия маршрута Uber
     route.getPaths().each(function (path) {
       path.options.set({
         strokeColor: "#ffffff",
@@ -425,6 +430,19 @@ function calcRealPrice() {
   }, function() {
     result.textContent = "❌ Маршрут не найден. Проверьте адреса.";
   });
+}
+
+// =========================
+// МЕССЕНДЖЕРЫ
+// =========================
+function sendWhatsApp() {
+  window.open("https://wa.me/79888717018", "_blank");
+}
+function sendTelegram() {
+  window.open("https://t.me/", "_blank");
+}
+function sendVK() {
+  window.open("https://vk.com/", "_blank");
 }
 </script>
 
