@@ -43,56 +43,48 @@ body {
   100% { opacity:1; transform:translateY(0); }
 }
 
-/* НОВАЯ КРАСИВАЯ ШАПКА */
+/* НОВАЯ ИДЕАЛЬНАЯ ШАПКА */
 .header {
   width:100%;
-  max-width:100%;
-  overflow:hidden;
+  display:flex;
+  align-items:center;
+  gap:16px;
   background:rgba(20,20,20,0.75);
-  backdrop-filter:blur(20px);
   padding:16px;
   border-radius:20px;
   box-shadow:0 0 25px rgba(0,0,0,0.55);
-  display:flex;
-  align-items:center;
-  gap:18px;
-  margin-bottom:18px;
+  overflow:hidden;
 }
 
 /* ЛОГОТИП — КРУПНЫЙ */
-.header img {
+.header-logo {
   height:150px;
-  width:auto;
   flex-shrink:0;
-  border-radius:18px;
+  border-radius:16px;
 }
 
 /* ТЕКСТОВЫЙ БЛОК */
-.header-title {
+.header-text {
   flex:1;
   min-width:0;
-  text-align:left;
 }
 
 /* ЭВАКУАТОР КРАСНОДАР — КРУПНО */
-.header-title .main-title {
-  font-size:30px;
+.header-title-main {
+  font-size:28px;
   font-weight:800;
-  line-height:1.05;
-  margin:0;
   white-space:nowrap;
 }
 
 /* 24/7 — ОТДЕЛЬНО */
-.header-title .sub-title {
+.header-title-sub {
   font-size:20px;
-  opacity:0.85;
-  margin-top:6px;
-  font-weight:600;
+  font-weight:700;
   color:#ffcc00;
+  margin-top:4px;
 }
 
-/* ТЕЛЕФОН */
+/* ТЕЛЕФОН — ВСЕГДА В ОДНУ СТРОКУ */
 .header-phone {
   margin-top:10px;
   font-size:22px;
@@ -100,25 +92,21 @@ body {
   white-space:nowrap;
 }
 
+.header-phone a {
+  color:#fff;
+  text-decoration:none;
+}
+
 /* iPhone FIX */
-@supports (-webkit-touch-callout: none) {
-  .header-title .main-title {
-    font-size:26px;
-    letter-spacing:-0.3px;
-  }
-  .header img {
-    height:135px;
-  }
+@supports (-webkit-touch-callout:none) {
+  .header-title-main { font-size:24px; }
+  .header-logo { height:130px; }
 }
 
 /* Android FIX */
-@media screen and (max-width:900px) and (pointer:coarse) {
-  .header-title .main-title {
-    font-size:25px;
-  }
-  .header img {
-    height:130px;
-  }
+@media (max-width:900px) and (pointer:coarse) {
+  .header-title-main { font-size:23px; }
+  .header-logo { height:125px; }
 }
 
 /* Кнопки */
@@ -240,6 +228,12 @@ input, select {
   border-radius:18px;
   margin-top:20px;
 }
+
+.footer a {
+  color:#fff;
+  text-decoration:none;
+  white-space:nowrap;
+}
 </style>
 </head>
 
@@ -247,18 +241,16 @@ input, select {
 
 <div class="container">
 
-  <!-- НОВАЯ КРАСИВАЯ ШАПКА -->
+  <!-- НОВАЯ ИДЕАЛЬНАЯ ШАПКА -->
   <div class="header fade">
-    <img src="img/logo.png" alt="Логотип">
+    <img src="img/logo.png" alt="Логотип" class="header-logo">
 
-    <div class="header-title">
-      <div class="main-title">Эвакуатор Краснодар</div>
-      <div class="sub-title">24/7</div>
+    <div class="header-text">
+      <div class="header-title-main">Эвакуатор Краснодар</div>
+      <div class="header-title-sub">24/7</div>
 
       <div class="header-phone">
-        📞 <a href="tel:+79888717018" style="color:#fff;text-decoration:none;">
-          +7 (988) 871‑70‑18
-        </a>
+        📞 <a href="tel:+79888717018">+7 (988) 871‑70‑18</a>
       </div>
     </div>
   </div>
@@ -343,9 +335,7 @@ input, select {
 
   <div class="footer fade">
     📞 Эвакуатор Краснодар —
-    <a href="tel:+79888717018" style="color:#fff;text-decoration:none;">
-      +7 (988) 871‑70‑18
-    </a>
+    <a href="tel:+79888717018">+7 (988) 871‑70‑18</a>
   </div>
 
 </div>
@@ -465,19 +455,6 @@ function safeRoute(from, to) {
 
       ymaps.route([coordsFrom, coordsTo]).then(route => {
 
-        map2.geoObjects.removeAll();
-
-        route.getPaths().each(path => {
-          path.options.set({
-            strokeColor: "#ffffff",
-            strokeWidth: 6,
-            strokeOpacity: 0.9
-          });
-        });
-
-        map2.geoObjects.add(route);
-        map2.setBounds(route.getBounds(), { checkZoomRange: true });
-
         const distance = route.getLength() / 1000;
 
         const basePerKm = 85; // реалистично
@@ -489,8 +466,6 @@ function safeRoute(from, to) {
 
         result.textContent = `Расстояние: ${distance.toFixed(1)} км. Стоимость: ~ ${Math.round(price)} ₽`;
 
-      }, () => {
-        result.textContent = "❌ Маршрут не найден.";
       });
     });
   });
