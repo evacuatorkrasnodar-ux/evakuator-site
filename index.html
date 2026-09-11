@@ -147,26 +147,6 @@ input, select {
   margin-top:16px;
 }
 
-/* МЕССЕНДЖЕРЫ */
-.messengers {
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-.msg-btn {
-  flex:1;
-  padding:14px;
-  border-radius:14px;
-  font-size:18px;
-  font-weight:700;
-  border:none;
-}
-
-.whatsapp { background:#25D366; color:#000; }
-.telegram { background:#0088cc; color:#fff; }
-.vk { background:#4a76a8; color:#fff; }
-
 /* ОТЗЫВЫ */
 .review {
   background:rgba(255,255,255,0.05);
@@ -249,12 +229,6 @@ input, select {
     border-radius:14px;
   }
 
-  .msg-btn {
-    padding:12px;
-    font-size:16px;
-    border-radius:12px;
-  }
-
   .review {
     padding:14px;
     font-size:16px;
@@ -264,6 +238,82 @@ input, select {
   .footer {
     padding:14px;
     font-size:18px;
+    border-radius:14px;
+  }
+}
+
+/* ============================= */
+/*        ОТДЕЛЬНЫЙ ANDROID      */
+/* ============================= */
+
+@media screen and (max-width:900px) and (pointer:coarse) and (min-device-width:360px) {
+
+  body {
+    background:#000;
+  }
+
+  .header {
+    padding:18px;
+    border-radius:20px;
+    gap:14px;
+    box-shadow:0 0 18px rgba(0,0,0,0.6);
+  }
+
+  .header img {
+    height:130px;
+  }
+
+  .header-title h1 {
+    font-size:26px;
+  }
+
+  .header-phone {
+    font-size:19px;
+  }
+
+  .uber-btn {
+    padding:14px;
+    font-size:19px;
+    border-radius:14px;
+    margin:12px 0;
+    box-shadow:0 0 14px rgba(255,255,255,0.18);
+  }
+
+  .section {
+    padding:18px;
+    border-radius:20px;
+    box-shadow:0 0 14px rgba(0,0,0,0.4);
+  }
+
+  .section h2 {
+    font-size:22px;
+  }
+
+  .adv-item {
+    font-size:18px;
+    padding:10px 0;
+  }
+
+  input, select {
+    padding:12px;
+    font-size:17px;
+    border-radius:12px;
+  }
+
+  #map {
+    height:220px;
+    border-radius:16px;
+  }
+
+  .review {
+    padding:14px;
+    font-size:17px;
+    border-radius:12px;
+  }
+
+  .footer {
+    padding:14px;
+    font-size:19px;
     border-radius:14px;
   }
 }
