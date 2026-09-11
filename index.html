@@ -43,8 +43,11 @@ body {
   100% { opacity:1; transform:translateY(0); }
 }
 
-/* Шапка — фиксируем заголовок и логотип */
+/* Шапка — фиксируем ширину, текст и картинку */
 .header {
+  width:100%;
+  max-width:100%;
+  overflow:hidden; /* главный фикс */
   background:rgba(20,20,20,0.7);
   backdrop-filter:blur(20px);
   padding:14px;
@@ -57,21 +60,23 @@ body {
 }
 
 .header img {
-  height:120px; /* фикс логотипа */
+  height:120px;
   width:auto;
+  flex-shrink:0; /* фикс Safari */
 }
 
 .header-title {
   flex:1;
   text-align:center;
+  min-width:0; /* фикс Safari */
 }
 
 .header-title h1 {
-  font-size:24px; /* универсальный размер */
+  font-size:24px;
   line-height:1.05;
   margin:0;
   font-weight:700;
-  white-space:nowrap; /* не переносится */
+  white-space:nowrap;
 }
 
 .header-phone {
@@ -203,14 +208,14 @@ input, select {
 /* ANDROID FIX */
 @media screen and (max-width:900px) and (pointer:coarse) {
   .header-title h1 {
-    font-size:21px; /* ровно на Android */
+    font-size:21px;
   }
 }
 
-/* iPhone FIX — чтобы заголовок не вылазил */
+/* iPhone FIX */
 @supports (-webkit-touch-callout: none) {
   .header-title h1 {
-    font-size:22px; /* ровно на iPhone */
+    font-size:22px;
     letter-spacing:-0.3px;
   }
 }
