@@ -27,6 +27,7 @@
 <link rel="preconnect" href="https://api-maps.yandex.ru">
 <link rel="dns-prefetch" href="https://api-maps.yandex.ru">
 
+<!-- Яндекс.Карты с твоим ключом -->
 <script src="https://api-maps.yandex.ru/2.1/?apikey=fc0f9182-0eee-4e83-bed3-8e561c88c4d5&lang=ru_RU"></script>
 
 <!-- Yandex.Metrika counter -->
@@ -79,8 +80,8 @@
   "@context": "https://schema.org",
   "@type": "Organization",
   "name": "Эвакуатор Краснодар",
-  "url": "https://evакуатор-krd.online",
-  "logo": "https://evакуатор-krd.online/img/logo.png",
+  "url": "https://evakuator-krd.online",
+  "logo": "https://evakuator-krd.online/img/logo.png",
   "contactPoint": [{
     "@type": "ContactPoint",
     "telephone": "+79888717018",
@@ -522,12 +523,6 @@ ymaps.ready(function () {
     controls: ['zoomControl']
   });
 
-  // Тёмная тема карты
-  map2.layers.get(0).getTileUrl = function (tileNumber, zoom) {
-    const url = ymaps.layers.get('map').getTileUrl(tileNumber, zoom);
-    return url.replace('l=map', 'l=map_dark');
-  };
-
   const mapEl = document.getElementById("map");
   mapEl.style.opacity = "1";
   mapEl.style.transform = "translateY(0)";
@@ -548,14 +543,18 @@ ymaps.ready(function () {
 
   new ymaps.SuggestView('fromAddress', {
     provider: {
-      suggest: r => ymaps.suggest("Краснодар, " + r).then(i => i.filter(onlyKrasnodar))
+      suggest: r => ymaps.suggest("Краснодар, " + r).then(items => {
+        return (items || []).filter(onlyKrasnodar);
+      })
     },
     results: 8
   });
 
   new ymaps.SuggestView('toAddress', {
     provider: {
-      suggest: r => ymaps.suggest("Краснодар, " + r).then(i => i.filter(onlyKrasnodar))
+      suggest: r => ymaps.suggest("Краснодар, " + r).then(items => {
+        return (items || []).filter(onlyKrasnodar);
+      })
     },
     results: 8
   });
@@ -609,7 +608,7 @@ function safeRoute(from, to) {
         result.textContent = `Расстояние: ${distance.toFixed(1)} км. Стоимость: ~ ${Math.round(price)} ₽`;
 
       }, () => {
-        result.textContent = "❌ Маршрут не найден даже после коррекции.";
+        result.textContent = "❌ Маршрут не найден.";
       });
     });
   });
@@ -617,6 +616,12 @@ function safeRoute(from, to) {
 
 // Основная функция расчёта
 function calcRealPrice() {
+  if (!map2) {
+    document.getElementById("calcResult").textContent =
+      "Карта загружается… попробуйте через секунду.";
+    return;
+  }
+
   const from = document.getElementById("fromAddress").value.trim();
   const to = document.getElementById("toAddress").value.trim();
 
@@ -643,6 +648,7 @@ document.getElementById("waSend").onclick = () => {
 
   const msg = `Маршрут эвакуатора:\nОткуда: ${from}\nКуда: ${to}`;
   const url = `https://wa.me/79888717018?text=${encodeURIComponent(msg)}`;
+  document.getElementById("waSend").href = url;
   window.location.href = url;
 };
 
