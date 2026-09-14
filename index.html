@@ -29,6 +29,29 @@
 
 <script src="https://api-maps.yandex.ru/2.1/?apikey=fc0f9182-0eee-4e83-bed3-8e561c88c4d5&lang=ru_RU"></script>
 
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=112570279', 'ym');
+
+    ym(112570279, 'init', {
+        ssr:true,
+        webvisor:true,
+        clickmap:true,
+        ecommerce:"dataLayer",
+        referrer: document.referrer,
+        url: location.href,
+        accurateTrackBounce:true,
+        trackLinks:true
+    });
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/112570279" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
 <!-- LocalBusiness -->
 <script type="application/ld+json">
 {
@@ -56,8 +79,8 @@
   "@context": "https://schema.org",
   "@type": "Organization",
   "name": "Эвакуатор Краснодар",
-  "url": "https://evakuator-krd.online",
-  "logo": "https://evakuатор-krd.online/img/logo.png",
+  "url": "https://evакуатор-krd.online",
+  "logo": "https://evакуатор-krd.online/img/logo.png",
   "contactPoint": [{
     "@type": "ContactPoint",
     "telephone": "+79888717018",
@@ -325,7 +348,10 @@ input, select {
     <div class="header-title">
       <h1>Эвакуатор Краснодар — круглосуточно</h1>
       <div class="header-phone">
-        📞 <a href="tel:+79888717018" itemprop="telephone" style="color:#fff;text-decoration:none;">
+        📞 <a href="tel:+79888717018"
+              itemprop="telephone"
+              onclick="ym(112570279,'reachGoal','call_click');"
+              style="color:#fff;text-decoration:none;">
           +7 (988) 871‑70‑18
         </a>
       </div>
@@ -334,7 +360,11 @@ input, select {
 
   <button id="installBtn" class="uber-btn fade" onclick="installApp()">📲 Установить приложение</button>
 
-  <a href="tel:+79888717018" class="uber-btn fade">🚨 Вызвать эвакуатор</a>
+  <a href="tel:+79888717018"
+     class="uber-btn fade"
+     onclick="ym(112570279,'reachGoal','call_click');">
+    🚨 Вызвать эвакуатор
+  </a>
 
   <section class="section fade">
     <h2>Наши преимущества</h2>
@@ -471,6 +501,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
 });
 
 function installApp() {
+  ym(112570279,'reachGoal','install_pwa');
   if (deferredPrompt) {
     deferredPrompt.prompt();
     deferredPrompt.userChoice.then(() => {
@@ -483,6 +514,8 @@ function installApp() {
 
 // Яндекс.Карты
 ymaps.ready(function () {
+  ym(112570279,'reachGoal','map_view');
+
   map2 = new ymaps.Map("map", {
     center: [45.035470, 38.975313],
     zoom: 11,
@@ -592,6 +625,7 @@ function calcRealPrice() {
     return;
   }
 
+  ym(112570279,'reachGoal','calc_price');
   safeRoute(from, to);
 }
 
@@ -604,6 +638,8 @@ document.getElementById("waSend").onclick = () => {
     alert("Введите оба адреса");
     return;
   }
+
+  ym(112570279,'reachGoal','whatsapp_click');
 
   const msg = `Маршрут эвакуатора:\nОткуда: ${from}\nКуда: ${to}`;
   const url = `https://wa.me/79888717018?text=${encodeURIComponent(msg)}`;
@@ -620,6 +656,8 @@ document.getElementById("geoSend").onclick = () => {
   navigator.geolocation.getCurrentPosition(pos => {
     const lat = pos.coords.latitude;
     const lon = pos.coords.longitude;
+
+    ym(112570279,'reachGoal','geo_send');
 
     const msg = `Моё местоположение:\nhttps://yandex.ru/maps/?ll=${lon},${lat}&z=17`;
     const url = `https://wa.me/79888717018?text=${encodeURIComponent(msg)}`;
