@@ -6,7 +6,6 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
 
 <title>Эвакуатор Краснодар 24/7 — быстро, недорого, от 15 минут</title>
-
 <meta name="description" content="Круглосуточный эвакуатор в Краснодаре. Подача от 15 минут. Аккуратная погрузка, честные цены, перевозка любых авто. Звоните!">
 <meta name="keywords" content="эвакуатор Краснодар, эвакуатор круглосуточно, эвакуатор недорого, эвакуатор быстро, эвакуатор Краснодар цена">
 
@@ -27,8 +26,9 @@
 <link rel="preconnect" href="https://api-maps.yandex.ru">
 <link rel="dns-prefetch" href="https://api-maps.yandex.ru">
 
-<!-- Яндекс.Карты с твоим ключом -->
+<!-- Яндекс.Карты: JavaScript API + Геокодер -->
 <script src="https://api-maps.yandex.ru/2.1/?apikey=fc0f9182-0eee-4e83-bed3-8e561c88c4d5&lang=ru_RU"></script>
+<script src="https://geocode-maps.yandex.ru/1.x/?apikey=0a81267e-7b5a-44f8-b0b0-4398346f7864"></script>
 
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
@@ -605,7 +605,8 @@ function safeRoute(from, to) {
         let price = distance * basePerKm * carType;
         if (price < minPrice) price = minPrice;
 
-        result.textContent = `Расстояние: ${distance.toFixed(1)} км. Стоимость: ~ ${Math.round(price)} ₽`;
+        result.textContent =
+          `Расстояние: ${distance.toFixed(1)} км. Стоимость: ~ ${Math.round(price)} ₽`;
 
       }, () => {
         result.textContent = "❌ Маршрут не найден.";
