@@ -23,6 +23,10 @@
 <!-- Манифест -->
 <link rel="manifest" href="manifest.json">
 
+<!-- Ускорение Яндекс.Карт -->
+<link rel="preconnect" href="https://api-maps.yandex.ru">
+<link rel="dns-prefetch" href="https://api-maps.yandex.ru">
+
 <script src="https://api-maps.yandex.ru/2.1/?apikey=fc0f9182-0eee-4e83-bed3-8e561c88c4d5&lang=ru_RU"></script>
 
 <!-- LocalBusiness -->
@@ -145,7 +149,7 @@ body {
   border-radius:16px;
   margin:14px 0;
   box-shadow:0 0 18px rgba(255,255,255,0.25);
-  transition:0.25s;
+  transition:transform .25s cubic-bezier(.25,.46,.45,.94), box-shadow .25s;
   text-align:center;
   display:block;
   text-decoration:none;
@@ -167,6 +171,11 @@ body {
 
 .uber-btn:hover::after {
   left:0;
+}
+
+.uber-btn:active {
+  transform:scale(.97);
+  box-shadow:0 0 25px rgba(255,255,255,0.35);
 }
 
 /* Секции */
@@ -241,6 +250,12 @@ input, select {
   box-shadow:0 0 25px rgba(0,0,0,0.8);
 
   will-change:opacity, transform;
+  animation:mapFade .8s ease forwards;
+}
+
+@keyframes mapFade {
+  0% { opacity:0; transform:scale(.95); }
+  100% { opacity:1; transform:scale(1); }
 }
 
 /* Отзывы */
@@ -328,13 +343,12 @@ input, select {
   <section class="section fade">
     <h2>Наши преимущества</h2>
 
-    <div class="adv-item">Эвакуатор Краснодар — круглосуточно, быстро, недорого</div>
-    <div class="adv-item">Подача эвакуатора от 15 минут</div>
-    <div class="adv-item">Аккуратная погрузка без повреждений</div>
-    <div class="adv-item">Пневмоподушки — идеально для премиальных авто с низкой посадкой</div>
-    <div class="adv-item">Работаем по Краснодару и краю</div>
-    <div class="adv-item">Оплата картой или наличными</div>
-    <div class="adv-item">Перевозка любых авто: легковые, кроссоверы, грузовые</div>
+    <div class="adv-item">Эвакуатор в Краснодаре круглосуточно — работаем 24/7 без выходных и праздников.</div>
+    <div class="adv-item">Подача эвакуатора от 15–25 минут по городу и ближайшим районам.</div>
+    <div class="adv-item">Аккуратная погрузка без повреждений — опытные водители и надёжное оборудование.</div>
+    <div class="adv-item">Эвакуатор недорого — честная фиксированная цена, без скрытых доплат.</div>
+    <div class="adv-item">Перевозка любых авто: легковые, кроссоверы, минивэны, малые грузовики.</div>
+    <div class="adv-item">Работаем по Краснодару и краю — заберём машину из любой точки региона.</div>
   </section>
 
   <section class="section fade">
@@ -358,9 +372,32 @@ input, select {
 
     <button class="uber-btn fade" onclick="calcRealPrice()">Рассчитать стоимость</button>
 
+    <a id="waSend" class="uber-btn fade" style="background:#25D366;color:#fff;">
+      💬 Отправить маршрут в WhatsApp
+    </a>
+
+    <a id="geoSend" class="uber-btn fade" style="background:#0077ff;color:#fff;">
+      📍 Отправить мою геолокацию
+    </a>
+
     <div id="calcResult">Введите адреса и нажмите «Рассчитать стоимость».</div>
 
     <div id="map"></div>
+  </section>
+
+  <!-- SEO-блок про цену -->
+  <section class="section fade">
+    <h2>Эвакуатор Краснодар — цена и условия</h2>
+    <p style="font-size:18px;line-height:1.5;">
+      Стоимость эвакуатора в Краснодаре зависит от расстояния, типа автомобиля и сложности погрузки.
+      Мы заранее озвучиваем цену, без сюрпризов на месте. Минимальная стоимость по городу — от 1700 ₽
+      для легкового автомобиля. Для кроссоверов и минивэнов — от 1900 ₽, для малых грузовиков — от 2200 ₽.
+    </p>
+    <p style="font-size:18px;line-height:1.5;">
+      Если вам нужен эвакуатор срочно — просто позвоните по номеру
+      <a href="tel:+79888717018" style="color:#fff;text-decoration:none;">+7 (988) 871‑70‑18</a>.
+      Мы приедем максимально быстро, аккуратно погрузим автомобиль и доставим его в нужное место.
+    </p>
   </section>
 
   <!-- СОЦСЕТИ -->
@@ -394,18 +431,31 @@ input, select {
 
   <section class="section fade">
     <h2>Отзывы клиентов</h2>
-    <div class="review">«Очень быстро приехали, аккуратно погрузили, цена честная.» — Сергей</div>
-    <div class="review">«Выручили ночью, спасибо большое! Машину доставили без единой царапины.» — Анна</div>
-    <div class="review">«Лучший эвакуатор в Краснодаре. Приехали за 20 минут.» — Михаил</div>
+    <div class="review">«Очень быстро приехали, аккуратно погрузили, цена честная. Буду рекомендовать друзьям.» — Сергей</div>
+    <div class="review">«Выручили ночью, спасибо большое! Машину доставили без единой царапины, водитель всё объяснил.» — Анна</div>
+    <div class="review">«Лучший эвакуатор в Краснодаре. Приехали за 20 минут, цена как по телефону, без доплат.» — Михаил</div>
+  </section>
+
+  <section class="section fade">
+    <h2>Когда может понадобиться эвакуатор</h2>
+    <p style="font-size:18px;line-height:1.5;">
+      Эвакуатор в Краснодаре часто нужен в самых разных ситуациях: поломка на дороге, ДТП, отказ коробки передач,
+      пробитое колесо, блокировка рулевого управления или просто невозможность продолжать движение.
+      В таких случаях безопаснее вызвать эвакуатор, чем рисковать автомобилем.
+    </p>
+    <p style="font-size:18px;line-height:1.5;">
+      Мы работаем аккуратно, бережно относимся к каждому автомобилю и всегда стараемся приехать как можно быстрее.
+      Если вы ищете надёжный эвакуатор в Краснодаре — просто позвоните нам.
+    </p>
   </section>
 
   <div class="footer fade">
-    📞 Эвакуатор Краснодар —
+    📞 Эвакуатор Краснодар — круглосуточно, быстро, недорого.<br>
     <a href="tel:+79888717018" itemprop="telephone" style="color:#fff;text-decoration:none;">
       +7 (988) 871‑70‑18
     </a>
     <br>
-    <span itemprop="address">Краснодар</span>
+    <span itemprop="address">Краснодар и Краснодарский край</span>
   </div>
 
 </div>
@@ -546,6 +596,55 @@ function calcRealPrice() {
   }
 
   safeRoute(from, to);
+}
+
+/* Отправка маршрута в WhatsApp */
+document.getElementById("waSend").onclick = () => {
+  const from = document.getElementById("fromAddress").value.trim();
+  const to = document.getElementById("toAddress").value.trim();
+
+  if (!from || !to) {
+    alert("Введите оба адреса");
+    return;
+  }
+
+  const msg = `Маршрут эвакуатора:\nОткуда: ${from}\nКуда: ${to}`;
+  const url = `https://wa.me/79888717018?text=${encodeURIComponent(msg)}`;
+  window.location.href = url;
+};
+
+/* Отправка геолокации в WhatsApp */
+document.getElementById("geoSend").onclick = () => {
+  if (!navigator.geolocation) {
+    alert("Геолокация не поддерживается");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(pos => {
+    const lat = pos.coords.latitude;
+    const lon = pos.coords.longitude;
+
+    const msg = `Моё местоположение:\nhttps://yandex.ru/maps/?ll=${lon},${lat}&z=17`;
+    const url = `https://wa.me/79888717018?text=${encodeURIComponent(msg)}`;
+    window.location.href = url;
+  });
+};
+
+/* Авто-определение района */
+function detectDistrict(lat, lon) {
+  if (lat > 45.05 && lon < 38.97) return "Центр";
+  if (lat > 45.03 && lon > 38.99) return "ЮМР";
+  if (lat < 45.03 && lon < 38.97) return "ГМР";
+  if (lat < 45.05 && lon > 38.99) return "ФМР";
+  return "Краснодар";
+}
+
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(pos => {
+    const district = detectDistrict(pos.coords.latitude, pos.coords.longitude);
+    const h1 = document.querySelector(".header-title h1");
+    if (h1) h1.innerHTML = `Эвакуатор Краснодар — ${district}`;
+  });
 }
 </script>
 
