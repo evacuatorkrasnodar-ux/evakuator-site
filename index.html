@@ -57,7 +57,7 @@
   "@type": "Organization",
   "name": "Эвакуатор Краснодар",
   "url": "https://evakuator-krd.online",
-  "logo": "https://evakuator-krd.online/img/logo.png",
+  "logo": "https://evakuатор-krd.online/img/logo.png",
   "contactPoint": [{
     "@type": "ContactPoint",
     "telephone": "+79888717018",
@@ -244,11 +244,8 @@ input, select {
   opacity:0;
   transform:translateY(20px);
   transition:opacity .7s ease,transform .7s ease;
-
-  /* Uber Black Style */
   filter:brightness(.55) contrast(1.35) saturate(1.1);
   box-shadow:0 0 25px rgba(0,0,0,0.8);
-
   will-change:opacity, transform;
   animation:mapFade .8s ease forwards;
 }
@@ -339,10 +336,8 @@ input, select {
 
   <a href="tel:+79888717018" class="uber-btn fade">🚨 Вызвать эвакуатор</a>
 
-  <!-- НАШИ ПРЕИМУЩЕСТВА -->
   <section class="section fade">
     <h2>Наши преимущества</h2>
-
     <div class="adv-item">Эвакуатор в Краснодаре круглосуточно — работаем 24/7 без выходных и праздников.</div>
     <div class="adv-item">Подача эвакуатора от 15–25 минут по городу и ближайшим районам.</div>
     <div class="adv-item">Аккуратная погрузка без повреждений — опытные водители и надёжное оборудование.</div>
@@ -383,9 +378,12 @@ input, select {
     <div id="calcResult">Введите адреса и нажмите «Рассчитать стоимость».</div>
 
     <div id="map"></div>
+
+    <div id="districtInfo" style="font-size:18px;margin-top:10px;opacity:.85;">
+      Определение района…
+    </div>
   </section>
 
-  <!-- SEO-блок про цену -->
   <section class="section fade">
     <h2>Эвакуатор Краснодар — цена и условия</h2>
     <p style="font-size:18px;line-height:1.5;">
@@ -400,7 +398,6 @@ input, select {
     </p>
   </section>
 
-  <!-- СОЦСЕТИ -->
   <section class="section fade">
     <h2>Мы в соцсетях</h2>
 
@@ -492,7 +489,7 @@ ymaps.ready(function () {
     controls: ['zoomControl']
   });
 
-  /* Тёмная тема карты */
+  // Тёмная тема карты
   map2.layers.get(0).getTileUrl = function (tileNumber, zoom) {
     const url = ymaps.layers.get('map').getTileUrl(tileNumber, zoom);
     return url.replace('l=map', 'l=map_dark');
@@ -531,7 +528,7 @@ ymaps.ready(function () {
   });
 });
 
-// Автокоррекция адресов
+// Автокоррекция адресов и маршрут
 function safeRoute(from, to) {
   const result = document.getElementById("calcResult");
 
@@ -598,7 +595,7 @@ function calcRealPrice() {
   safeRoute(from, to);
 }
 
-/* Отправка маршрута в WhatsApp */
+// Отправка маршрута в WhatsApp
 document.getElementById("waSend").onclick = () => {
   const from = document.getElementById("fromAddress").value.trim();
   const to = document.getElementById("toAddress").value.trim();
@@ -613,7 +610,7 @@ document.getElementById("waSend").onclick = () => {
   window.location.href = url;
 };
 
-/* Отправка геолокации в WhatsApp */
+// Отправка геолокации в WhatsApp
 document.getElementById("geoSend").onclick = () => {
   if (!navigator.geolocation) {
     alert("Геолокация не поддерживается");
@@ -630,7 +627,7 @@ document.getElementById("geoSend").onclick = () => {
   });
 };
 
-/* Авто-определение района */
+// Авто-определение района
 function detectDistrict(lat, lon) {
   if (lat > 45.05 && lon < 38.97) return "Центр";
   if (lat > 45.03 && lon > 38.99) return "ЮМР";
@@ -642,8 +639,8 @@ function detectDistrict(lat, lon) {
 if (navigator.geolocation) {
   navigator.geolocation.getCurrentPosition(pos => {
     const district = detectDistrict(pos.coords.latitude, pos.coords.longitude);
-    const h1 = document.querySelector(".header-title h1");
-    if (h1) h1.innerHTML = `Эвакуатор Краснодар — ${district}`;
+    const info = document.getElementById("districtInfo");
+    if (info) info.innerHTML = `Ваш район: <b>${district}</b>`;
   });
 }
 </script>
