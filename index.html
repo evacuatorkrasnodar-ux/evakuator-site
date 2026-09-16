@@ -39,7 +39,18 @@
   "telephone": "+7-988-871-7018",
   "priceRange": "₽₽",
   "description": "Круглосуточный эвакуатор в Краснодаре. Подача от 15 минут. Аккуратная погрузка, честные цены.",
-  "areaServed": "Краснодар, Краснодарский край",
+
+  "areaServed": [
+    { "@type": "AdministrativeArea", "name": "Прикубанский округ, Краснодар" },
+    { "@type": "AdministrativeArea", "name": "Российский микрорайон, Краснодар" },
+    { "@type": "AdministrativeArea", "name": "Дачи на Ростовском шоссе, Краснодар" },
+    { "@type": "AdministrativeArea", "name": "Ейское шоссе, Краснодар" },
+    { "@type": "AdministrativeArea", "name": "Музыкальный микрорайон, Краснодар" },
+    { "@type": "AdministrativeArea", "name": "Славянский микрорайон, Краснодар" },
+    { "@type": "AdministrativeArea", "name": "Фестивальный микрорайон (ФМР), Краснодар" },
+    { "@type": "AdministrativeArea", "name": "Западный округ, Краснодар" }
+  ],
+
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "ул. Северная, 324",
@@ -47,6 +58,7 @@
     "addressLocality": "Краснодар",
     "addressCountry": "RU"
   },
+
   "openingHoursSpecification": [{
     "@type": "OpeningHoursSpecification",
     "dayOfWeek": [
@@ -55,6 +67,7 @@
     "opens": "00:00",
     "closes": "23:59"
   }],
+
   "serviceType": "Эвакуация автомобилей",
   "services": [
     "Эвакуатор для легковых автомобилей",
@@ -63,45 +76,53 @@
     "Перевозка после ДТП",
     "Подача эвакуатора от 15 минут"
   ],
+
   "aggregateRating": {
     "@type": "AggregateRating",
     "ratingValue": "4.9",
     "reviewCount": "37"
   },
+
   "review": [
     {
       "@type": "Review",
-      "author": {
-        "@type": "Person",
-        "name": "Алексей"
-      },
+      "author": { "@type": "Person", "name": "Алексей" },
       "datePublished": "2026-09-10",
       "reviewBody": "Отличный сервис! Эвакуатор приехал за 15 минут, аккуратно погрузили машину.",
       "name": "Быстрая подача и аккуратная погрузка",
       "image": "https://evakuator-krd.online/img/logo.png",
-      "reviewRating": {
-        "@type": "Rating",
-        "ratingValue": "5"
-      }
+      "reviewRating": { "@type": "Rating", "ratingValue": "5" }
     },
     {
       "@type": "Review",
-      "author": {
-        "@type": "Person",
-        "name": "Марина"
-      },
+      "author": { "@type": "Person", "name": "Марина" },
       "datePublished": "2026-09-12",
       "reviewBody": "Очень вежливый водитель, помог с документами после ДТП. Рекомендую!",
       "name": "Помощь после ДТП",
       "image": "https://evakuator-krd.online/img/logo.png",
-      "reviewRating": {
-        "@type": "Rating",
-        "ratingValue": "5"
-      }
+      "reviewRating": { "@type": "Rating", "ratingValue": "5" }
     }
-  ]
+  ],
+
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "RUB",
+    "price": "1500",
+    "priceSpecification": {
+      "@type": "PriceSpecification",
+      "priceCurrency": "RUB",
+      "minPrice": "1500",
+      "maxPrice": "5000",
+      "priceType": "starting",
+      "description": "Стоимость эвакуации зависит от расстояния и типа автомобиля"
+    },
+    "availability": "https://schema.org/InStock",
+    "url": "https://evakuator-krd.online",
+    "eligibleRegion": "Краснодар"
+  }
 }
 </script>
+
 
 <script type="application/ld+json">
 {
