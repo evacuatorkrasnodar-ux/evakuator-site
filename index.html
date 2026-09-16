@@ -6,24 +6,29 @@
   <title>Эвакуатор Краснодар 24/7 — быстро, недорого, от 15 минут</title>
   <meta name="description" content="Круглосуточный эвакуатор в Краснодаре. Подача от 15 минут. Аккуратная погрузка, честные цены, перевозка любых авто. Звоните!">
   <meta name="keywords" content="эвакуатор Краснодар, эвакуатор круглосуточно, эвакуатор недорого, эвакуатор быстро, эвакуатор Краснодар цена">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://evakuator-krd.online">
   <meta property="og:title" content="Эвакуатор Краснодар — круглосуточно, быстро, недорого">
   <meta property="og:description" content="Подача эвакуатора от 15 минут. Аккуратная погрузка, честные цены.">
   <meta property="og:image" content="https://evakuator-krd.online/img/logo.png">
   <meta property="og:url" content="https://evakuator-krd.online">
   <meta property="og:type" content="website">
   <link rel="manifest" href="manifest.json">
-  <link rel="icon" type="image/x-icon" href="машинка.ico">
   <link rel="icon" type="image/png" href="img/favicon.png">
   <meta name="theme-color" content="#ff9900">
+
+  <!-- Яндекс.Карты -->
   <link rel="preconnect" href="https://api-maps.yandex.ru">
   <link rel="dns-prefetch" href="https://api-maps.yandex.ru">
- <script src="https://api-maps.yandex.ru/2.1/?apikey=fc0f9182-0eee-4e83-bed3-8e561c88c4d5&lang=ru_RU"></script>
+  <script src="https://api-maps.yandex.ru/2.1/?apikey=fc0f9182-0eee-4e83-bed3-8e561c88c4d5&lang=ru_RU"></script>
+
+  <!-- Яндекс.Метрика -->
   <script type="text/javascript">
     (function(m,e,t,r,i,k,a){
       m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
       m[i].l=1*new Date();
       for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-      k=e.createElement(t),a=e.getElementsByTagName(t),k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+      k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
     })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=112570279', 'ym');
     ym(112570279, 'init', {
       ssr:true,
@@ -37,6 +42,8 @@
     });
   </script>
   <noscript><div><img src="https://mc.yandex.ru/watch/112570279" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+
+  <!-- JSON-LD LocalBusiness -->
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -122,39 +129,8 @@
       }
     }
   </script>
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Service",
-      "serviceType": "Эвакуация автомобилей",
-      "provider": {
-        "@type": "AutoTowing",
-        "name": "Эвакуатор Краснодар",
-        "url": "https://evakuator-krd.online",
-        "telephone": "+7-988-871-7018"
-      },
-      "areaServed": {
-        "@type": "Place",
-        "name": "Краснодар, Краснодарский край"
-      },
-      "offers": {
-        "@type": "Offer",
-        "priceCurrency": "RUB",
-        "price": "1500",
-        "priceSpecification": {
-          "@type": "PriceSpecification",
-          "priceCurrency": "RUB",
-          "minPrice": "1500",
-          "maxPrice": "5000",
-          "priceType": "starting",
-          "description": "Стоимость эвакуации зависит от расстояния и типа автомобиля"
-        },
-        "availability": "https://schema.org/InStock",
-        "url": "https://evakuator-krd.online",
-        "eligibleRegion": "Краснодар"
-      }
-    }
-  </script>
+
+  <!-- JSON-LD Organization -->
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -170,6 +146,7 @@
       }]
     }
   </script>
+
   <style>
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     body { margin:0; background:#000; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial; color:#fff; overflow-x:hidden; }
@@ -224,8 +201,10 @@
         </div>
       </div>
     </div>
+
     <button id="installBtn" class="uber-btn fade" onclick="installApp()">📲 Установить приложение</button>
     <a href="tel:+79888717018" class="uber-btn fade" onclick="ym(112570279,'reachGoal','call_click');">🚨 Вызвать эвакуатор</a>
+
     <section class="section fade">
       <h2>Наши преимущества</h2>
       <div class="adv-item">Эвакуатор в Краснодаре круглосуточно — работаем 24/7 без выходных и праздников.</div>
@@ -235,6 +214,7 @@
       <div class="adv-item">Перевозка любых авто: легковые, кроссоверы, минивэны, малые грузовики.</div>
       <div class="adv-item">Работаем по Краснодару и краю — заберём машину из любой точки региона.</div>
     </section>
+
     <section class="section fade">
       <h2>Расчёт стоимости</h2>
       <div class="calc-row">
@@ -257,11 +237,13 @@
       <div id="map"></div>
       <div id="districtInfo" style="font-size:18px;margin-top:10px;opacity:.85;">Определение района…</div>
     </section>
+
     <section class="section fade">
       <h2>Эвакуатор Краснодар — цена и условия</h2>
       <p style="font-size:18px;line-height:1.5;">Стоимость эвакуатора в Краснодаре зависит от расстояния, типа автомобиля и сложности погрузки. Мы заранее озвучиваем цену, без сюрпризов на месте. Минимальная стоимость по городу — от 1700 ₽ для легкового автомобиля. Для кроссоверов и минивэнов — от 1900 ₽, для малых грузовиков — от 2200 ₽.</p>
       <p style="font-size:18px;line-height:1.5;">Если вам нужен эвакуатор срочно — просто позвоните по номеру <a href="tel:+79888717018" style="color:#fff;text-decoration:none;">+7 (988) 871‑70‑18</a>. Мы приедем максимально быстро, аккуратно погрузим автомобиль и доставим его в нужное место.</p>
     </section>
+
     <section class="section fade">
       <h2>Мы в соцсетях</h2>
       <a href="https://t.me/evakuator_krasnodar" style="display:block;background:#0088cc;color:#fff;padding:14px 20px;border-radius:14px;text-decoration:none;font-size:20px;font-weight:700;margin-bottom:12px;text-align:center;">✈️ Telegram</a>
@@ -269,17 +251,20 @@
       <a href="https://mah.ru/" style="display:block;background:#ff6600;color:#fff;padding:14px 20px;border-radius:14px;text-decoration:none;font-size:20px;font-weight:700;margin-bottom:12px;text-align:center;">🟠 МАХ</a>
       <a href="https://vk.com/evakuator_krasnodar" style="display:block;background:#0077ff;color:#fff;padding:14px 20px;border-radius:14px;text-decoration:none;font-size:20px;font-weight:700;margin-bottom:12px;text-align:center;">🔵 VK</a>
     </section>
+
     <section class="section fade">
       <h2>Отзывы клиентов</h2>
       <div class="review">«Очень быстро приехали, аккуратно погрузили, цена честная. Буду рекомендовать друзьям.» — Сергей</div>
       <div class="review">«Выручили ночью, спасибо большое! Машину доставили без единой царапины, водитель всё объяснил.» — Анна</div>
       <div class="review">«Лучший эвакуатор в Краснодаре. Приехали за 20 минут, цена как по телефону, без доплат.» — Михаил</div>
     </section>
+
     <section class="section fade">
       <h2>Когда может понадобиться эвакуатор</h2>
       <p style="font-size:18px;line-height:1.5;">Эвакуатор в Краснодаре часто нужен в самых разных ситуациях: поломка на дороге, ДТП, отказ коробки передач, пробитое колесо, блокировка рулевого управления или просто невозможность продолжать движение. В таких случаях безопаснее вызвать эвакуатор, чем рисковать автомобилем.</p>
       <p style="font-size:18px;line-height:1.5;">Мы работаем аккуратно, бережно относимся к каждому автомобилю и всегда стараемся приехать как можно быстрее. Если вы ищете надёжный эвакуатор в Краснодаре — просто позвоните нам.</p>
     </section>
+
     <div class="footer fade">
       📞 Эвакуатор Краснодар — круглосуточно, быстро, недорого.<br>
       <a href="tel:+79888717018" itemprop="telephone" style="color:#fff;text-decoration:none;">+7 (988) 871‑70‑18</a>
@@ -287,6 +272,7 @@
       <span itemprop="address">Краснодар и Краснодарский край</span>
     </div>
   </div>
+
   <script>
     let deferredPrompt;
     const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
@@ -322,69 +308,51 @@
       const mapEl = document.getElementById("map");
       mapEl.style.opacity = "1";
 
-      const suggestFrom = new ymaps.SuggestView('fromAddress', { boundedBy: map2.getBounds() });
-      const suggestTo = new ymaps.SuggestView('toAddress', { boundedBy: map2.getBounds() });
+      new ymaps.SuggestView('fromAddress');
+      new ymaps.SuggestView('toAddress');
     });
 
     function calcRealPrice() {
       const from = document.getElementById("fromAddress").value.trim();
       const to = document.getElementById("toAddress").value.trim();
       const result = document.getElementById("calcResult");
-      result.textContent = "Расчёт маршрута…";
+
+      if (!from || !to) {
+        result.textContent = "Введите оба адреса.";
+        return;
+      }
 
       if (!map2) {
         result.textContent = "Карта не загружена.";
         return;
       }
 
+      result.textContent = "Строим маршрут…";
       map2.geoObjects.removeAll();
 
-      ymaps.geocode(from).then(resFrom => {
-        const pointFrom = resFrom.geoObjects.get(0);
-        if (!pointFrom) {
-          result.textContent = "Адрес отправления не найден.";
-          return;
-        }
-
-        ymaps.geocode(to).then(resTo => {
-          const pointTo = resTo.geoObjects.get(0);
-          if (!pointTo) {
-            result.textContent = "Адрес назначения не найден.";
-            return;
-          }
-
-          const coordsFrom = pointFrom.geometry.getCoordinates();
-          const coordsTo = pointTo.geometry.getCoordinates();
-
-          ymaps.route([coordsFrom, coordsTo]).then(route => {
-            route.getPaths().each(path => {
-              path.options.set({
-                strokeColor: "#ffffff",
-                strokeWidth: 6,
-                strokeOpacity: 0.9
-              });
-            });
-
-            map2.geoObjects.add(route);
-            map2.setBounds(route.getBounds(), { checkZoomRange: true });
-
-            const distance = route.getLength() / 1000;
-            const basePerKm = 60;
-            const carType = parseFloat(document.getElementById("carType").value);
-            const minPrice = carType === 1.3 ? 2200 : carType === 1.1 ? 1900 : 1700;
-
-            let price = distance * basePerKm * carType;
-            if (price < minPrice) price = minPrice;
-
-            result.textContent = `Расстояние: ${distance.toFixed(1)} км. Стоимость: ~ ${Math.round(price)} ₽`;
-          }, err => {
-            result.textContent = "❌ Маршрут не найден.";
+      ymaps.route([from, to]).then(route => {
+        route.getPaths().each(path => {
+          path.options.set({
+            strokeColor: "#ffffff",
+            strokeWidth: 6,
+            strokeOpacity: 0.9
           });
-        }, err => {
-          result.textContent = "❌ Ошибка геокодирования адреса назначения.";
         });
-      }, err => {
-        result.textContent = "❌ Ошибка геокодирования адреса отправления.";
+
+        map2.geoObjects.add(route);
+        map2.setBounds(route.getBounds(), { checkZoomRange: true });
+
+        const distance = route.getLength() / 1000;
+        const basePerKm = 60;
+        const carType = parseFloat(document.getElementById("carType").value);
+        const minPrice = carType === 1.3 ? 2200 : carType === 1.1 ? 1900 : 1700;
+
+        let price = distance * basePerKm * carType;
+        if (price < minPrice) price = minPrice;
+
+        result.textContent = `Расстояние: ${distance.toFixed(1)} км. Стоимость: ~ ${Math.round(price)} ₽`;
+      }).catch(() => {
+        result.textContent = "❌ Маршрут не найден. Уточните адреса.";
       });
     }
 
@@ -401,7 +369,7 @@
       ym(112570279, 'reachGoal', 'whatsapp_click');
 
       const msg = `Маршрут эвакуатора:\nОткуда: ${from}\nКуда: ${to}`;
-      const url = `https://wa.me/79888717018?text=\${encodeURIComponent(msg)}`;
+      const url = `https://wa.me/79888717018?text=${encodeURIComponent(msg)}`;
       window.location.href = url;
     };
 
@@ -416,7 +384,7 @@
             const res = await ymaps.geocode([lat, lon], { kind: 'district' });
             const district = res.geoObjects.get(0)?.getAddressLine() || 'Краснодар';
             const info = document.getElementById("districtInfo");
-            if (info) info.innerHTML = `Ваш район: <b>\${district}</b>`;
+            if (info) info.innerHTML = `Ваш район: <b>${district}</b>`;
           } catch (e) {
             console.error(e);
           }
