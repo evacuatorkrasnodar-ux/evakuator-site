@@ -28,46 +28,6 @@
     <meta property="og:url" content="https://evakuator-krd.online">
     <meta property="og:type" content="website">
 
-    <!-- JSON-LD -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "AutoTowing",
-      "name": "Эвакуатор Краснодар",
-      "image": "https://evakuator-krd.online/img/favicon.png",
-      "url": "https://evakuator-krd.online",
-      "telephone": "+79888717018",
-      "priceRange": "₽₽",
-      "description": "Круглосуточный эвакуатор в Краснодаре. Подача от 15 минут. Аккуратная погрузка, честные цены.",
-      "areaServed": "Краснодар, Краснодарский край",
-  "address": {
-  "@type": "PostalAddress",
-  "streetAddress": "ул. Северная, 324",
-  "postalCode": "350000",
-  "addressLocality": "Краснодар",
-  "addressCountry": "RU"
-},
-
-      },
-      "openingHoursSpecification": [{
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": [
-          "Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"
-        ],
-        "opens": "00:00",
-        "closes": "23:59"
-      }],
-      "serviceType": "Эвакуация автомобилей",
-      "services": [
-        "Эвакуатор для легковых автомобилей",
-        "Эвакуатор для внедорожников",
-        "Эвакуатор для мотоциклов",
-        "Перевозка после ДТП",
-        "Подача эвакуатора от 15 минут"
-      ]
-    }
-    </script>
-
 <!-- JSON-LD основной -->
 <script type="application/ld+json">
 {
@@ -102,17 +62,7 @@
     "Эвакуатор для мотоциклов",
     "Перевозка после ДТП",
     "Подача эвакуатора от 15 минут"
-  ]
-}
-</script>
-
-<!-- JSON-LD отзывы -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "AutoTowing",
-  "name": "Эвакуатор Краснодар",
-  "url": "https://evakuator-krd.online",
+  ],
   "aggregateRating": {
     "@type": "AggregateRating",
     "ratingValue": "4.9",
@@ -121,7 +71,10 @@
   "review": [
     {
       "@type": "Review",
-      "author": "Алексей",
+      "author": {
+        "@type": "Person",
+        "name": "Алексей"
+      },
       "datePublished": "2026-09-10",
       "reviewBody": "Отличный сервис! Эвакуатор приехал за 15 минут, аккуратно погрузили машину.",
       "name": "Быстрая подача и аккуратная погрузка",
@@ -133,7 +86,10 @@
     },
     {
       "@type": "Review",
-      "author": "Марина",
+      "author": {
+        "@type": "Person",
+        "name": "Марина"
+      },
       "datePublished": "2026-09-12",
       "reviewBody": "Очень вежливый водитель, помог с документами после ДТП. Рекомендую!",
       "name": "Помощь после ДТП",
