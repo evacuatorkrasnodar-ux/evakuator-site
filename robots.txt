@@ -2,6 +2,6 @@ User-agent: *
 Allow: /
 
 Sitemap: https://evakuator-krd.online/sitemap.xml
-
 Host: evakuator-krd.online
 
+IndexNow: https://api.indexnow.org/indexnow?key=b7f3e9c1a4d82f7b93c1e7a4d9f2b8c3
