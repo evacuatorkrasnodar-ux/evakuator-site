@@ -5,103 +5,89 @@
   <title>Эвакуатор Краснодар 24/7</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="style.css?v=3">
+  <link rel="stylesheet" href="style.css?v=5000">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="favicon.png">
 </head>
 <body>
+
 <div class="container">
 
-  <!-- HERO — чистый баннер без текста -->
-  <header class="hero-parallax fade">
+  <!-- HERO — чистый баннер -->
+  <header class="hero">
     <div class="hero-bg"></div>
   </header>
 
-  <!-- Кнопка установки приложения — поднята вверх -->
-  <button id="installBtn" class="apple-btn fade" style="margin-bottom:20px;display:none;">
-    Установить приложение
-  </button>
+  <!-- Установить приложение -->
+  <button id="installBtn" class="apple-glass-btn install-btn">Установить приложение</button>
 
   <!-- Основные кнопки -->
-  <div class="btn-row fade">
-    <a class="apple-btn" href="tel:+79888717018">Позвонить</a>
-    <button class="apple-btn" id="geoSend">Геолокация</button>
-    <a class="apple-btn" href="#requestForm">Оставить заявку</a>
+  <div class="btn-row">
+    <a class="apple-glass-btn" href="tel:+79888717018">Позвонить</a>
+    <button class="apple-glass-btn" id="geoSend">Геолокация</button>
+    <a class="apple-glass-btn" href="#requestForm">Оставить заявку</a>
   </div>
 
-  <div class="status-box" id="geoStatus"></div>
+  <div id="geoStatus" class="status-box"></div>
 
   <!-- Соцсети -->
-  <section class="section fade">
+  <section class="section glass-section">
     <h2>Мы в соцсетях</h2>
 
     <div class="social-row">
-      <a class="social-apple" href="https://t.me/evakuatorkrasnodar24">Telegram</a>
-      <a class="social-apple" href="https://chat.whatsapp.com/Da9sLiLpm6SLjmW7WZBZze">WhatsApp</a>
-      <a class="social-apple" href="https://web.max.ru/">МАХ</a>
-      <a class="social-apple" href="https://vk.ru/evakuator.krasnodar">VK</a>
+      <a class="social-glass" href="https://t.me/evakuatorkrasnodar24">Telegram</a>
+      <a class="social-glass" href="https://chat.whatsapp.com/Da9sLiLpm6SLjmW7WZBZze">WhatsApp</a>
+      <a class="social-glass" href="https://web.max.ru/">МАХ</a>
+      <a class="social-glass" href="https://vk.ru/evakuator.krasnodar">VK</a>
     </div>
   </section>
 
   <!-- Услуги -->
-  <section class="section fade">
+  <section class="section glass-section">
     <h2>Услуги</h2>
+
     <div class="services-list">
-      <div class="service-item fade"><h3>Легковые авто</h3><p>До 3,5 т</p></div>
-      <div class="service-item fade"><h3>Кроссоверы</h3><p>Платформа + лебёдка</p></div>
-      <div class="service-item fade"><h3>Минивэны</h3><p>Аккуратная погрузка</p></div>
-      <div class="service-item fade"><h3>Коммерческий транспорт</h3><p>До 3,5 т</p></div>
+      <div class="service-card glass-soft"><h3>Легковые авто</h3><p>До 3,5 т</p></div>
+      <div class="service-card glass-soft"><h3>Кроссоверы</h3><p>Платформа + лебёдка</p></div>
+      <div class="service-card glass-soft"><h3>Минивэны</h3><p>Аккуратная погрузка</p></div>
+      <div class="service-card glass-soft"><h3>Коммерческий транспорт</h3><p>До 3,5 т</p></div>
     </div>
   </section>
 
   <!-- Цены -->
-  <section class="section fade">
+  <section class="section glass-section">
     <h2>Цены</h2>
+
     <div class="services-list">
-      <div class="service-item fade"><h3>Легковой</h3><p>2 000 ₽</p></div>
-      <div class="service-item fade"><h3>Кроссовер</h3><p>2 200 ₽</p></div>
-      <div class="service-item fade"><h3>Минивэн</h3><p>2 500 ₽</p></div>
-      <div class="service-item fade"><h3>Грузовой</h3><p>3 000 ₽</p></div>
+      <div class="service-card glass-soft"><h3>Легковой</h3><p>2 000 ₽</p></div>
+      <div class="service-card glass-soft"><h3>Кроссовер</h3><p>2 200 ₽</p></div>
+      <div class="service-card glass-soft"><h3>Минивэн</h3><p>2 500 ₽</p></div>
+      <div class="service-card glass-soft"><h3>Грузовой</h3><p>3 000 ₽</p></div>
     </div>
 
     <div class="adv-item">За город — <strong>80 ₽ / км</strong></div>
 
-    <a class="apple-btn" href="prices.html">Подробные цены</a>
+    <a class="apple-glass-btn" href="prices.html">Подробные цены</a>
   </section>
 
   <!-- Заявка -->
-  <section class="section fade">
+  <section class="section glass-section">
     <h2>Оставить заявку</h2>
 
     <form id="requestForm" class="request-form">
-      <div class="form-row">
-        <label>Имя</label>
-        <input type="text" name="name" required>
-      </div>
+      <input type="text" name="name" placeholder="Имя" required>
+      <input type="tel" name="phone" placeholder="Телефон" required>
+      <input type="text" name="address" placeholder="Адрес" required>
+      <textarea name="comment" placeholder="Комментарий"></textarea>
 
-      <div class="form-row">
-        <label>Телефон</label>
-        <input type="tel" name="phone" required>
-      </div>
+      <button class="apple-glass-btn" type="submit">Оставить заявку</button>
 
-      <div class="form-row">
-        <label>Адрес</label>
-        <input type="text" name="address" required>
-      </div>
-
-      <div class="form-row">
-        <label>Комментарий</label>
-        <textarea name="comment"></textarea>
-      </div>
-
-      <button class="apple-btn" type="submit">Оставить заявку</button>
-
-      <div class="status-box" id="requestStatus"></div>
+      <div id="requestStatus" class="status-box"></div>
     </form>
   </section>
 
   <!-- Footer -->
-  <footer class="footer glass-heavy fade">
+  <footer class="footer glass-heavy">
     <div class="footer-grid">
       <div>
         <h3>Эвакуатор Краснодар 24/7</h3>
@@ -120,6 +106,6 @@
 
 </div>
 
-<script src="app.js?v=3"></script>
+<script src="app.js?v=5000"></script>
 </body>
 </html>
