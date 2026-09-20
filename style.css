@@ -1,107 +1,314 @@
-/* Apple font */
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Manrope", sans-serif;
+/* ------------------------------
+   GLOBAL
+------------------------------ */
+
+:root {
+  --bg:#050608;
+  --text:#f3f5f7;
+  --muted:#aab1b8;
+
+  --glass-soft:rgba(255,255,255,.08);
+  --glass-heavy:rgba(255,255,255,.14);
+
+  --border-soft:rgba(255,255,255,.12);
+  --border-heavy:rgba(255,255,255,.22);
+
+  --shadow-heavy:0 28px 60px rgba(0,0,0,.55);
+  --shadow-medium:0 16px 40px rgba(0,0,0,.45);
+  --shadow-soft:0 8px 20px rgba(0,0,0,.35);
+
+  --radius:18px;
 }
 
-/* HERO */
+* {
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:-apple-system, BlinkMacSystemFont, "SF Pro Display", "Manrope", sans-serif;
+  overflow-x:hidden;
+}
+
+.container {
+  max-width:960px;
+  margin:0 auto;
+  padding:20px;
+}
+
+/* ------------------------------
+   HERO
+------------------------------ */
+
+.hero {
+  position:relative;
+  height:420px;
+  border-radius:var(--radius);
+  overflow:hidden;
+  box-shadow:var(--shadow-heavy);
+  margin-bottom:28px;
+}
+
 .hero-bg {
   position:absolute;
   inset:0;
-  background-image:url('banner-top.png?v=3');
+  background-image:url('banner-top.png?v=5000');
   background-size:cover;
   background-position:center;
   filter:brightness(1.18) contrast(1.12);
   transform:scale(1.02);
 }
 
-/* Apple buttons */
-.apple-btn {
+/* ------------------------------
+   HYBRID GLASS BUTTONS
+------------------------------ */
+
+.apple-glass-btn {
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  padding:12px 20px;
-  border-radius:12px;
+
+  padding:12px 22px;
+  border-radius:14px;
+
   font-size:17px;
   font-weight:600;
-  background:linear-gradient(180deg,#ffffff,#f4f4f6 40%,#e6e7eb 60%,#f9fafb 100%);
-  color:#0a0a0c;
-  border:1px solid rgba(255,255,255,.9);
-  box-shadow:
-    0 1px 2px rgba(0,0,0,.12),
-    0 6px 18px rgba(0,0,0,.12),
-    inset 0 1px 0 rgba(255,255,255,1);
+  color:var(--text);
   text-decoration:none;
+
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.04)),
+    linear-gradient(180deg, rgba(20,20,20,.85), rgba(10,10,10,.92));
+
+  border:1px solid var(--border-heavy);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.25),
+    var(--shadow-medium);
+
+  backdrop-filter:blur(18px);
+
   cursor:pointer;
-  transition:all .18s ease;
+  transition:.22s ease;
 }
 
-.apple-btn:hover {
+.apple-glass-btn:hover {
   transform:translateY(-2px);
   box-shadow:
-    0 3px 6px rgba(0,0,0,.16),
-    0 12px 28px rgba(0,0,0,.18),
-    inset 0 1px 0 rgba(255,255,255,1);
+    inset 0 1px 0 rgba(255,255,255,.25),
+    0 22px 50px rgba(0,0,0,.55);
 }
 
+.apple-glass-btn:active {
+  transform:translateY(1px) scale(.985);
+}
+
+/* Short buttons row */
 .btn-row {
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:20px;
+}
+
+/* Install button */
+.install-btn {
+  margin-bottom:20px;
+  width:100%;
+}
+
+/* ------------------------------
+   SECTIONS (Hybrid Glass)
+------------------------------ */
+
+.section {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04)),
+    rgba(10,10,10,.85);
+
+  border:1px solid var(--border-soft);
+  border-radius:var(--radius);
+
+  padding:22px;
+  margin:22px 0;
+
+  box-shadow:var(--shadow-medium);
+  backdrop-filter:blur(16px);
+}
+
+.section h2 {
+  margin:0 0 16px;
+  font-size:26px;
+  font-weight:700;
+}
+
+/* ------------------------------
+   SOCIAL BUTTONS (Glass)
+------------------------------ */
+
+.social-row {
   display:flex;
   gap:10px;
   flex-wrap:wrap;
 }
 
-/* Social buttons */
-.social-apple {
+.social-glass {
   flex:1;
-  padding:10px 14px;
-  border-radius:12px;
+  padding:12px 14px;
+  border-radius:14px;
+
   font-size:15px;
   font-weight:600;
   text-align:center;
-  background:linear-gradient(180deg,#ffffff,#f4f4f6);
-  color:#0a0a0c;
-  border:1px solid rgba(255,255,255,.9);
-  box-shadow:
-    0 1px 2px rgba(0,0,0,.12),
-    0 6px 18px rgba(0,0,0,.12),
-    inset 0 1px 0 rgba(255,255,255,1);
   text-decoration:none;
-  transition:.18s;
+  color:var(--text);
+
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.04)),
+    rgba(10,10,10,.85);
+
+  border:1px solid var(--border-heavy);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.25),
+    var(--shadow-soft);
+
+  backdrop-filter:blur(14px);
+  transition:.22s ease;
 }
 
-.social-apple:hover {
+.social-glass:hover {
   transform:translateY(-1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.25),
+    0 18px 40px rgba(0,0,0,.55);
 }
 
-/* Sections */
-.section {
-  background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.1);
-  padding:22px;
-  border-radius:20px;
-  margin:20px 0;
-  backdrop-filter:blur(12px);
-}
+/* ------------------------------
+   SERVICES (Glass Soft)
+------------------------------ */
 
-/* Services */
 .services-list {
   display:grid;
   grid-template-columns:repeat(2,1fr);
   gap:18px;
 }
 
-.service-item {
-  background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.08);
+.service-card {
   padding:18px;
   border-radius:16px;
+
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)),
+    rgba(10,10,10,.75);
+
+  border:1px solid var(--border-soft);
+  box-shadow:var(--shadow-soft);
+  backdrop-filter:blur(12px);
 }
 
-/* Form */
+.service-card h3 {
+  margin:0 0 8px;
+  font-size:20px;
+  font-weight:700;
+}
+
+.service-card p {
+  margin:0;
+  font-size:15px;
+  color:var(--muted);
+}
+
+/* ------------------------------
+   FORM (Glass)
+------------------------------ */
+
+.request-form {
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
 .request-form input,
 .request-form textarea {
-  background:rgba(255,255,255,.08);
-  border:1px solid rgba(255,255,255,.2);
-  padding:10px;
-  border-radius:12px;
-  color:white;
+  width:100%;
+  padding:12px;
+  border-radius:14px;
+
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)),
+    rgba(10,10,10,.75);
+
+  border:1px solid var(--border-soft);
+  color:var(--text);
+
+  font-size:16px;
+  backdrop-filter:blur(12px);
+}
+
+.request-form input:focus,
+.request-form textarea:focus {
+  border-color:rgba(255,255,255,.35);
+}
+
+/* ------------------------------
+   STATUS
+------------------------------ */
+
+.status-box {
+  margin-top:10px;
+  font-size:14px;
+  color:var(--muted);
+}
+
+/* ------------------------------
+   FOOTER
+------------------------------ */
+
+.footer {
+  margin-top:30px;
+  padding:22px;
+  border-radius:var(--radius);
+
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.04)),
+    rgba(10,10,10,.85);
+
+  border:1px solid var(--border-heavy);
+  box-shadow:var(--shadow-medium);
+  backdrop-filter:blur(18px);
+}
+
+.footer-grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+
+.footer h3 {
+  margin:0 0 6px;
+  font-size:16px;
+}
+
+.footer p {
+  margin:0;
+  font-size:14px;
+  color:var(--muted);
+}
+
+.footer a {
+  color:#4ade80;
+  text-decoration:none;
+}
+
+/* ------------------------------
+   MOBILE
+------------------------------ */
+
+@media (max-width:680px) {
+  .hero { height:360px; }
+  .services-list { grid-template-columns:1fr; }
+  .footer-grid { grid-template-columns:1fr; }
 }
