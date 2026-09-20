@@ -2,7 +2,7 @@
 const heroBg = document.getElementById('heroBg');
 window.addEventListener('scroll', () => {
   const offset = window.scrollY * 0.25;
-  heroBg.style.transform = `translateY(${offset}px) scale(1.1)`;
+  heroBg.style.transform = `translateY(${offset}px) scale(1.08)`;
 });
 
 // GEO + ROUTE
