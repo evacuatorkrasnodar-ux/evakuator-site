@@ -9,47 +9,31 @@
   <meta name="description" content="Круглосуточный эвакуатор в Краснодаре. Подача от 15 минут. Аккуратная погрузка, честные цены.">
   <meta name="keywords" content="эвакуатор Краснодар, эвакуатор круглосуточно, эвакуатор недорого">
 
-  <!-- Styles -->
   <link rel="stylesheet" href="/style.css">
-
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
-
-  <!-- Manifest -->
   <link rel="manifest" href="/manifest.json">
   <link rel="icon" href="/favicon.png">
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
 
 <body>
 <div class="container">
 
-  <!-- Премиальный баннер -->
-  <header class="top-banner fade">
-    <a href="tel:+79888717018">
-      <picture>
-        <source srcset="/banner-top-mobile.png" media="(max-width: 680px)">
-        <img src="/banner-top.png" alt="Эвакуатор Краснодар 24/7">
-      </picture>
+  <!-- Премиальный параллакс-баннер -->
+  <header class="hero-parallax">
+    <div class="hero-bg" id="heroBg"></div>
 
-      <div class="banner-overlay">
-        <h1 class="banner-title">Эвакуатор Краснодар 24/7</h1>
-        <p class="banner-sub">Подача от 15 минут • Аккуратная погрузка • Честная цена</p>
+    <div class="hero-content glass">
+      <h1>Эвакуатор Краснодар 24/7</h1>
+      <p>Подача от 15 минут • Аккуратная погрузка • Честная цена</p>
 
-        <div class="banner-row">
-          <div class="banner-pill">Круглосуточно</div>
-          <div class="banner-pill">Краснодар и край</div>
-          <div class="banner-pill">Легковые и грузовые</div>
-
-          <button class="banner-call" onclick="callNow()">
-            <span class="icon">☎</span>
-            <span>Вызвать эвакуатор</span>
-          </button>
-        </div>
+      <div class="hero-actions">
+        <a href="tel:+79888717018" class="hero-call">Вызвать эвакуатор</a>
+        <button class="hero-secondary" id="heroGeoBtn">Отправить мою геолокацию</button>
       </div>
-    </a>
+    </div>
   </header>
 
   <!-- Основные кнопки -->
@@ -70,7 +54,7 @@
     <span>Установить приложение</span>
   </button>
 
-  <!-- Почему обращаются -->
+  <!-- Блок "Почему обращаются" -->
   <section class="section fade">
     <h2>Почему обращаются к нам</h2>
     <div class="adv-item">Эвакуатор в Краснодаре круглосуточно — работаем 24/7 без выходных и праздников.</div>
@@ -85,6 +69,64 @@
       <div class="badge">Быстро и надёжно</div>
       <div class="badge">Краснодар и край</div>
       <div class="badge">Легковые и грузовые</div>
+    </div>
+  </section>
+
+  <!-- О компании -->
+  <section class="section fade about-block">
+    <h2>О компании</h2>
+
+    <p class="about-text">
+      Мы — профессиональная служба эвакуации автомобилей в Краснодаре.
+      Работаем круглосуточно, обеспечиваем быструю подачу и аккуратную погрузку.
+      Наши водители имеют большой опыт и используют современное оборудование,
+      что гарантирует безопасность вашего автомобиля.
+    </p>
+
+    <div class="about-grid">
+      <div class="about-item">
+        <h3>15+ лет опыта</h3>
+        <p>Работаем с 2010 года. Тысячи успешно выполненных эвакуаций.</p>
+      </div>
+
+      <div class="about-item">
+        <h3>24/7 без выходных</h3>
+        <p>Помогаем в любое время суток, в любую погоду.</p>
+      </div>
+
+      <div class="about-item">
+        <h3>Краснодар и край</h3>
+        <p>Работаем по городу и всему Краснодарскому краю.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Услуги -->
+  <section class="section fade services-block">
+    <h2>Наши услуги</h2>
+
+    <div class="services-list">
+
+      <div class="service-item">
+        <h3>Эвакуация легковых авто</h3>
+        <p>Бережная погрузка и перевозка любых легковых автомобилей.</p>
+      </div>
+
+      <div class="service-item">
+        <h3>Эвакуация кроссоверов и внедорожников</h3>
+        <p>Специальные платформы для тяжёлых и высоких авто.</p>
+      </div>
+
+      <div class="service-item">
+        <h3>Эвакуация после ДТП</h3>
+        <p>Аккуратная работа с повреждёнными автомобилями.</p>
+      </div>
+
+      <div class="service-item">
+        <h3>Перевозка спецтехники</h3>
+        <p>Мини‑погрузчики, мототехника, малые грузовики.</p>
+      </div>
+
     </div>
   </section>
 
@@ -106,6 +148,34 @@
       Для срочного вызова просто позвоните по номеру
       <a href="tel:+79888717018" style="color:#fff;text-decoration:none;font-weight:800;">+7 (988) 871‑70‑18</a>.
     </p>
+  </section>
+
+  <!-- Заявка (форма) -->
+  <section class="section fade">
+    <h2>Оставить заявку</h2>
+    <form id="requestForm" class="request-form">
+      <div class="form-row">
+        <label>Имя</label>
+        <input type="text" name="name" required placeholder="Ваше имя">
+      </div>
+      <div class="form-row">
+        <label>Телефон</label>
+        <input type="tel" name="phone" required placeholder="+7">
+      </div>
+      <div class="form-row">
+        <label>Адрес или ориентир</label>
+        <input type="text" name="address" required placeholder="Где вы находитесь">
+      </div>
+      <div class="form-row">
+        <label>Комментарий</label>
+        <textarea name="comment" rows="3" placeholder="Марка авто, причина эвакуации"></textarea>
+      </div>
+      <button type="submit" class="premium-btn">
+        <span class="btn-icon">✉</span>
+        <span>Отправить заявку</span>
+      </button>
+      <div class="status-box" id="requestStatus"></div>
+    </form>
   </section>
 
   <!-- Соцсети -->
@@ -155,6 +225,15 @@
     <p style="font-size:18px;line-height:1.5;margin:0;">
       Работаем аккуратно и стараемся приехать как можно быстрее.
     </p>
+  </section>
+
+  <!-- Переключатель языка -->
+  <section class="section fade">
+    <h2>Language / Язык</h2>
+    <a class="premium-btn" href="/en.html">
+      <span class="btn-icon">EN</span>
+      <span>English version</span>
+    </a>
   </section>
 
   <!-- Футер -->
