@@ -47,7 +47,7 @@ body {
   to { opacity:1; transform:none; }
 }
 
-/* HERO PARALLAX + GLASS */
+/* HERO */
 
 .hero-parallax {
   position:relative;
@@ -64,8 +64,8 @@ body {
   background-image:url('banner-top.png');
   background-size:cover;
   background-position:center;
-  filter:blur(10px) brightness(.75);
-  transform:scale(1.1);
+  filter:blur(10px) brightness(.8);
+  transform:scale(1.08);
   transition:transform .2s ease-out;
   will-change:transform;
 }
@@ -78,7 +78,7 @@ body {
   flex-direction:column;
   justify-content:flex-end;
   padding:32px;
-  background:linear-gradient(180deg, rgba(0,0,0,.0), rgba(0,0,0,.85));
+  background:linear-gradient(180deg, rgba(0,0,0,.0), rgba(0,0,0,.88));
 }
 
 .title-hero {
@@ -126,7 +126,13 @@ body {
   border:1px solid rgba(255,255,255,.12);
 }
 
-/* BUTTONS */
+.glass-soft {
+  backdrop-filter:blur(10px);
+  background:linear-gradient(180deg, rgba(20,24,28,.65), rgba(10,12,15,.85));
+  border:1px solid rgba(255,255,255,.08);
+}
+
+/* BUTTONS — Tesla / Stripe алюминий */
 
 .premium-btn {
   position:relative;
@@ -135,24 +141,37 @@ body {
   align-items:center;
   justify-content:center;
   gap:12px;
-  min-height:58px;
-  padding:15px 20px;
+  padding:14px 22px;
   margin:12px 0;
-  border:1px solid rgba(255,255,255,.65);
-  border-radius:17px;
-  color:#171a1e;
+  border-radius:18px;
+  font-size:17px;
+  font-weight:700;
+  color:#0f1113;
   text-decoration:none;
-  font-size:18px;
-  font-weight:800;
   background:
-    linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,0) 36%),
-    linear-gradient(180deg, #f8fafb 0%, #d9dee3 44%, #b9c0c7 55%, #eef1f4 100%);
+    linear-gradient(180deg,#f9fafb,#d5d9df 40%,#b7bcc3 60%,#eef1f4 100%);
+  border:1px solid rgba(255,255,255,.7);
   box-shadow:
-    0 2px 0 rgba(0,0,0,.28),
-    0 13px 28px rgba(0,0,0,.34),
+    0 1px 0 rgba(0,0,0,.35),
+    0 12px 26px rgba(0,0,0,.45),
     inset 0 1px 0 rgba(255,255,255,.95),
-    inset 0 -2px 0 rgba(40,45,50,.22);
+    inset 0 -2px 0 rgba(40,45,50,.25);
   cursor:pointer;
+  transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;
+}
+
+.premium-btn:hover {
+  transform:translateY(-2px);
+  filter:brightness(1.04);
+  box-shadow:
+    0 3px 0 rgba(0,0,0,.32),
+    0 16px 32px rgba(0,0,0,.52),
+    inset 0 1px 0 rgba(255,255,255,.98),
+    inset 0 -2px 0 rgba(40,45,50,.22);
+}
+
+.premium-btn:active {
+  transform:translateY(1px) scale(.985);
 }
 
 .btn-icon {
@@ -250,6 +269,17 @@ body {
   color:var(--muted);
 }
 
+/* REVIEWS */
+
+.review-card {
+  padding:16px;
+  margin:12px 0;
+  border-radius:16px;
+  box-shadow:var(--shadow-sm);
+  font-size:16px;
+  line-height:1.5;
+}
+
 /* FORM */
 
 .request-form {
@@ -285,7 +315,7 @@ body {
   border-color:var(--accent);
 }
 
-/* STATUS BOX */
+/* STATUS */
 
 .status-box {
   margin-top:10px;
