@@ -1,62 +1,38 @@
-const heroBg = document.querySelector('.hero-bg');
-window.addEventListener('scroll', () => {
-  const offset = window.scrollY * 0.25;
-  heroBg.style.transform = `translateY(${offset}px) scale(1.02)`;
-});
-
 const geoBtn = document.getElementById('geoSend');
-const heroGeoBtn = document.getElementById('heroGeoBtn');
 const geoStatus = document.getElementById('geoStatus');
 
-function requestGeo() {
+geoBtn.addEventListener('click', () => {
   if (!navigator.geolocation) {
     geoStatus.textContent = "Геолокация не поддерживается.";
     return;
   }
 
-  geoStatus.textContent = "Определяем ваше местоположение...";
+  geoStatus.textContent = "Определяем местоположение...";
 
   navigator.geolocation.getCurrentPosition(
     (pos) => {
       const lat = pos.coords.latitude;
       const lon = pos.coords.longitude;
-      geoStatus.textContent = "Геолокация получена, открываем маршрут...";
-
       const url = `https://yandex.ru/maps/?pt=${lon},${lat}&z=16&l=map`;
       window.location.href = url;
     },
-    () => {
-      geoStatus.textContent = "Разрешите доступ к геолокации в браузере.";
-    },
-    { enableHighAccuracy:true, timeout:10000, maximumAge:0 }
+    () => geoStatus.textContent = "Разрешите доступ к геолокации."
   );
-}
+});
 
-geoBtn.addEventListener('click', requestGeo);
-heroGeoBtn.addEventListener('click', requestGeo);
+const form = document.getElementById('requestForm');
+const statusBox = document.getElementById('requestStatus');
 
-const requestForm = document.getElementById('requestForm');
-const requestStatus = document.getElementById('requestStatus');
-
-requestForm.addEventListener('submit', (e) => {
+form.addEventListener('submit', (e) => {
   e.preventDefault();
 
-  const formData = new FormData(requestForm);
-  const name = formData.get('name');
-  const phone = formData.get('phone');
-  const address = formData.get('address');
-  const comment = formData.get('comment') || '—';
-
+  const fd = new FormData(form);
   const text =
-    `Заявка эвакуатора:%0A` +
-    `Имя: ${name}%0A` +
-    `Телефон: ${phone}%0A` +
-    `Адрес: ${address}%0A` +
-    `Комментарий: ${comment}`;
+    `Заявка:%0AИмя: ${fd.get('name')}%0AТелефон: ${fd.get('phone')}%0AАдрес: ${fd.get('address')}%0AКомментарий: ${fd.get('comment')}`;
 
-  requestStatus.textContent = "Открываем WhatsApp для отправки заявки...";
-  const waUrl = `https://wa.me/79888717018?text=${text}`;
-  window.location.href = waUrl;
+  statusBox.textContent = "Открываем VK для отправки заявки...";
+
+  window.location.href = `https://vk.ru/evakuator.krasnodar?message=${text}`;
 });
 
 let deferredPrompt = null;
@@ -69,12 +45,9 @@ window.addEventListener('beforeinstallprompt', (e) => {
 });
 
 installBtn.addEventListener('click', async () => {
-  if (!deferredPrompt) return;
   deferredPrompt.prompt();
   await deferredPrompt.userChoice;
   installBtn.style.display = "none";
 });
 
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("service-worker.js");
-}
+navigator.serviceWorker.register("service-worker.js");
