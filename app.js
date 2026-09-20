@@ -1,53 +1,43 @@
-/* CALL */
-function callNow() {
-  window.location.href = "tel:+79888717018";
-}
-
-/* PARALLAX */
+// PARALLAX
 const heroBg = document.getElementById('heroBg');
 window.addEventListener('scroll', () => {
   const offset = window.scrollY * 0.25;
   heroBg.style.transform = `translateY(${offset}px) scale(1.1)`;
 });
 
-/* GEO + ROUTE */
+// GEO + ROUTE
 const geoBtn = document.getElementById('geoSend');
 const heroGeoBtn = document.getElementById('heroGeoBtn');
 const geoStatus = document.getElementById('geoStatus');
 
 function requestGeo() {
-  geoStatus.classList.add('show');
+  if (!navigator.geolocation) {
+    geoStatus.textContent = "Геолокация не поддерживается.";
+    return;
+  }
+
   geoStatus.textContent = "Определяем ваше местоположение...";
 
   navigator.geolocation.getCurrentPosition(
     (pos) => {
       const lat = pos.coords.latitude;
       const lon = pos.coords.longitude;
+      geoStatus.textContent = "Геолокация получена, открываем маршрут...";
 
-      geoStatus.innerHTML = `
-        <strong>Геолокация получена.</strong><br>
-        Открываем маршрут...
-      `;
-
-      // Яндекс.Карты
       const url = `https://yandex.ru/maps/?pt=${lon},${lat}&z=16&l=map`;
       window.location.href = url;
     },
-    (err) => {
+    () => {
       geoStatus.textContent = "Разрешите доступ к геолокации в браузере.";
     },
-    {
-      enableHighAccuracy: true,
-      timeout: 10000,
-      maximumAge: 0
-    }
+    { enableHighAccuracy:true, timeout:10000, maximumAge:0 }
   );
 }
 
 geoBtn.addEventListener('click', requestGeo);
 heroGeoBtn.addEventListener('click', requestGeo);
 
-/* REQUEST FORM -> ADMIN (через простой API) */
+// REQUEST FORM
 const requestForm = document.getElementById('requestForm');
 const requestStatus = document.getElementById('requestStatus');
 
@@ -62,28 +52,27 @@ requestForm.addEventListener('submit', async (e) => {
     comment: formData.get('comment')
   };
 
-  requestStatus.classList.add('show');
   requestStatus.textContent = "Отправляем заявку...";
 
   try {
     const res = await fetch('/api/request.php', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload)
     });
 
     if (res.ok) {
-      requestStatus.innerHTML = "<strong>Заявка отправлена.</strong> Мы скоро свяжемся с вами.";
+      requestStatus.textContent = "Заявка отправлена. Мы скоро свяжемся с вами.";
       requestForm.reset();
     } else {
       requestStatus.textContent = "Ошибка отправки. Попробуйте ещё раз.";
     }
-  } catch (e) {
+  } catch {
     requestStatus.textContent = "Ошибка соединения. Попробуйте позже.";
   }
 });
 
-/* PWA INSTALL */
+// PWA
 let deferredPrompt = null;
 const installBtn = document.getElementById('installBtn');
 
@@ -99,7 +88,6 @@ installBtn.addEventListener('click', async () => {
   installBtn.style.display = "none";
 });
 
-/* SERVICE WORKER */
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("/service-worker.js");
+  navigator.serviceWorker.register("service-worker.js");
 }
