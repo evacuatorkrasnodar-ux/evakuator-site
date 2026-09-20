@@ -2,51 +2,21 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Админка — заявки эвакуатора</title>
+  <title>Админка — заявки</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css?v=1">
+  <link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
 <div class="container">
 
   <section class="section fade">
     <h2>Заявки</h2>
-    <div id="requestsList" class="requests-list"></div>
+    <p class="about-text">
+      Заявки сейчас отправляются через WhatsApp.<br>
+      История диалогов доступна в самом WhatsApp.
+    </p>
   </section>
 
 </div>
-
-<script>
-async function loadRequests() {
-  try {
-    const res = await fetch('/api/get-requests.php');
-    const data = await res.json();
-
-    const list = document.getElementById('requestsList');
-    list.innerHTML = '';
-
-    if (!data || !data.length) {
-      list.textContent = 'Заявок пока нет.';
-      return;
-    }
-
-    data.forEach(req => {
-      const div = document.createElement('div');
-      div.className = 'request-card glass-soft';
-      div.innerHTML = `
-        <strong>${req.name}</strong> (${req.phone})<br>
-        Адрес: ${req.address}<br>
-        Комментарий: ${req.comment || '—'}<br>
-        Время: ${req.created_at}
-      `;
-      list.appendChild(div);
-    });
-  } catch (e) {
-    document.getElementById('requestsList').textContent = 'Ошибка загрузки заявок.';
-  }
-}
-
-loadRequests();
-</script>
 </body>
 </html>
