@@ -4,59 +4,108 @@
   <meta charset="UTF-8">
   <title>Tow Truck Krasnodar 24/7</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css?v=2">
+
+  <link rel="stylesheet" href="style.css?v=5000">
 </head>
 <body>
+
 <div class="container">
 
-  <header class="section glass-heavy fade">
-    <h2>Tow Truck Krasnodar 24/7</h2>
-    <p>Fast arrival • Fixed price • City and region.</p>
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-bg"></div>
   </header>
 
-  <section class="section fade">
-    <h3>Services</h3>
-    <ul style="list-style:none;padding:0;margin:0;">
-      <li class="adv-item">Passenger cars up to 3.5 t</li>
-      <li class="adv-item">Crossovers and SUVs</li>
-      <li class="adv-item">Minivans</li>
-      <li class="adv-item">Light commercial vehicles up to 3.5 t</li>
-      <li class="adv-item">Motorcycles</li>
-      <li class="adv-item">Business‑class cars</li>
-    </ul>
+  <!-- Install App -->
+  <button id="installBtn" class="apple-glass-btn install-btn">
+    Install App
+  </button>
+
+  <!-- Main Buttons -->
+  <div class="btn-row">
+    <a class="apple-glass-btn" href="tel:+79888717018">Call</a>
+    <button class="apple-glass-btn" id="geoSend">Location</button>
+    <a class="apple-glass-btn" href="#requestForm">Send Request</a>
+  </div>
+
+  <div id="geoStatus" class="status-box"></div>
+
+  <!-- Social -->
+  <section class="section glass-section">
+    <h2>Social Networks</h2>
+
+    <div class="social-row">
+      <a class="social-glass" href="https://t.me/evakuatorkrasnodar24">Telegram</a>
+      <a class="social-glass" href="https://chat.whatsapp.com/Da9sLiLpm6SLjmW7WZBZze">WhatsApp</a>
+      <a class="social-glass" href="https://web.max.ru/">MAX</a>
+      <a class="social-glass" href="https://vk.ru/evakuator.krasnodar">VK</a>
+    </div>
   </section>
 
-  <section class="section fade">
-    <h3>City prices</h3>
-    <ul style="list-style:none;padding:0;margin:0;">
-      <li class="adv-item">Passenger car — 2 000 ₽</li>
-      <li class="adv-item">Crossover / SUV — 2 200 ₽</li>
-      <li class="adv-item">Minivan — 2 500 ₽</li>
-      <li class="adv-item">Light truck — 3 000 ₽</li>
-    </ul>
+  <!-- Services -->
+  <section class="section glass-section">
+    <h2>Services</h2>
+
+    <div class="services-list">
+      <div class="service-card glass-soft"><h3>Passenger Cars</h3><p>Up to 3.5 t</p></div>
+      <div class="service-card glass-soft"><h3>SUV / Crossovers</h3><p>Platform + winch</p></div>
+      <div class="service-card glass-soft"><h3>Minivans</h3><p>Careful loading</p></div>
+      <div class="service-card glass-soft"><h3>Light Commercial</h3><p>Up to 3.5 t</p></div>
+    </div>
   </section>
 
-  <section class="section fade">
-    <h3>Out of town</h3>
-    <p class="about-text">
-      We work across Krasnodar region.<br>
-      Price per km — <strong>80 ₽ / km</strong>.<br>
-      Final cost is agreed before the trip.
-    </p>
+  <!-- Prices -->
+  <section class="section glass-section">
+    <h2>City Prices</h2>
+
+    <div class="services-list">
+      <div class="service-card glass-soft"><h3>Passenger Car</h3><p>2 000 ₽</p></div>
+      <div class="service-card glass-soft"><h3>SUV</h3><p>2 200 ₽</p></div>
+      <div class="service-card glass-soft"><h3>Minivan</h3><p>2 500 ₽</p></div>
+      <div class="service-card glass-soft"><h3>Light Truck</h3><p>3 000 ₽</p></div>
+    </div>
+
+    <div class="adv-item">Out of town — <strong>80 ₽ / km</strong></div>
+
+    <a class="apple-glass-btn" href="prices.html">Full Price List</a>
   </section>
 
-  <section class="section fade">
-    <h3>Contact</h3>
-    <p class="about-text">
-      Phone: <a href="tel:+79888717018">+7 (988) 871‑70‑18</a><br>
-      WhatsApp: <a href="https://wa.me/79888717018">chat</a>
-    </p>
-    <a href="index.html" class="premium-btn">
-      <span class="btn-icon">←</span>
-      <span>Back to Russian version</span>
-    </a>
+  <!-- Request -->
+  <section class="section glass-section">
+    <h2>Send Request</h2>
+
+    <form id="requestForm" class="request-form">
+      <input type="text" name="name" placeholder="Name" required>
+      <input type="tel" name="phone" placeholder="Phone" required>
+      <input type="text" name="address" placeholder="Address" required>
+      <textarea name="comment" placeholder="Comment"></textarea>
+
+      <button class="apple-glass-btn" type="submit">Send Request</button>
+
+      <div id="requestStatus" class="status-box"></div>
+    </form>
   </section>
+
+  <!-- Footer -->
+  <footer class="footer glass-heavy">
+    <div class="footer-grid">
+      <div>
+        <h3>Tow Truck Krasnodar 24/7</h3>
+        <p>City & region, 24/7.</p>
+      </div>
+      <div>
+        <h3>Phone</h3>
+        <p><a href="tel:+79888717018">+7 (988) 871‑70‑18</a></p>
+      </div>
+      <div>
+        <h3>Pages</h3>
+        <p><a href="prices.html">Prices</a> · <a href="index.html">Russian</a></p>
+      </div>
+    </div>
+  </footer>
 
 </div>
+
+<script src="app.js?v=5000"></script>
 </body>
 </html>
