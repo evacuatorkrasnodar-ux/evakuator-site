@@ -1,36 +1,36 @@
-/* ---------------------------------------
-   HERO PARALLAX (мягкое движение баннера)
----------------------------------------- */
+/* ----------------------------------------------------
+   HERO PARALLAX — мягкое движение баннера (macOS style)
+---------------------------------------------------- */
 
 const heroBg = document.querySelector('.hero-bg');
 
 window.addEventListener('scroll', () => {
   const offset = window.scrollY * 0.25;
-  heroBg.style.transform = `translateY(${offset}px) scale(1.02)`;
+  heroBg.style.transform = `translateY(${offset}px) scale(1.05)`;
 });
 
 
-/* ---------------------------------------
-   ГЕОЛОКАЦИЯ
----------------------------------------- */
+/* ----------------------------------------------------
+   ГЕОЛОКАЦИЯ — «Найти меня по геолокации»
+---------------------------------------------------- */
 
 const geoBtn = document.getElementById('geoSend');
 const geoStatus = document.getElementById('geoStatus');
 
 geoBtn.addEventListener('click', () => {
   if (!navigator.geolocation) {
-    geoStatus.textContent = "Геолокация не поддерживается.";
+    geoStatus.textContent = "Ваш браузер не поддерживает геолокацию.";
     return;
   }
 
-  geoStatus.textContent = "Определяем местоположение...";
+  geoStatus.textContent = "Определяем ваше местоположение…";
 
   navigator.geolocation.getCurrentPosition(
     (pos) => {
       const lat = pos.coords.latitude;
       const lon = pos.coords.longitude;
 
-      geoStatus.textContent = "Открываем маршрут...";
+      geoStatus.textContent = "Открываем карту…";
 
       const url = `https://yandex.ru/maps/?pt=${lon},${lat}&z=16&l=map`;
       window.location.href = url;
@@ -43,9 +43,9 @@ geoBtn.addEventListener('click', () => {
 });
 
 
-/* ---------------------------------------
+/* ----------------------------------------------------
    ЗАЯВКА → VK
----------------------------------------- */
+---------------------------------------------------- */
 
 const form = document.getElementById('requestForm');
 const requestStatus = document.getElementById('requestStatus');
@@ -67,15 +67,27 @@ form.addEventListener('submit', (e) => {
     `Адрес: ${address}%0A` +
     `Комментарий: ${comment}`;
 
-  requestStatus.textContent = "Открываем VK для отправки заявки...";
+  requestStatus.textContent = "Открываем VK для отправки заявки…";
 
   window.location.href = `https://vk.ru/evakuator.krasnodar?message=${text}`;
 });
 
 
-/* ---------------------------------------
-   PWA УСТАНОВКА ПРИЛОЖЕНИЯ
----------------------------------------- */
+/* ----------------------------------------------------
+   iOS Fade-In Animation Trigger
+---------------------------------------------------- */
+
+document.addEventListener("DOMContentLoaded", () => {
+  const animatedBlocks = document.querySelectorAll('.fade-in');
+  animatedBlocks.forEach((el, i) => {
+    el.style.animationDelay = `${i * 0.12}s`;
+  });
+});
+
+
+/* ----------------------------------------------------
+   PWA INSTALL
+---------------------------------------------------- */
 
 let deferredPrompt = null;
 const installBtn = document.getElementById('installBtn');
@@ -94,10 +106,10 @@ installBtn.addEventListener('click', async () => {
 });
 
 
-/* ---------------------------------------
+/* ----------------------------------------------------
    SERVICE WORKER
----------------------------------------- */
+---------------------------------------------------- */
 
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("service-worker.js?v=5000");
+  navigator.serviceWorker.register("service-worker.js?v=6000");
 }
