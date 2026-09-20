@@ -10,8 +10,6 @@
   --shadow-sm:0 6px 16px rgba(0,0,0,.35);
 }
 
-/* GLOBAL */
-
 * {
   box-sizing:border-box;
   -webkit-tap-highlight-color:transparent;
@@ -34,8 +32,6 @@ body {
   margin:0 auto;
   padding:20px;
 }
-
-/* FADE */
 
 .fade {
   opacity:0;
@@ -64,8 +60,8 @@ body {
   background-image:url('banner-top.png');
   background-size:cover;
   background-position:center;
-  filter:blur(10px) brightness(.8);
-  transform:scale(1.08);
+  filter:blur(3px) brightness(1.15);
+  transform:scale(1.05);
   transition:transform .2s ease-out;
   will-change:transform;
 }
@@ -132,7 +128,7 @@ body {
   border:1px solid rgba(255,255,255,.08);
 }
 
-/* BUTTONS — Tesla / Stripe алюминий */
+/* BUTTONS — Tesla / Stripe */
 
 .premium-btn {
   position:relative;
@@ -163,11 +159,6 @@ body {
 .premium-btn:hover {
   transform:translateY(-2px);
   filter:brightness(1.04);
-  box-shadow:
-    0 3px 0 rgba(0,0,0,.32),
-    0 16px 32px rgba(0,0,0,.52),
-    inset 0 1px 0 rgba(255,255,255,.98),
-    inset 0 -2px 0 rgba(40,45,50,.22);
 }
 
 .premium-btn:active {
@@ -355,17 +346,8 @@ body {
   text-decoration:none;
 }
 
-/* MOBILE */
+/* ADMIN CARDS */
 
-@media (max-width:680px) {
-  .hero-parallax { height:360px; }
-  .hero-content { padding:22px; }
-  .title-hero { font-size:26px; }
-  .subtitle-hero { font-size:16px; }
-  .about-grid { grid-template-columns:1fr; }
-  .services-list { grid-template-columns:1fr; }
-  .footer-grid { grid-template-columns:1fr; }
-}
 .requests-list {
   display:flex;
   flex-direction:column;
@@ -377,4 +359,16 @@ body {
   border-radius:14px;
   font-size:15px;
   line-height:1.5;
+}
+
+/* MOBILE */
+
+@media (max-width:680px) {
+  .hero-parallax { height:360px; }
+  .hero-content { padding:22px; }
+  .title-hero { font-size:26px; }
+  .subtitle-hero { font-size:16px; }
+  .about-grid { grid-template-columns:1fr; }
+  .services-list { grid-template-columns:1fr; }
+  .footer-grid { grid-template-columns:1fr; }
 }
