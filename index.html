@@ -2,38 +2,88 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Эвакуатор Краснодар 24/7</title>
+  <title>Эвакуатор Краснодар 24/7 — Apple Glass Edition</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="style.css?v=5000">
+  <link rel="stylesheet" href="style.css?v=6000">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="favicon.png">
+
+  <style>
+    /* iOS fade-in animation */
+    .fade-in {
+      opacity:0;
+      transform:translateY(20px);
+      animation:fadeIn 0.9s ease forwards;
+    }
+    @keyframes fadeIn {
+      to { opacity:1; transform:translateY(0); }
+    }
+
+    /* macOS button hover animation */
+    .apple-glass-btn {
+      transition:all .25s cubic-bezier(.25,.46,.45,.94);
+    }
+
+    /* bottom Apple menu */
+    .bottom-menu {
+      position:fixed;
+      bottom:0;
+      left:0;
+      right:0;
+      padding:12px;
+      display:flex;
+      justify-content:space-around;
+      backdrop-filter:blur(22px);
+      background:rgba(20,20,20,.55);
+      border-top:1px solid rgba(255,255,255,.15);
+      box-shadow:0 -10px 40px rgba(0,0,0,.45);
+      z-index:999;
+    }
+    .bottom-menu a {
+      color:#fff;
+      text-decoration:none;
+      font-size:15px;
+      font-weight:600;
+      padding:10px 14px;
+      border-radius:12px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.15);
+      backdrop-filter:blur(12px);
+    }
+
+    /* blur on banner */
+    .hero-bg {
+      filter:blur(2px) brightness(1.15) contrast(1.1);
+    }
+  </style>
 </head>
 <body>
 
 <div class="container">
 
-  <!-- HERO — чистый баннер -->
-  <header class="hero">
+  <!-- HERO -->
+  <header class="hero fade-in">
     <div class="hero-bg"></div>
   </header>
 
-  <!-- Установить приложение -->
-  <button id="installBtn" class="apple-glass-btn install-btn">Установить приложение</button>
+  <!-- Install App -->
+  <button id="installBtn" class="apple-glass-btn install-btn fade-in">
+    Установить приложение
+  </button>
 
-  <!-- Основные кнопки -->
-  <div class="btn-row">
+  <!-- Main Buttons -->
+  <div class="btn-row fade-in">
     <a class="apple-glass-btn" href="tel:+79888717018">Позвонить</a>
-    <button class="apple-glass-btn" id="geoSend">Геолокация</button>
+    <button class="apple-glass-btn" id="geoSend">Найти меня по геолокации</button>
     <a class="apple-glass-btn" href="#requestForm">Оставить заявку</a>
   </div>
 
-  <div id="geoStatus" class="status-box"></div>
+  <div id="geoStatus" class="status-box fade-in"></div>
 
-  <!-- Соцсети -->
-  <section class="section glass-section">
+  <!-- Social -->
+  <section class="section glass-section fade-in">
     <h2>Мы в соцсетях</h2>
-
     <div class="social-row">
       <a class="social-glass" href="https://t.me/evakuatorkrasnodar24">Telegram</a>
       <a class="social-glass" href="https://chat.whatsapp.com/Da9sLiLpm6SLjmW7WZBZze">WhatsApp</a>
@@ -42,10 +92,50 @@
     </div>
   </section>
 
-  <!-- Услуги -->
-  <section class="section glass-section">
-    <h2>Услуги</h2>
+  <!-- About Us -->
+  <section class="section glass-section fade-in">
+    <h2>О нас</h2>
+    <p class="muted">
+      Эвакуатор Краснодар 24/7 — служба профессиональной эвакуации автомобилей,
+      работающая по городу и всему Краснодарскому краю. Мы перевозим легковые авто,
+      кроссоверы, минивэны, коммерческий транспорт и премиальные автомобили.
+      Работаем аккуратно, быстро и безопасно.
+    </p>
+    <p class="muted">
+      Наша команда — это опытные специалисты с современным оборудованием.
+      Мы всегда приезжаем вовремя, заранее согласовываем стоимость и
+      обеспечиваем бережную погрузку. Для клиентов доступна отправка заявки
+      через VK, WhatsApp и Telegram.
+    </p>
+  </section>
 
+  <!-- Reviews -->
+  <section class="section glass-section fade-in">
+    <h2>Отзывы</h2>
+
+    <div class="services-list">
+      <div class="service-card glass-soft">
+        <h3>Алексей</h3>
+        <p>Быстро приехали, аккуратно погрузили авто. Цена честная.</p>
+      </div>
+      <div class="service-card glass-soft">
+        <h3>Марина</h3>
+        <p>Эвакуатор приехал через 15 минут. Очень вежливый водитель.</p>
+      </div>
+      <div class="service-card glass-soft">
+        <h3>Игорь</h3>
+        <p>Перевозили кроссовер — всё идеально, без единой царапины.</p>
+      </div>
+      <div class="service-card glass-soft">
+        <h3>Сергей</h3>
+        <p>Лучший эвакуатор в Краснодаре. Рекомендую.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="section glass-section fade-in">
+    <h2>Услуги</h2>
     <div class="services-list">
       <div class="service-card glass-soft"><h3>Легковые авто</h3><p>До 3,5 т</p></div>
       <div class="service-card glass-soft"><h3>Кроссоверы</h3><p>Платформа + лебёдка</p></div>
@@ -54,40 +144,34 @@
     </div>
   </section>
 
-  <!-- Цены -->
-  <section class="section glass-section">
+  <!-- Prices -->
+  <section class="section glass-section fade-in">
     <h2>Цены</h2>
-
     <div class="services-list">
       <div class="service-card glass-soft"><h3>Легковой</h3><p>2 000 ₽</p></div>
       <div class="service-card glass-soft"><h3>Кроссовер</h3><p>2 200 ₽</p></div>
       <div class="service-card glass-soft"><h3>Минивэн</h3><p>2 500 ₽</p></div>
       <div class="service-card glass-soft"><h3>Грузовой</h3><p>3 000 ₽</p></div>
     </div>
-
     <div class="adv-item">За город — <strong>80 ₽ / км</strong></div>
-
     <a class="apple-glass-btn" href="prices.html">Подробные цены</a>
   </section>
 
-  <!-- Заявка -->
-  <section class="section glass-section">
+  <!-- Request -->
+  <section class="section glass-section fade-in">
     <h2>Оставить заявку</h2>
-
     <form id="requestForm" class="request-form">
       <input type="text" name="name" placeholder="Имя" required>
       <input type="tel" name="phone" placeholder="Телефон" required>
       <input type="text" name="address" placeholder="Адрес" required>
       <textarea name="comment" placeholder="Комментарий"></textarea>
-
       <button class="apple-glass-btn" type="submit">Оставить заявку</button>
-
       <div id="requestStatus" class="status-box"></div>
     </form>
   </section>
 
   <!-- Footer -->
-  <footer class="footer glass-heavy">
+  <footer class="footer glass-heavy fade-in">
     <div class="footer-grid">
       <div>
         <h3>Эвакуатор Краснодар 24/7</h3>
@@ -106,6 +190,15 @@
 
 </div>
 
-<script src="app.js?v=5000"></script>
+<!-- Bottom Apple Menu -->
+<div class="bottom-menu">
+  <a href="index.html">Главная</a>
+  <a href="#requestForm">Заявка</a>
+  <a href="prices.html">Цены</a>
+  <a href="#reviews">Отзывы</a>
+  <a href="#about">О нас</a>
+</div>
+
+<script src="app.js?v=6000"></script>
 </body>
 </html>
