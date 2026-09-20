@@ -2,19 +2,18 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Эвакуатор Краснодар 24/7</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="style.css?v=1">
+  <link rel="stylesheet" href="style.css?v=2">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="favicon.png">
 </head>
-
 <body>
 <div class="container">
 
-  <header class="hero-parallax glass-heavy fade">
-    <div class="hero-bg" id="heroBg"></div>
+  <header class="hero-parallax fade">
+    <div class="hero-bg"></div>
 
     <div class="hero-content">
       <h1 class="title-hero">Эвакуатор Краснодар 24/7</h1>
@@ -30,7 +29,7 @@
   </header>
 
   <a class="premium-btn fade" href="tel:+79888717018">
-    <span class="btn-icon">☎</span>
+    <span class="btn-icon">🚚</span>
     <span>Вызвать эвакуатор</span>
   </a>
 
@@ -40,6 +39,21 @@
   </button>
 
   <div class="status-box" id="geoStatus"></div>
+
+  <section class="section fade">
+    <h2>Мы в мессенджерах</h2>
+    <div class="social-row">
+      <a class="social-btn tg" href="https://t.me/">
+        <span>Telegram</span>
+      </a>
+      <a class="social-btn vk" href="https://vk.com/">
+        <span>VK</span>
+      </a>
+      <a class="social-btn wa" href="https://wa.me/79888717018">
+        <span>WhatsApp</span>
+      </a>
+    </div>
+  </section>
 
   <section class="section fade">
     <h2>Почему обращаются к нам</h2>
@@ -87,12 +101,12 @@
         <p>Платформа и лебёдка для тяжёлых авто.</p>
       </div>
       <div class="service-item fade">
-        <h3>Минивэны и малый коммерческий транспорт</h3>
-        <p>До 3,5 т, надёжная фиксация при перевозке.</p>
+        <h3>Минивэны</h3>
+        <p>Комфортная перевозка семейных авто.</p>
       </div>
       <div class="service-item fade">
-        <h3>Мототехника и бизнес‑класс</h3>
-        <p>Аккуратная работа с премиальными и низкими авто.</p>
+        <h3>Малый коммерческий транспорт</h3>
+        <p>До 3,5 т, надёжная фиксация при перевозке.</p>
       </div>
     </div>
   </section>
@@ -138,7 +152,8 @@
     </div>
 
     <div class="review-card glass-soft fade">
-      «Выручили ночью, всё чётко и без лишних вопросов.» — Анна</div>
+      «Выручили ночью, всё чётко и без лишних вопросов.» — Анна
+    </div>
 
     <div class="review-card glass-soft fade">
       «Эвакуировали после ДТП, аккуратно, с фотоотчётом.» — Михаил
@@ -166,13 +181,13 @@
       </div>
       <button class="premium-btn" type="submit">
         <span class="btn-icon">✉</span>
-        <span>Отправить заявку</span>
+        <span>Отправить заявку (через WhatsApp)</span>
       </button>
       <div class="status-box" id="requestStatus"></div>
     </form>
   </section>
 
-  <footer class="footer fade glass-heavy">
+  <footer class="footer glass-heavy fade">
     <div class="footer-grid">
       <div>
         <h3>Эвакуатор Краснодар 24/7</h3>
@@ -183,14 +198,19 @@
         <p><a href="tel:+79888717018">+7 (988) 871‑70‑18</a></p>
       </div>
       <div>
-        <h3>Админка</h3>
-        <p><a href="admin.html">Открыть панель заявок</a></p>
+        <h3>Страницы</h3>
+        <p><a href="prices.html">Цены</a> · <a href="en.html">English</a></p>
       </div>
     </div>
+
+    <button id="installBtn" class="premium-btn" style="margin-top:14px;display:none;">
+      <span class="btn-icon">📱</span>
+      <span>Установить как приложение</span>
+    </button>
   </footer>
 
 </div>
 
-<script src="app.js?v=1"></script>
+<script src="app.js?v=2"></script>
 </body>
 </html>
