@@ -1,17 +1,22 @@
-/* ----------------------------------------------------
-   GLOBAL
----------------------------------------------------- */
-
 :root {
-  --bg:#050608;
-  --text:#f3f5f7;
-  --muted:#aab1b8;
+  --bg-dark:#050608;
+  --bg-light:#f5f7fa;
+  --text-dark:#f3f5f7;
+  --text-light:#111318;
+  --muted-dark:#aab1b8;
+  --muted-light:#6b7280;
 
-  --glass-soft:rgba(255,255,255,.08);
-  --glass-heavy:rgba(255,255,255,.14);
+  --glass-soft-dark:rgba(255,255,255,.08);
+  --glass-soft-light:rgba(255,255,255,.65);
 
-  --border-soft:rgba(255,255,255,.12);
-  --border-heavy:rgba(255,255,255,.22);
+  --glass-heavy-dark:rgba(255,255,255,.14);
+  --glass-heavy-light:rgba(255,255,255,.85);
+
+  --border-soft-dark:rgba(255,255,255,.12);
+  --border-soft-light:rgba(0,0,0,.06);
+
+  --border-heavy-dark:rgba(255,255,255,.22);
+  --border-heavy-light:rgba(0,0,0,.12);
 
   --shadow-heavy:0 28px 60px rgba(0,0,0,.55);
   --shadow-medium:0 16px 40px rgba(0,0,0,.45);
@@ -27,10 +32,16 @@
 
 body {
   margin:0;
-  background:var(--bg);
-  color:var(--text);
   font-family:-apple-system, BlinkMacSystemFont, "SF Pro Display", "Manrope", sans-serif;
   overflow-x:hidden;
+  background:var(--bg-dark);
+  color:var(--text-dark);
+}
+
+/* светлая тема */
+body.theme-light {
+  background:var(--bg-light);
+  color:var(--text-light);
 }
 
 .container {
@@ -39,24 +50,17 @@ body {
   padding:20px;
 }
 
-/* ----------------------------------------------------
-   iOS Fade-In Animation
----------------------------------------------------- */
-
+/* iOS fade-in */
 .fade-in {
   opacity:0;
   transform:translateY(20px);
   animation:fadeIn 0.9s ease forwards;
 }
-
 @keyframes fadeIn {
   to { opacity:1; transform:translateY(0); }
 }
 
-/* ----------------------------------------------------
-   HERO (with blur)
----------------------------------------------------- */
-
+/* HERO + стеклянный скролл */
 .hero {
   position:relative;
   height:420px;
@@ -69,44 +73,51 @@ body {
 .hero-bg {
   position:absolute;
   inset:0;
-  background-image:url('banner-top.png?v=6000');
+  background-image:url('banner-top.png?v=7000');
   background-size:cover;
   background-position:center;
   filter:blur(2px) brightness(1.15) contrast(1.1);
   transform:scale(1.05);
 }
 
-/* ----------------------------------------------------
-   BUTTONS — Apple Hybrid Glass + macOS Hover
----------------------------------------------------- */
+/* стеклянный скролл */
+.section,
+.footer {
+  backdrop-filter:blur(18px);
+}
 
+/* BUTTONS */
 .apple-glass-btn {
   display:inline-flex;
   align-items:center;
   justify-content:center;
-
   padding:14px 24px;
   border-radius:14px;
-
   font-size:17px;
   font-weight:600;
-  color:var(--text);
   text-decoration:none;
-
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.04)),
-    linear-gradient(180deg, rgba(20,20,20,.85), rgba(10,10,10,.92));
-
-  border:1px solid var(--border-heavy);
-
+  cursor:pointer;
+  transition:all .25s cubic-bezier(.25,.46,.45,.94);
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.25),
     var(--shadow-medium);
+}
 
-  backdrop-filter:blur(18px);
+/* тёмная */
+body:not(.theme-light) .apple-glass-btn {
+  color:var(--text-dark);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.04)),
+    linear-gradient(180deg, rgba(20,20,20,.85), rgba(10,10,10,.92));
+  border:1px solid var(--border-heavy-dark);
+}
 
-  cursor:pointer;
-  transition:all .25s cubic-bezier(.25,.46,.45,.94);
+/* светлая */
+body.theme-light .apple-glass-btn {
+  color:var(--text-light);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.85));
+  border:1px solid var(--border-heavy-light);
 }
 
 .apple-glass-btn:hover {
@@ -120,7 +131,7 @@ body {
   transform:translateY(1px) scale(.985);
 }
 
-/* Symmetric button row */
+/* BUTTON ROW */
 .btn-row {
   display:flex;
   justify-content:space-between;
@@ -129,29 +140,32 @@ body {
   margin-bottom:20px;
 }
 
-/* Install button */
 .install-btn {
   margin-bottom:20px;
   width:100%;
 }
 
-/* ----------------------------------------------------
-   SECTIONS — Apple Hybrid Glass
----------------------------------------------------- */
-
+/* SECTIONS */
 .section {
+  border-radius:var(--radius);
+  padding:22px;
+  margin:22px 0;
+  box-shadow:var(--shadow-medium);
+}
+
+/* тёмная */
+body:not(.theme-light) .section {
   background:
     linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04)),
     rgba(10,10,10,.85);
+  border:1px solid var(--border-soft-dark);
+}
 
-  border:1px solid var(--border-soft);
-  border-radius:var(--radius);
-
-  padding:22px;
-  margin:22px 0;
-
-  box-shadow:var(--shadow-medium);
-  backdrop-filter:blur(16px);
+/* светлая */
+body.theme-light .section {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,255,255,.92));
+  border:1px solid var(--border-soft-light);
 }
 
 .section h2 {
@@ -160,10 +174,7 @@ body {
   font-weight:700;
 }
 
-/* ----------------------------------------------------
-   SOCIAL BUTTONS
----------------------------------------------------- */
-
+/* SOCIAL */
 .social-row {
   display:flex;
   gap:10px;
@@ -174,37 +185,39 @@ body {
   flex:1;
   padding:12px 14px;
   border-radius:14px;
-
   font-size:15px;
   font-weight:600;
   text-align:center;
   text-decoration:none;
-  color:var(--text);
+  transition:.22s ease;
+}
 
+/* тёмная */
+body:not(.theme-light) .social-glass {
+  color:var(--text-dark);
   background:
     linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.04)),
     rgba(10,10,10,.85);
-
-  border:1px solid var(--border-heavy);
+  border:1px solid var(--border-heavy-dark);
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.25),
     var(--shadow-soft);
+}
 
-  backdrop-filter:blur(14px);
-  transition:.22s ease;
+/* светлая */
+body.theme-light .social-glass {
+  color:var(--text-light);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,255,255,.92));
+  border:1px solid var(--border-heavy-light);
+  box-shadow:var(--shadow-soft);
 }
 
 .social-glass:hover {
   transform:translateY(-1px);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.25),
-    0 18px 40px rgba(0,0,0,.55);
 }
 
-/* ----------------------------------------------------
-   SERVICES — Glass Soft
----------------------------------------------------- */
-
+/* SERVICES */
 .services-list {
   display:grid;
   grid-template-columns:repeat(2,1fr);
@@ -214,14 +227,26 @@ body {
 .service-card {
   padding:18px;
   border-radius:16px;
+  backdrop-filter:blur(12px);
+}
 
+/* тёмная */
+body:not(.theme-light) .service-card {
   background:
     linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)),
     rgba(10,10,10,.75);
-
-  border:1px solid var(--border-soft);
+  border:1px solid var(--border-soft-dark);
   box-shadow:var(--shadow-soft);
-  backdrop-filter:blur(12px);
+  color:var(--text-dark);
+}
+
+/* светлая */
+body.theme-light .service-card {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,255,255,.92));
+  border:1px solid var(--border-soft-light);
+  box-shadow:var(--shadow-soft);
+  color:var(--text-light);
 }
 
 .service-card h3 {
@@ -233,13 +258,12 @@ body {
 .service-card p {
   margin:0;
   font-size:15px;
-  color:var(--muted);
 }
 
-/* ----------------------------------------------------
-   FORM — Glass
----------------------------------------------------- */
+body:not(.theme-light) .service-card p { color:var(--muted-dark); }
+body.theme-light .service-card p { color:var(--muted-light); }
 
+/* FORM */
 .request-form {
   display:flex;
   flex-direction:column;
@@ -251,16 +275,27 @@ body {
   width:100%;
   padding:12px;
   border-radius:14px;
+  font-size:16px;
+  backdrop-filter:blur(12px);
+}
 
+/* тёмная */
+body:not(.theme-light) .request-form input,
+body:not(.theme-light) .request-form textarea {
   background:
     linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)),
     rgba(10,10,10,.75);
+  border:1px solid var(--border-soft-dark);
+  color:var(--text-dark);
+}
 
-  border:1px solid var(--border-soft);
-  color:var(--text);
-
-  font-size:16px;
-  backdrop-filter:blur(12px);
+/* светлая */
+body.theme-light .request-form input,
+body.theme-light .request-form textarea {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,255,255,.92));
+  border:1px solid var(--border-soft-light);
+  color:var(--text-light);
 }
 
 .request-form input:focus,
@@ -268,32 +303,37 @@ body {
   border-color:rgba(255,255,255,.35);
 }
 
-/* ----------------------------------------------------
-   STATUS
----------------------------------------------------- */
-
+/* STATUS */
 .status-box {
   margin-top:10px;
   font-size:14px;
-  color:var(--muted);
 }
+body:not(.theme-light) .status-box { color:var(--muted-dark); }
+body.theme-light .status-box { color:var(--muted-light); }
 
-/* ----------------------------------------------------
-   FOOTER
----------------------------------------------------- */
-
+/* FOOTER */
 .footer {
   margin-top:30px;
   padding:22px;
   border-radius:var(--radius);
+  backdrop-filter:blur(18px);
+}
 
+/* тёмная */
+body:not(.theme-light) .footer {
   background:
     linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.04)),
     rgba(10,10,10,.85);
-
-  border:1px solid var(--border-heavy);
+  border:1px solid var(--border-heavy-dark);
   box-shadow:var(--shadow-medium);
-  backdrop-filter:blur(18px);
+}
+
+/* светлая */
+body.theme-light .footer {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,255,255,.92));
+  border:1px solid var(--border-heavy-light);
+  box-shadow:var(--shadow-medium);
 }
 
 .footer-grid {
@@ -310,21 +350,20 @@ body {
 .footer p {
   margin:0;
   font-size:14px;
-  color:var(--muted);
 }
+
+body:not(.theme-light) .footer p { color:var(--muted-dark); }
+body.theme-light .footer p { color:var(--muted-light); }
 
 .footer a {
   color:#4ade80;
   text-decoration:none;
 }
 
-/* ----------------------------------------------------
-   BOTTOM APPLE MENU
----------------------------------------------------- */
-
+/* BOTTOM MENU + анимация */
 .bottom-menu {
   position:fixed;
-  bottom:0;
+  bottom:-80px;
   left:0;
   right:0;
   padding:12px;
@@ -335,6 +374,20 @@ body {
   border-top:1px solid rgba(255,255,255,.15);
   box-shadow:0 -10px 40px rgba(0,0,0,.45);
   z-index:999;
+  transition:transform .4s ease, bottom .4s ease, opacity .4s ease;
+  opacity:0;
+  transform:translateY(40px);
+}
+
+body.theme-light .bottom-menu {
+  background:rgba(255,255,255,.9);
+  border-top:1px solid rgba(0,0,0,.08);
+}
+
+.bottom-menu.visible {
+  bottom:0;
+  opacity:1;
+  transform:translateY(0);
 }
 
 .bottom-menu a {
@@ -349,10 +402,13 @@ body {
   backdrop-filter:blur(12px);
 }
 
-/* ----------------------------------------------------
-   MOBILE ADAPTIVE
----------------------------------------------------- */
+body.theme-light .bottom-menu a {
+  color:#111318;
+  background:rgba(255,255,255,.95);
+  border:1px solid rgba(0,0,0,.06);
+}
 
+/* MOBILE */
 @media (max-width:680px) {
   .hero { height:360px; }
   .services-list { grid-template-columns:1fr; }
