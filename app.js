@@ -1,7 +1,7 @@
-const heroBg = document.getElementById('heroBg');
+const heroBg = document.querySelector('.hero-bg');
 window.addEventListener('scroll', () => {
   const offset = window.scrollY * 0.25;
-  heroBg.style.transform = `translateY(${offset}px) scale(1.05)`;
+  heroBg.style.transform = `translateY(${offset}px) scale(1.02)`;
 });
 
 const geoBtn = document.getElementById('geoSend');
@@ -38,35 +38,25 @@ heroGeoBtn.addEventListener('click', requestGeo);
 const requestForm = document.getElementById('requestForm');
 const requestStatus = document.getElementById('requestStatus');
 
-requestForm.addEventListener('submit', async (e) => {
+requestForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
   const formData = new FormData(requestForm);
-  const payload = {
-    name: formData.get('name'),
-    phone: formData.get('phone'),
-    address: formData.get('address'),
-    comment: formData.get('comment')
-  };
+  const name = formData.get('name');
+  const phone = formData.get('phone');
+  const address = formData.get('address');
+  const comment = formData.get('comment') || '—';
 
-  requestStatus.textContent = "Отправляем заявку...";
+  const text =
+    `Заявка эвакуатора:%0A` +
+    `Имя: ${name}%0A` +
+    `Телефон: ${phone}%0A` +
+    `Адрес: ${address}%0A` +
+    `Комментарий: ${comment}`;
 
-  try {
-    const res = await fetch('/api/request.php', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(payload)
-    });
-
-    if (res.ok) {
-      requestStatus.textContent = "Заявка отправлена. Мы скоро свяжемся с вами.";
-      requestForm.reset();
-    } else {
-      requestStatus.textContent = "Ошибка отправки. Попробуйте ещё раз.";
-    }
-  } catch {
-    requestStatus.textContent = "Ошибка соединения. Попробуйте позже.";
-  }
+  requestStatus.textContent = "Открываем WhatsApp для отправки заявки...";
+  const waUrl = `https://wa.me/79888717018?text=${text}`;
+  window.location.href = waUrl;
 });
 
 let deferredPrompt = null;
@@ -79,6 +69,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
 });
 
 installBtn.addEventListener('click', async () => {
+  if (!deferredPrompt) return;
   deferredPrompt.prompt();
   await deferredPrompt.userChoice;
   installBtn.style.display = "none";
