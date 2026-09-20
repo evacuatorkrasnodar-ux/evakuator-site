@@ -1,11 +1,9 @@
-// PARALLAX
 const heroBg = document.getElementById('heroBg');
 window.addEventListener('scroll', () => {
   const offset = window.scrollY * 0.25;
-  heroBg.style.transform = `translateY(${offset}px) scale(1.08)`;
+  heroBg.style.transform = `translateY(${offset}px) scale(1.05)`;
 });
 
-// GEO + ROUTE
 const geoBtn = document.getElementById('geoSend');
 const heroGeoBtn = document.getElementById('heroGeoBtn');
 const geoStatus = document.getElementById('geoStatus');
@@ -37,7 +35,6 @@ function requestGeo() {
 geoBtn.addEventListener('click', requestGeo);
 heroGeoBtn.addEventListener('click', requestGeo);
 
-// REQUEST FORM
 const requestForm = document.getElementById('requestForm');
 const requestStatus = document.getElementById('requestStatus');
 
@@ -72,7 +69,6 @@ requestForm.addEventListener('submit', async (e) => {
   }
 });
 
-// PWA
 let deferredPrompt = null;
 const installBtn = document.getElementById('installBtn');
 
