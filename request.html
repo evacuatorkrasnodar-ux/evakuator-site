@@ -26,11 +26,21 @@
     <p class="muted">Заполните форму — оператор свяжется с вами.</p>
 
     <form id="requestForm" class="request-form">
-      <input type="text" name="name" placeholder="Имя" required>
-      <input type="tel" name="phone" placeholder="Телефон" required>
-      <input type="text" name="address" placeholder="Адрес подачи эвакуатора" required>
-      <textarea name="comment" placeholder="Комментарий"></textarea>
-      <button class="apple-glass-btn" type="submit">Оставить заявку</button>
+      <input id="name" type="text" name="name" placeholder="Имя" required>
+      <input id="phone" type="tel" name="phone" placeholder="Телефон" required>
+      <input id="address" type="text" name="address" placeholder="Адрес подачи эвакуатора" required>
+      <textarea id="comment" name="comment" placeholder="Комментарий"></textarea>
+
+      <!-- Кнопка отправки заявки -->
+      <button id="btn-request" class="apple-glass-btn" type="button">
+        Оставить заявку
+      </button>
+
+      <!-- Кнопка отправки геолокации -->
+      <button id="btn-location" class="apple-glass-btn" type="button">
+        Отправить геолокацию
+      </button>
+
       <div id="requestStatus" class="status-box"></div>
     </form>
   </section>
