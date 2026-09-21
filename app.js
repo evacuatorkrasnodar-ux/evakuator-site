@@ -95,10 +95,8 @@ function sendRequest() {
 
   sendToVK(message);
 
-  // Apple-вибрация
   if (navigator.vibrate) navigator.vibrate(30);
 
-  // Красивый статус
   const status = document.getElementById("requestStatus");
   if (status) {
     status.textContent = "Заявка отправлена!";
@@ -120,7 +118,6 @@ async function sendLocation() {
     const lat = pos.coords.latitude;
     const lon = pos.coords.longitude;
 
-    // Получаем нормальный адрес
     const addr = await getFullAddress(lat, lon);
 
     const yandex = `https://yandex.ru/maps/?pt=${lon},${lat}&z=16&l=map`;
@@ -140,10 +137,8 @@ ${yandex}`;
 
     sendToVK(message);
 
-    // Apple-вибрация
     if (navigator.vibrate) navigator.vibrate(30);
 
-    // Статус геолокации
     const geoStatus = document.getElementById("geoStatus");
     if (geoStatus) {
       geoStatus.textContent = "Геолокация отправлена!";
@@ -158,8 +153,34 @@ ${yandex}`;
   });
 }
 
-// === ПРИВЯЗКА КНОПОК ===
+// === ПЕРЕКЛЮЧЕНИЕ ТЕМЫ ===
 document.addEventListener("DOMContentLoaded", () => {
+
+  const themeBtn = document.getElementById("themeToggle");
+
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme === "light") {
+    document.body.classList.remove("theme-dark");
+    document.body.classList.add("theme-light");
+  }
+
+  if (themeBtn) {
+    themeBtn.addEventListener("click", () => {
+
+      themeBtn.classList.add("btn-bounce");
+      setTimeout(() => themeBtn.classList.remove("btn-bounce"), 250);
+
+      if (document.body.classList.contains("theme-dark")) {
+        document.body.classList.remove("theme-dark");
+        document.body.classList.add("theme-light");
+        localStorage.setItem("theme", "light");
+      } else {
+        document.body.classList.remove("theme-light");
+        document.body.classList.add("theme-dark");
+        localStorage.setItem("theme", "dark");
+      }
+    });
+  }
 
   const btnRequest = document.getElementById("btn-request");
   if (btnRequest) {
