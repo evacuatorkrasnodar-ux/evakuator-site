@@ -27,6 +27,53 @@ async function sendToVK(message) {
   }
 }
 
+// === Яндекс Геокодер — авто-адрес ===
+async function getFullAddress(lat, lon) {
+  const apiKey = "fc0f9182-0eee-4e83-bed3-8e561c88c4d5"; // твой активный ключ
+  const url = `https://geocode-maps.yandex.ru/1.x/?format=json&apikey=${apiKey}&geocode=${lon},${lat}`;
+
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+
+    const geo = data.response.GeoObjectCollection.featureMember[0].GeoObject;
+
+    const fullAddress = geo.metaDataProperty.GeocoderMetaData.text || "Адрес не найден";
+
+    const components = geo.metaDataProperty.GeocoderMetaData.Address.Components;
+
+    let city = "";
+    let district = "";
+    let street = "";
+    let house = "";
+
+    components.forEach(c => {
+      if (c.kind === "locality") city = c.name;
+      if (c.kind === "district") district = c.name;
+      if (c.kind === "street") street = c.name;
+      if (c.kind === "house") house = c.name;
+    });
+
+    return {
+      city,
+      district,
+      street,
+      house,
+      fullAddress
+    };
+
+  } catch (err) {
+    console.error("Geo API Error:", err);
+    return {
+      city: "",
+      district: "",
+      street: "",
+      house: "",
+      fullAddress: "Адрес не найден"
+    };
+  }
+}
+
 // === ОТПРАВКА ЗАЯВКИ ===
 function sendRequest() {
   const name = document.getElementById("name")?.value || "";
@@ -63,20 +110,28 @@ function sendRequest() {
 }
 
 // === ОТПРАВКА ГЕОЛОКАЦИИ ===
-function sendLocation() {
+async function sendLocation() {
   if (!navigator.geolocation) {
     alert("Геолокация не поддерживается на этом устройстве");
     return;
   }
 
-  navigator.geolocation.getCurrentPosition(pos => {
+  navigator.geolocation.getCurrentPosition(async pos => {
     const lat = pos.coords.latitude;
     const lon = pos.coords.longitude;
+
+    // Получаем нормальный адрес
+    const addr = await getFullAddress(lat, lon);
 
     const yandex = `https://yandex.ru/maps/?pt=${lon},${lat}&z=16&l=map`;
 
     const message =
 `Геолокация клиента:
+Город: ${addr.city}
+Район: ${addr.district}
+Улица: ${addr.street} ${addr.house}
+Полный адрес: ${addr.fullAddress}
+
 Широта: ${lat}
 Долгота: ${lon}
 
