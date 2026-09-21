@@ -521,3 +521,26 @@ body {
 @keyframes pageLoad {
   to { opacity:1; }
 }
+
+/* === Анимация кнопки "Найти меня" — Apple bounce === */
+.btn-bounce {
+  animation:btnBounce 0.25s cubic-bezier(.25,1.25,.45,.94);
+}
+
+@keyframes btnBounce {
+  0% { transform:scale(1); }
+  50% { transform:scale(0.92); }
+  100% { transform:scale(1); }
+}
+
+/* === Статус геолокации — плавное появление === */
+#geoStatus {
+  opacity:0;
+  transform:translateY(10px);
+  transition:opacity .45s ease, transform .45s ease;
+}
+
+#geoStatus.status-show {
+  opacity:1;
+  transform:translateY(0);
+}
