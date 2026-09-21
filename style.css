@@ -21,6 +21,7 @@ body {
   margin:0;
   font-family:-apple-system, BlinkMacSystemFont, "SF Pro Display", "Manrope", sans-serif;
   overflow-x:hidden;
+  transition:background .35s ease, color .35s ease;
 }
 
 body.theme-dark {
@@ -39,7 +40,7 @@ body.theme-light {
   padding:20px;
 }
 
-/* HERO — без blur, оптимизирован под мобилки */
+/* HERO — исправленный, без blur, без обрезания */
 .hero {
   position:relative;
   height:420px;
@@ -53,21 +54,22 @@ body.theme-light {
   position:absolute;
   inset:0;
   background-image:url('banner-top.png?v=8000');
-  background-size:cover;
+  background-size:contain;
+  background-repeat:no-repeat;
   background-position:center;
 }
 
-/* На мобильных — меньше высота, центр */
+/* Мобильная оптимизация HERO */
 @media (max-width:680px) {
   .hero {
-    height:260px;
+    height:220px;
   }
   .hero-bg {
     background-position:center top;
   }
 }
 
-/* iOS fade-in */
+/* Fade-in */
 .fade-in {
   opacity:0;
   transform:translateY(20px);
@@ -365,7 +367,7 @@ body.theme-light .footer p { color:var(--muted-light); }
   text-decoration:none;
 }
 
-/* BOTTOM MENU */
+/* BOTTOM MENU — без blur */
 .bottom-menu {
   position:fixed;
   bottom:0;
@@ -374,7 +376,6 @@ body.theme-light .footer p { color:var(--muted-light); }
   padding:12px;
   display:flex;
   justify-content:space-around;
-  backdrop-filter:blur(22px);
   background:rgba(20,20,20,.55);
   border-top:1px solid rgba(255,255,255,.15);
   box-shadow:0 -10px 40px rgba(0,0,0,.45);
