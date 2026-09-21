@@ -50,18 +50,19 @@ body.theme-light {
 /* HERO */
 
 .hero {
-  height: 520px;
+  height: 580px;
 }
 
 .hero-bg {
   position:absolute;
   inset:0;
-  background-image:url('banner-top.png?v=7');
+  background-image:url('banner-top.png?v=8');
   background-size:contain;
   background-position:center;
   background-repeat:no-repeat;
   animation:heroMove 18s ease-in-out infinite alternate;
 }
+
 
 .hero-bg {
   position:absolute;
