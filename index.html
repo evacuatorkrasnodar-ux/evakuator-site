@@ -28,7 +28,10 @@
 
   <div class="btn-row fade-in">
     <a class="apple-glass-btn" href="tel:+79888717018">Позвонить</a>
-    <button class="apple-glass-btn" id="geoSend">Геолокация</button>
+
+    <!-- Кнопка геолокации (переименована) -->
+    <button class="apple-glass-btn" id="btn-location">Найти меня</button>
+
     <a class="apple-glass-btn" href="#requestForm">Оставить заявку</a>
   </div>
 
@@ -74,12 +77,18 @@
 
   <section class="section fade-in">
     <h2>Оставить заявку</h2>
+
     <form id="requestForm" class="request-form">
-      <input type="text" name="name" placeholder="Имя" required>
-      <input type="tel" name="phone" placeholder="Телефон" required>
-      <input type="text" name="address" placeholder="Адрес" required>
-      <textarea name="comment" placeholder="Комментарий"></textarea>
-      <button class="apple-glass-btn" type="submit">Отправить</button>
+
+      <!-- Добавлены id для работы VK-кода -->
+      <input id="name" type="text" name="name" placeholder="Имя" required>
+      <input id="phone" type="tel" name="phone" placeholder="Телефон" required>
+      <input id="address" type="text" name="address" placeholder="Адрес" required>
+      <textarea id="comment" name="comment" placeholder="Комментарий"></textarea>
+
+      <!-- Кнопка заявки с id -->
+      <button id="btn-request" class="apple-glass-btn" type="button">Отправить</button>
+
       <div id="requestStatus" class="status-box"></div>
     </form>
   </section>
