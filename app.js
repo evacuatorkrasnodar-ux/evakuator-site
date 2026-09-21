@@ -153,9 +153,24 @@ ${yandex}`;
   });
 }
 
-// === ПЕРЕКЛЮЧЕНИЕ ТЕМЫ ===
+// === УСТАНОВКА PWA ===
+let deferredPrompt;
+
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+
+  const installBtn = document.getElementById("installBtn");
+  if (installBtn) {
+    installBtn.style.display = "block";
+    installBtn.classList.add("popIn");
+  }
+});
+
+// === ПРИВЯЗКА КНОПОК + ТЕМА ===
 document.addEventListener("DOMContentLoaded", () => {
 
+  // Тема
   const themeBtn = document.getElementById("themeToggle");
 
   const savedTheme = localStorage.getItem("theme");
@@ -182,6 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Заявка
   const btnRequest = document.getElementById("btn-request");
   if (btnRequest) {
     btnRequest.addEventListener("click", () => {
@@ -191,6 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Геолокация
   const btnLocation = document.getElementById("btn-location");
   if (btnLocation) {
     btnLocation.addEventListener("click", () => {
@@ -200,6 +217,28 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Установка PWA
+  const installBtn = document.getElementById("installBtn");
+  if (installBtn) {
+    installBtn.addEventListener("click", async () => {
+
+      installBtn.classList.add("btn-bounce");
+      setTimeout(() => installBtn.classList.remove("btn-bounce"), 250);
+
+      if (!deferredPrompt) {
+        alert("Установка недоступна. Попробуйте позже.");
+        return;
+      }
+
+      deferredPrompt.prompt();
+      const choice = await deferredPrompt.userChoice;
+
+      deferredPrompt = null;
+      installBtn.style.display = "none";
+    });
+  }
+
+  // Enter в форме
   const form = document.getElementById("requestForm");
   if (form) {
     form.addEventListener("submit", (e) => {
