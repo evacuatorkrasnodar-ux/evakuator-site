@@ -2,20 +2,36 @@
   "name": "Эвакуатор Краснодар 24/7",
   "short_name": "Эвакуатор",
   "start_url": "/index.html",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#050608",
   "theme_color": "#050608",
-  "orientation": "portrait",
+  "description": "Круглосуточный эвакуатор в Краснодаре. Быстрая подача, аккуратная погрузка, честные цены.",
+  "categories": ["transportation", "service", "utilities"],
+
   "icons": [
     {
       "src": "favicon.png",
-      "sizes": "192x192",
+      "sizes": "64x64",
       "type": "image/png"
     },
     {
       "src": "favicon.png",
-      "sizes": "512x512",
+      "sizes": "128x128",
       "type": "image/png"
+    },
+    {
+      "src": "favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
