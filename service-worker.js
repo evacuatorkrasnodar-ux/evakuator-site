@@ -1,27 +1,35 @@
-const CACHE_NAME = 'evakuator-apple-glass-v1';
+/* ---------------------------------------
+   SERVICE WORKER — Apple Glass Edition
+   Полный, рабочий, оптимизированный
+---------------------------------------- */
 
-const FILES_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/style.css?v=5000',
-  '/app.js?v=5000',
-  '/prices.html',
-  '/en.html',
-  '/admin.html',
-  '/manifest.json',
-  '/favicon.png'
+const CACHE_NAME = "evacuator-cache-v1";
+
+const ASSETS = [
+  "/",
+  "/index.html",
+  "/prices.html",
+  "/en.html",
+  "/admin.html",
+  "/style.css?v=9000",
+  "/app.js?v=9000",
+  "/favicon.png",
+  "/logo.svg",
+  "/banner-top.png"
 ];
 
-self.addEventListener('install', (event) => {
+/* Установка SW и кэширование */
+self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(FILES_TO_CACHE);
+      return cache.addAll(ASSETS);
     })
   );
   self.skipWaiting();
 });
 
-self.addEventListener('activate', (event) => {
+/* Активация SW */
+self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
       Promise.all(
@@ -36,14 +44,13 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-self.addEventListener('fetch', (event) => {
+/* Перехват запросов */
+self.addEventListener("fetch", (event) => {
   event.respondWith(
     caches.match(event.request).then((cached) => {
       return (
         cached ||
-        fetch(event.request).catch(() =>
-          caches.match('/index.html')
-        )
+        fetch(event.request).catch(() => caches.match("/index.html"))
       );
     })
   );
