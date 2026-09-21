@@ -6,7 +6,46 @@ window.addEventListener('scroll', () => {
   heroBg.style.transform = `translateY(${offset}px) scale(1.05)`;
 });
 
-/* ГЕОЛОКАЦИЯ */
+/* Логотип */
+document.addEventListener("DOMContentLoaded", () => {
+  const logo = document.querySelector('.logo-animated');
+  if (logo) {
+    setTimeout(() => {
+      logo.classList.add('visible');
+    }, 400);
+  }
+});
+
+/* Переключатель темы */
+const themeToggle = document.getElementById('themeToggle');
+
+function applySavedTheme() {
+  const savedTheme = localStorage.getItem('theme');
+
+  if (savedTheme === 'light') {
+    document.body.classList.add('theme-light');
+    document.body.classList.remove('theme-dark');
+  } else if (savedTheme === 'dark') {
+    document.body.classList.add('theme-dark');
+    document.body.classList.remove('theme-light');
+  } else {
+    const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+    document.body.classList.add(prefersLight ? 'theme-light' : 'theme-dark');
+  }
+}
+
+document.addEventListener("DOMContentLoaded", applySavedTheme);
+
+if (themeToggle) {
+  themeToggle.addEventListener('click', () => {
+    const isLight = document.body.classList.contains('theme-light');
+    document.body.classList.toggle('theme-light', !isLight);
+    document.body.classList.toggle('theme-dark', isLight);
+    localStorage.setItem('theme', !isLight ? 'light' : 'dark');
+  });
+}
+
+/* Геолокация → сервер → Telegram */
 const geoBtn = document.getElementById('geoSend');
 const geoStatus = document.getElementById('geoStatus');
 
@@ -20,12 +59,22 @@ if (geoBtn) {
     geoStatus.textContent = "Определяем ваше местоположение…";
 
     navigator.geolocation.getCurrentPosition(
-      (pos) => {
+      async (pos) => {
         const lat = pos.coords.latitude;
         const lon = pos.coords.longitude;
-        geoStatus.textContent = "Открываем карту…";
-        const url = `https://yandex.ru/maps/?pt=${lon},${lat}&z=16&l=map`;
-        window.location.href = url;
+
+        geoStatus.textContent = "Отправляем данные…";
+
+        try {
+          await fetch('https://твой-домен-или-ip/api/geo', {
+            method:'POST',
+            headers:{ 'Content-Type':'application/json' },
+            body:JSON.stringify({ lat, lon })
+          });
+          geoStatus.textContent = "Ваше местоположение отправлено оператору.";
+        } catch (e) {
+          geoStatus.textContent = "Ошибка отправки. Попробуйте ещё раз.";
+        }
       },
       () => {
         geoStatus.textContent = "Разрешите доступ к геолокации.";
@@ -35,12 +84,12 @@ if (geoBtn) {
   });
 }
 
-/* ЗАЯВКА → VK */
+/* Заявка → сервер → Telegram */
 const form = document.getElementById('requestForm');
 const requestStatus = document.getElementById('requestStatus');
 
 if (form) {
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const fd = new FormData(form);
@@ -49,53 +98,21 @@ if (form) {
     const address = fd.get('address');
     const comment = fd.get('comment') || '—';
 
-    const text =
-      `Заявка:%0A` +
-      `Имя: ${name}%0A` +
-      `Телефон: ${phone}%0A` +
-      `Адрес: ${address}%0A` +
-      `Комментарий: ${comment}`;
+    requestStatus.textContent = "Отправляем заявку…";
 
-    requestStatus.textContent = "Открываем VK для отправки заявки…";
-    window.location.href = `https://vk.ru/evakuator.krasnodar?message=${text}`;
+    try {
+      await fetch('https://твой-домен-или-ip/api/request', {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json' },
+        body:JSON.stringify({ name, phone, address, comment })
+      });
+      requestStatus.textContent = "Заявка отправлена. Оператор скоро свяжется с вами.";
+      form.reset();
+    } catch (e) {
+      requestStatus.textContent = "Ошибка отправки. Попробуйте ещё раз.";
+    }
   });
 }
-
-/* iOS Fade-In Delay */
-document.addEventListener("DOMContentLoaded", () => {
-  const animatedBlocks = document.querySelectorAll('.fade-in');
-  animatedBlocks.forEach((el, i) => {
-    el.style.animationDelay = `${i * 0.12}s`;
-  });
-
-  /* Анимация нижнего меню */
-  const bottomMenu = document.querySelector('.bottom-menu');
-  if (bottomMenu) {
-    setTimeout(() => {
-      bottomMenu.classList.add('visible');
-    }, 600);
-  }
-
-  /* Авто‑тёмная/светлая тема */
-  const prefersLight = window.matchMedia &&
-    window.matchMedia('(prefers-color-scheme: light)').matches;
-
-  if (prefersLight) {
-    document.body.classList.add('theme-light');
-  }
-
-  /* Анимация логотипа (когда появится) */
-  const logo = document.querySelector('.logo-animated');
-  if (logo) {
-    logo.style.opacity = '0';
-    logo.style.transform = 'scale(0.9)';
-    setTimeout(() => {
-      logo.style.transition = 'all .6s ease';
-      logo.style.opacity = '1';
-      logo.style.transform = 'scale(1)';
-    }, 400);
-  }
-});
 
 /* PWA INSTALL */
 let deferredPrompt = null;
@@ -118,5 +135,5 @@ if (installBtn) {
 
 /* SERVICE WORKER */
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("service-worker.js?v=7000");
+  navigator.serviceWorker.register("service-worker.js?v=8000");
 }
