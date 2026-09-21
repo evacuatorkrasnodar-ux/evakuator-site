@@ -1,4 +1,4 @@
-const CACHE_NAME = "evacuator-v3";
+const CACHE_NAME = "evacuator-v4";
 
 const ASSETS = [
   "/",
@@ -17,7 +17,6 @@ const ASSETS = [
 
   "/favicon.png",
   "/машинка.ico",
-  "/logo.svg",
   "/banner-top.png"
 ];
 
