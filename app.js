@@ -1,169 +1,107 @@
-// ====== APP.JS — ПОЛНЫЙ ФАЙЛ ======
-
-// ТЕМА (СВЕТЛАЯ / ТЁМНАЯ)
-const themeToggle = document.getElementById('themeToggle');
+/* ====== ТЕМА ====== */
+const themeToggle = document.getElementById("themeToggle");
 
 if (themeToggle) {
-  themeToggle.addEventListener('click', () => {
-    if (document.body.classList.contains('theme-dark')) {
-      document.body.classList.remove('theme-dark');
-      document.body.classList.add('theme-light');
-    } else {
-      document.body.classList.remove('theme-light');
-      document.body.classList.add('theme-dark');
-    }
+  themeToggle.addEventListener("click", () => {
+    document.body.classList.toggle("theme-light");
   });
 }
 
-// TOAST
-function toast(msg) {
-  const t = document.getElementById('toast');
-  if (!t) return;
-  t.innerText = msg;
-  t.style.opacity = 1;
+/* ====== УСТАНОВКА PWA ====== */
+let deferredPrompt;
+const installBtn = document.getElementById("installBtn");
 
-  setTimeout(() => {
-    t.style.opacity = 0;
-  }, 2500);
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if (installBtn) installBtn.style.display = "block";
+});
+
+if (installBtn) {
+  installBtn.addEventListener("click", async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    deferredPrompt = null;
+    installBtn.style.display = "none";
+  });
 }
 
-// MODAL
-function openModal(title, text) {
-  const m = document.getElementById('modal');
-  const mt = document.getElementById('modalTitle');
-  const mx = document.getElementById('modalText');
-  if (!m || !mt || !mx) return;
+/* ====== ГЕОЛОКАЦИЯ ====== */
+const geoBtn = document.getElementById("geoSend");
+const geoStatus = document.getElementById("geoStatus");
 
-  mt.innerText = title;
-  mx.innerText = text;
-
-  m.style.opacity = 1;
-  m.style.pointerEvents = "auto";
-
-  const content = document.querySelector('.modal-content');
-  if (content) content.style.transform = "scale(1)";
-}
-
-function closeModal() {
-  const m = document.getElementById('modal');
-  if (!m) return;
-
-  m.style.opacity = 0;
-  m.style.pointerEvents = "none";
-
-  const content = document.querySelector('.modal-content');
-  if (content) content.style.transform = "scale(.9)";
-}
-
-// ГЕОЛОКАЦИЯ
-const geoBtn = document.getElementById('geoSend');
-const geoStatus = document.getElementById('geoStatus');
-
-if (geoBtn && geoStatus) {
-  geoBtn.addEventListener('click', () => {
+if (geoBtn) {
+  geoBtn.addEventListener("click", () => {
     if (!navigator.geolocation) {
-      geoStatus.innerText = "Геолокация не поддерживается.";
-      toast("Геолокация не поддерживается.");
+      showToast("Геолокация не поддерживается");
       return;
     }
 
-    geoStatus.innerText = "Определяем местоположение...";
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        const { latitude, longitude } = pos.coords;
-        geoStatus.innerText = `Ваши координаты: ${latitude.toFixed(5)}, ${longitude.toFixed(5)}`;
-        toast("Геолокация получена.");
+        const lat = pos.coords.latitude.toFixed(5);
+        const lon = pos.coords.longitude.toFixed(5);
+
+        geoStatus.innerHTML = `Ваши координаты: ${lat}, ${lon}`;
+        showToast("Геолокация получена");
+
+        // Здесь можно подключить отправку на сервер
       },
       () => {
-        geoStatus.innerText = "Не удалось получить геолокацию.";
-        toast("Ошибка геолокации.");
+        showToast("Не удалось получить геолокацию");
       }
     );
   });
 }
 
-// ЗАЯВКА (ФОРМА)
-const requestForm = document.getElementById('requestForm');
-const requestStatus = document.getElementById('requestStatus');
+/* ====== ФОРМА ЗАЯВКИ ====== */
+const requestForm = document.getElementById("requestForm");
+const requestStatus = document.getElementById("requestStatus");
 
-if (requestForm && requestStatus) {
-  requestForm.addEventListener('submit', (e) => {
+if (requestForm) {
+  requestForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
     const formData = new FormData(requestForm);
-    const name = formData.get('name');
-    const phone = formData.get('phone');
-    const address = formData.get('address');
-    const comment = formData.get('comment');
+    const name = formData.get("name");
+    const phone = formData.get("phone");
+    const address = formData.get("address");
+    const comment = formData.get("comment");
 
-    // Здесь можно подключить реальный backend
-    console.log("Заявка:", { name, phone, address, comment });
+    requestStatus.innerHTML = "Заявка отправлена (демо‑режим)";
+    showToast("Заявка отправлена");
 
-    requestStatus.innerText = "Заявка отправлена. Мы свяжемся с вами.";
-    toast("Заявка отправлена.");
     requestForm.reset();
+
+    // Здесь можно подключить отправку на сервер
   });
 }
 
-// PWA УСТАНОВКА
-const installBtn = document.getElementById('installBtn');
-let deferredPrompt = null;
-
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  if (installBtn) installBtn.style.display = 'inline-block';
-});
-
-if (installBtn) {
-  installBtn.addEventListener('click', async () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      deferredPrompt = null;
-      if (outcome === 'accepted') {
-        toast("Приложение установлено.");
-      } else {
-        toast("Установка отменена.");
-      }
-    } else {
-      // iPhone / Safari — показываем инструкцию
-      openModal(
-        "Как установить на iPhone",
-        "1. Откройте сайт в Safari.\n2. Нажмите кнопку «Поделиться».\n3. Выберите «На экран Домой».\n4. Подтвердите установку."
-      );
-    }
-  });
+/* ====== МОДАЛ ====== */
+function openModal(title, text) {
+  const modal = document.getElementById("modal");
+  document.getElementById("modalTitle").innerText = title;
+  document.getElementById("modalText").innerText = text;
+  modal.style.display = "flex";
 }
 
-// PAGE TRANSITION (ПЛАВНЫЕ ПЕРЕХОДЫ МЕЖДУ СТРАНИЦАМИ)
-document.addEventListener("DOMContentLoaded", () => {
-  document.body.classList.add("page-loaded");
-});
+function closeModal() {
+  const modal = document.getElementById("modal");
+  modal.style.display = "none";
+}
 
-document.querySelectorAll("a").forEach(a => {
-  a.addEventListener("click", e => {
-    const href = a.getAttribute("href");
-    if (!href || href.startsWith("#") || href.startsWith("tel:")) return;
+/* ====== TOAST ====== */
+function showToast(text) {
+  const toast = document.getElementById("toast");
+  toast.innerText = text;
+  toast.style.display = "block";
 
-    e.preventDefault();
-    document.body.style.opacity = 0;
+  setTimeout(() => {
+    toast.style.display = "none";
+  }, 2500);
+}
 
-    setTimeout(() => {
-      window.location.href = href;
-    }, 250);
-  });
-});
-
-// SERVICE WORKER РЕГИСТРАЦИЯ
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then(reg => {
-        console.log('ServiceWorker зарегистрирован:', reg.scope);
-      })
-      .catch(err => {
-        console.log('ServiceWorker ошибка:', err);
-      });
-  });
+/* ====== SERVICE WORKER ====== */
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js");
 }
