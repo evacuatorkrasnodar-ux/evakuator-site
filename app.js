@@ -47,6 +47,18 @@ function sendRequest() {
 Комментарий: ${comment}`;
 
   sendToVK(message);
+
+  // Apple-вибрация
+  if (navigator.vibrate) navigator.vibrate(30);
+
+  // Красивый статус
+  const status = document.getElementById("requestStatus");
+  if (status) {
+    status.textContent = "Заявка отправлена!";
+    status.classList.add("status-show");
+    setTimeout(() => status.classList.remove("status-show"), 3000);
+  }
+
   alert("Заявка отправлена! Мы свяжемся с вами.");
 }
 
@@ -72,6 +84,18 @@ function sendLocation() {
 ${yandex}`;
 
     sendToVK(message);
+
+    // Apple-вибрация
+    if (navigator.vibrate) navigator.vibrate(30);
+
+    // Статус геолокации
+    const geoStatus = document.getElementById("geoStatus");
+    if (geoStatus) {
+      geoStatus.textContent = "Геолокация отправлена!";
+      geoStatus.classList.add("status-show");
+      setTimeout(() => geoStatus.classList.remove("status-show"), 3000);
+    }
+
     alert("Геолокация отправлена! Открой сообщение в VK.");
   }, err => {
     console.error("Geo Error:", err);
@@ -83,10 +107,22 @@ ${yandex}`;
 document.addEventListener("DOMContentLoaded", () => {
 
   const btnRequest = document.getElementById("btn-request");
-  if (btnRequest) btnRequest.addEventListener("click", sendRequest);
+  if (btnRequest) {
+    btnRequest.addEventListener("click", () => {
+      btnRequest.classList.add("btn-bounce");
+      setTimeout(() => btnRequest.classList.remove("btn-bounce"), 250);
+      sendRequest();
+    });
+  }
 
   const btnLocation = document.getElementById("btn-location");
-  if (btnLocation) btnLocation.addEventListener("click", sendLocation);
+  if (btnLocation) {
+    btnLocation.addEventListener("click", () => {
+      btnLocation.classList.add("btn-bounce");
+      setTimeout(() => btnLocation.classList.remove("btn-bounce"), 250);
+      sendLocation();
+    });
+  }
 
   const form = document.getElementById("requestForm");
   if (form) {
