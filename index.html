@@ -2,87 +2,40 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Эвакуатор Краснодар 24/7 — Быстрая подача</title>
+  <title>Эвакуатор Краснодар 24/7 — Быстро, Надёжно</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="favicon.png">
-  <link rel="apple-touch-icon" href="icon-192.png">
-
-  <meta name="theme-color" content="#000000">
 </head>
 
 <body class="theme-dark">
 
 <div class="container">
 
-  <!-- HERO -->
   <header class="hero fade-in">
     <div class="hero-bg"></div>
   </header>
 
-  <!-- ТЕМА -->
   <button id="themeToggle" class="apple-glass-btn theme-btn fade-in">
     Светлая / Тёмная
   </button>
 
-  <!-- УСТАНОВКА -->
   <button id="installBtn" class="apple-glass-btn install-btn fade-in">
     Установить приложение
   </button>
 
-  <!-- ГЛАВНЫЕ КНОПКИ -->
   <div class="btn-row fade-in">
     <a class="apple-glass-btn" href="tel:+79888717018">Позвонить</a>
-    <button class="apple-glass-btn" id="geoSend">Отправить геолокацию</button>
-    <a class="apple-glass-btn" href="request.html">Заявка</a>
+    <button class="apple-glass-btn" id="geoSend">Геолокация</button>
+    <a class="apple-glass-btn" href="#requestForm">Оставить заявку</a>
   </div>
 
-  <!-- GEO STATUS -->
   <div id="geoStatus" class="status-box fade-in"></div>
 
-  <!-- О НАС -->
   <section class="section fade-in">
-    <h2>О компании</h2>
-    <p class="muted">
-      Эвакуатор Краснодар 24/7 — профессиональная служба эвакуации.
-      Подача от 15 минут. Работаем по городу и краю.
-    </p>
-    <a class="apple-glass-btn" href="about.html">Подробнее</a>
-  </section>
-
-  <!-- ЦЕНЫ -->
-  <section class="section fade-in">
-    <h2>Цены</h2>
-
-    <div class="services-list">
-      <div class="service-card"><h3>Легковой</h3><p>2 000 ₽</p></div>
-      <div class="service-card"><h3>Кроссовер</h3><p>2 200 ₽</p></div>
-      <div class="service-card"><h3>Минивэн</h3><p>2 500 ₽</p></div>
-      <div class="service-card"><h3>Грузовой</h3><p>3 000 ₽</p></div>
-    </div>
-
-    <div class="adv-item">За город — <strong>80 ₽ / км</strong></div>
-
-    <a class="apple-glass-btn" href="prices.html">Полный прайс</a>
-  </section>
-
-  <!-- ОТЗЫВЫ -->
-  <section class="section fade-in">
-    <h2>Отзывы</h2>
-    <div class="services-list">
-      <div class="service-card"><h3>Алексей</h3><p>Подача за 15 минут.</p></div>
-      <div class="service-card"><h3>Марина</h3><p>Аккуратная погрузка.</p></div>
-      <div class="service-card"><h3>Игорь</h3><p>Перевозка кроссовера идеально.</p></div>
-      <div class="service-card"><h3>Сергей</h3><p>Лучший эвакуатор в городе.</p></div>
-    </div>
-    <a class="apple-glass-btn" href="reviews.html">Все отзывы</a>
-  </section>
-
-  <!-- СОЦСЕТИ -->
-  <section class="section fade-in">
-    <h2>Соцсети</h2>
+    <h2>Мы в соцсетях</h2>
     <div class="social-row">
       <a class="social-glass" href="https://t.me/evakuatorkrasnodar24">Telegram</a>
       <a class="social-glass" href="https://chat.whatsapp.com/Da9sLiLpm6SLjmW7WZBZze">WhatsApp</a>
@@ -91,45 +44,62 @@
     </div>
   </section>
 
-  <!-- ФУТЕР -->
+  <section class="section fade-in" id="about">
+    <h2>О нас</h2>
+    <p class="muted">Эвакуатор Краснодар 24/7 — профессиональная служба эвакуации.</p>
+    <p class="muted">Работаем по городу и краю, круглосуточно.</p>
+  </section>
+
+  <section class="section fade-in" id="reviews">
+    <h2>Отзывы</h2>
+    <div class="services-list">
+      <div class="service-card"><h3>Алексей</h3><p>Быстро приехали, аккуратно погрузили авто.</p></div>
+      <div class="service-card"><h3>Марина</h3><p>Эвакуатор приехал через 15 минут.</p></div>
+      <div class="service-card"><h3>Игорь</h3><p>Перевозили кроссовер — идеально.</p></div>
+      <div class="service-card"><h3>Сергей</h3><p>Лучший эвакуатор в Краснодаре.</p></div>
+    </div>
+  </section>
+
+  <section class="section fade-in">
+    <h2>Цены</h2>
+    <div class="services-list">
+      <div class="service-card"><h3>Легковой</h3><p>2 000 ₽</p></div>
+      <div class="service-card"><h3>Кроссовер</h3><p>2 200 ₽</p></div>
+      <div class="service-card"><h3>Минивэн</h3><p>2 500 ₽</p></div>
+      <div class="service-card"><h3>Грузовой</h3><p>3 000 ₽</p></div>
+    </div>
+    <div class="adv-item">За город — <strong>80 ₽ / км</strong></div>
+    <a class="apple-glass-btn" href="prices.html">Подробные цены</a>
+  </section>
+
+  <section class="section fade-in">
+    <h2>Оставить заявку</h2>
+    <form id="requestForm" class="request-form">
+      <input type="text" name="name" placeholder="Имя" required>
+      <input type="tel" name="phone" placeholder="Телефон" required>
+      <input type="text" name="address" placeholder="Адрес" required>
+      <textarea name="comment" placeholder="Комментарий"></textarea>
+      <button class="apple-glass-btn" type="submit">Отправить</button>
+      <div id="requestStatus" class="status-box"></div>
+    </form>
+  </section>
+
   <footer class="footer fade-in">
     <div class="footer-grid">
-      <div>
-        <h3>Эвакуатор Краснодар 24/7</h3>
-        <p>Работаем круглосуточно.</p>
-        <p>Адрес: Дзержинского 100</p>
-      </div>
-      <div>
-        <h3>Телефон</h3>
-        <p><a href="tel:+79888717018">+7 (988) 871‑70‑18</a></p>
-      </div>
-      <div class="footer-right">
-        <h3>Версия</h3>
-        <p><a href="en.html">English</a></p>
-      </div>
+      <div><h3>Эвакуатор Краснодар 24/7</h3><p>Круглосуточно.</p></div>
+      <div><h3>Телефон</h3><p><a href="tel:+79888717018">+7 (988) 871‑70‑18</a></p></div>
+      <div><h3>Страницы</h3><p><a href="prices.html">Цены</a> · <a href="en.html">English</a></p></div>
     </div>
   </footer>
 
 </div>
 
-<!-- НИЖНЕЕ МЕНЮ -->
 <div class="bottom-menu">
   <a href="index.html">Главная</a>
+  <a href="#requestForm">Заявка</a>
   <a href="prices.html">Цены</a>
-  <a href="request.html">Заявка</a>
-  <a href="#top">Наверх</a>
-</div>
-
-<!-- TOAST -->
-<div id="toast"></div>
-
-<!-- MODAL -->
-<div id="modal" class="modal">
-  <div class="modal-content">
-    <h3 id="modalTitle"></h3>
-    <p id="modalText"></p>
-    <button onclick="closeModal()" class="apple-glass-btn">Закрыть</button>
-  </div>
+  <a href="#reviews">Отзывы</a>
+  <a href="#about">О нас</a>
 </div>
 
 <script src="app.js"></script>
