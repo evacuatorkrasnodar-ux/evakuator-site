@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Панель оператора — Эвакуатор Краснодар 24/7</title>
+  <title>Админ-панель — Эвакуатор Краснодар 24/7</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link rel="stylesheet" href="style.css">
@@ -22,108 +22,45 @@
     <div class="hero-bg"></div>
   </header>
 
-  <!-- LOGO -->
-  <div class="logo-wrapper fade-in" style="text-align:center; margin-bottom:20px;">
-    <img src="icon-192.png" alt="logo" style="width:120px; height:120px;">
-  </div>
-
   <!-- ТЕМА -->
   <button id="themeToggle" class="apple-glass-btn theme-btn fade-in">
     Светлая / Тёмная
   </button>
 
-  <!-- TITLE -->
+  <!-- УСТАНОВКА -->
+  <button id="installBtn" class="apple-glass-btn install-btn fade-in">
+    Установить приложение
+  </button>
+
+  <!-- ЗАГОЛОВОК -->
   <section class="section fade-in">
-    <h2>Панель оператора</h2>
+    <h2>Админ-панель</h2>
     <p class="muted">
-      Здесь будут отображаться заявки, геолокации клиентов, статусы и маршруты.
-      Сейчас панель работает в демо‑режиме.
+      Здесь отображаются заявки, которые отправляют клиенты.  
+      В демо‑режиме данные не сохраняются — только отображаются.
     </p>
   </section>
 
-  <!-- ЗАЯВКИ -->
+  <!-- СПИСОК ЗАЯВОК -->
   <section class="section fade-in">
     <h2>Заявки</h2>
 
-    <div class="services-list">
+    <div id="adminRequests" class="services-list">
 
+      <!-- ДЕМО-ЗАЯВКА -->
       <div class="service-card">
-        <h3>Заявки VK</h3>
-        <p class="muted">Подключение будет выполнено позже.</p>
-        <a class="apple-glass-btn" href="https://vk.ru/evakuator.krasnodar">Открыть VK</a>
-      </div>
-
-      <div class="service-card">
-        <h3>Заявки WhatsApp</h3>
-        <p class="muted">Переход в чат.</p>
-        <a class="apple-glass-btn" href="https://chat.whatsapp.com/Da9sLiLpm6SLjmW7WZBZze">Открыть WhatsApp</a>
-      </div>
-
-      <div class="service-card">
-        <h3>Заявки Telegram</h3>
-        <p class="muted">Переход в канал.</p>
-        <a class="apple-glass-btn" href="https://t.me/evakuatorkrasnodar24">Открыть Telegram</a>
+        <h3>Демо-заявка</h3>
+        <p><strong>Имя:</strong> Иван</p>
+        <p><strong>Телефон:</strong> +7 900 000‑00‑00</p>
+        <p><strong>Адрес:</strong> Красная 1</p>
+        <p><strong>Комментарий:</strong> Машина не заводится</p>
+        <button class="apple-glass-btn" onclick="openModal('Заявка', 'Это демо-заявка. В реальной версии здесь будут реальные данные.')">
+          Подробнее
+        </button>
       </div>
 
     </div>
-  </section>
 
-  <!-- ДЕМО ЗАЯВКА -->
-  <section class="section fade-in">
-    <h2>Последняя заявка (демо)</h2>
-
-    <div class="service-card">
-      <h3>Иван Петров</h3>
-      <p>Телефон: +7 (900) 000‑00‑00</p>
-      <p>Адрес: ул. Примерная 12</p>
-      <p>Комментарий: «Не заводится, нужна эвакуация»</p>
-      <p>Геолокация: 45.03547, 38.97531</p>
-      <a class="apple-glass-btn" href="#">
-        Открыть в навигаторе
-      </a>
-    </div>
-  </section>
-
-  <!-- ГЕО -->
-  <section class="section fade-in">
-    <h2>Геолокации клиентов</h2>
-
-    <p class="muted">
-      После подключения сервера здесь будут отображаться координаты клиентов.
-    </p>
-
-    <div class="service-card">
-      <h3>Пример записи</h3>
-      <p>Клиент: Мария</p>
-      <p>Телефон: +7 (900) 111‑22‑33</p>
-      <p>Адрес: ул. Южная 5</p>
-      <p>Геолокация: 45.02112, 38.98744</p>
-      <a class="apple-glass-btn" href="#">
-        Открыть в навигаторе
-      </a>
-    </div>
-  </section>
-
-  <!-- БУДУЩИЕ ФУНКЦИИ -->
-  <section class="section fade-in">
-    <h2>Будущие функции</h2>
-
-    <div class="services-list">
-      <div class="service-card">
-        <h3>Логирование заявок</h3>
-        <p class="muted">Будет добавлено позже.</p>
-      </div>
-
-      <div class="service-card">
-        <h3>Push‑уведомления</h3>
-        <p class="muted">Будет добавлено позже.</p>
-      </div>
-
-      <div class="service-card">
-        <h3>Маршруты в навигатор</h3>
-        <p class="muted">Будет добавлено позже.</p>
-      </div>
-    </div>
   </section>
 
   <!-- ФУТЕР -->
@@ -131,21 +68,18 @@
     <div class="footer-grid">
       <div>
         <h3>Эвакуатор Краснодар 24/7</h3>
-        <p>Круглосуточно, по городу и краю.</p>
+        <p>Работаем круглосуточно.</p>
+        <p>Адрес: Дзержинского 100</p>
       </div>
       <div>
         <h3>Телефон</h3>
         <p><a href="tel:+79888717018">+7 (988) 871‑70‑18</a></p>
       </div>
       <div class="footer-right">
-        <h3>Страницы</h3>
-        <p><a href="index.html">Главная</a> · <a href="prices.html">Цены</a></p>
+        <h3>Версия</h3>
+        <p><a href="en.html">English</a></p>
       </div>
     </div>
-
-    <p class="muted" style="margin-top:16px;">
-      Адрес: г. Краснодар, ул. Дзержинского 100
-    </p>
   </footer>
 
 </div>
@@ -153,7 +87,8 @@
 <!-- НИЖНЕЕ МЕНЮ -->
 <div class="bottom-menu">
   <a href="index.html">Главная</a>
-  <a href="admin.html">Админка</a>
+  <a href="admin.html">Админ</a>
+  <a href="request.html">Заявка</a>
   <a href="#top">Наверх</a>
 </div>
 
