@@ -5,60 +5,11 @@
   <title>Эвакуатор Краснодар 24/7 — Apple Glass Edition</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="style.css?v=6000">
+  <link rel="stylesheet" href="style.css?v=8000">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="favicon.png">
-
-  <style>
-    /* iOS fade-in animation */
-    .fade-in {
-      opacity:0;
-      transform:translateY(20px);
-      animation:fadeIn 0.9s ease forwards;
-    }
-    @keyframes fadeIn {
-      to { opacity:1; transform:translateY(0); }
-    }
-
-    /* macOS button hover animation */
-    .apple-glass-btn {
-      transition:all .25s cubic-bezier(.25,.46,.45,.94);
-    }
-
-    /* bottom Apple menu */
-    .bottom-menu {
-      position:fixed;
-      bottom:0;
-      left:0;
-      right:0;
-      padding:12px;
-      display:flex;
-      justify-content:space-around;
-      backdrop-filter:blur(22px);
-      background:rgba(20,20,20,.55);
-      border-top:1px solid rgba(255,255,255,.15);
-      box-shadow:0 -10px 40px rgba(0,0,0,.45);
-      z-index:999;
-    }
-    .bottom-menu a {
-      color:#fff;
-      text-decoration:none;
-      font-size:15px;
-      font-weight:600;
-      padding:10px 14px;
-      border-radius:12px;
-      background:rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.15);
-      backdrop-filter:blur(12px);
-    }
-
-    /* blur on banner */
-    .hero-bg {
-      filter:blur(2px) brightness(1.15) contrast(1.1);
-    }
-  </style>
 </head>
-<body>
+<body class="theme-dark">
 
 <div class="container">
 
@@ -66,6 +17,16 @@
   <header class="hero fade-in">
     <div class="hero-bg"></div>
   </header>
+
+  <!-- LOGO -->
+  <div class="logo-wrapper fade-in">
+    <img src="logo.svg" class="logo-animated" alt="logo">
+  </div>
+
+  <!-- Theme Switch -->
+  <button id="themeToggle" class="apple-glass-btn theme-btn fade-in">
+    Светлая / Тёмная
+  </button>
 
   <!-- Install App -->
   <button id="installBtn" class="apple-glass-btn install-btn fade-in">
@@ -93,7 +54,7 @@
   </section>
 
   <!-- About Us -->
-  <section class="section glass-section fade-in">
+  <section class="section glass-section fade-in" id="about">
     <h2>О нас</h2>
     <p class="muted">
       Эвакуатор Краснодар 24/7 — служба профессиональной эвакуации автомобилей,
@@ -110,7 +71,7 @@
   </section>
 
   <!-- Reviews -->
-  <section class="section glass-section fade-in">
+  <section class="section glass-section fade-in" id="reviews">
     <h2>Отзывы</h2>
 
     <div class="services-list">
@@ -186,6 +147,9 @@
         <p><a href="prices.html">Цены</a> · <a href="en.html">English</a></p>
       </div>
     </div>
+    <p class="muted" style="margin-top:16px;">
+      Адрес: г. Краснодар, ул. Дзержинского 100
+    </p>
   </footer>
 
 </div>
@@ -199,6 +163,6 @@
   <a href="#about">О нас</a>
 </div>
 
-<script src="app.js?v=6000"></script>
+<script src="app.js?v=8000"></script>
 </body>
 </html>
