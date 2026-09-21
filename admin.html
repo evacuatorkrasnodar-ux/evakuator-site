@@ -6,7 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
   <link rel="icon" href="favicon.png">
+  <link rel="apple-touch-icon" href="icon-192.png">
+
+  <meta name="theme-color" content="#000000">
 </head>
 
 <body class="theme-dark">
@@ -19,25 +23,25 @@
   </header>
 
   <!-- LOGO -->
-  <div class="logo-wrapper fade-in">
-    <img src="logo.png" class="logo-animated" alt="logo">
+  <div class="logo-wrapper fade-in" style="text-align:center; margin-bottom:20px;">
+    <img src="icon-192.png" alt="logo" style="width:120px; height:120px;">
   </div>
 
-  <!-- Theme Switch -->
+  <!-- ТЕМА -->
   <button id="themeToggle" class="apple-glass-btn theme-btn fade-in">
     Светлая / Тёмная
   </button>
 
-  <!-- ADMIN TITLE -->
+  <!-- TITLE -->
   <section class="section fade-in">
     <h2>Панель оператора</h2>
     <p class="muted">
-      Здесь будут отображаться заявки, геолокации клиентов и маршруты.
-      Сейчас панель работает в демо‑режиме, так как подключение к VK мы сделаем позже.
+      Здесь будут отображаться заявки, геолокации клиентов, статусы и маршруты.
+      Сейчас панель работает в демо‑режиме.
     </p>
   </section>
 
-  <!-- REQUESTS BLOCK -->
+  <!-- ЗАЯВКИ -->
   <section class="section fade-in">
     <h2>Заявки</h2>
 
@@ -64,29 +68,43 @@
     </div>
   </section>
 
-  <!-- GEO BLOCK -->
+  <!-- ДЕМО ЗАЯВКА -->
   <section class="section fade-in">
-    <h2>Геолокации клиентов</h2>
-
-    <p class="muted">
-      После подключения сервера здесь будут отображаться координаты клиентов
-      и кнопка «Открыть в навигаторе».
-    </p>
+    <h2>Последняя заявка (демо)</h2>
 
     <div class="service-card">
-      <h3>Пример записи</h3>
-      <p>Клиент: Иван</p>
+      <h3>Иван Петров</h3>
       <p>Телефон: +7 (900) 000‑00‑00</p>
       <p>Адрес: ул. Примерная 12</p>
+      <p>Комментарий: «Не заводится, нужна эвакуация»</p>
       <p>Геолокация: 45.03547, 38.97531</p>
       <a class="apple-glass-btn" href="#">
         Открыть в навигаторе
       </a>
     </div>
-
   </section>
 
-  <!-- FUTURE BLOCK -->
+  <!-- ГЕО -->
+  <section class="section fade-in">
+    <h2>Геолокации клиентов</h2>
+
+    <p class="muted">
+      После подключения сервера здесь будут отображаться координаты клиентов.
+    </p>
+
+    <div class="service-card">
+      <h3>Пример записи</h3>
+      <p>Клиент: Мария</p>
+      <p>Телефон: +7 (900) 111‑22‑33</p>
+      <p>Адрес: ул. Южная 5</p>
+      <p>Геолокация: 45.02112, 38.98744</p>
+      <a class="apple-glass-btn" href="#">
+        Открыть в навигаторе
+      </a>
+    </div>
+  </section>
+
+  <!-- БУДУЩИЕ ФУНКЦИИ -->
   <section class="section fade-in">
     <h2>Будущие функции</h2>
 
@@ -108,7 +126,7 @@
     </div>
   </section>
 
-  <!-- Footer -->
+  <!-- ФУТЕР -->
   <footer class="footer fade-in">
     <div class="footer-grid">
       <div>
@@ -119,7 +137,7 @@
         <h3>Телефон</h3>
         <p><a href="tel:+79888717018">+7 (988) 871‑70‑18</a></p>
       </div>
-      <div>
+      <div class="footer-right">
         <h3>Страницы</h3>
         <p><a href="index.html">Главная</a> · <a href="prices.html">Цены</a></p>
       </div>
@@ -132,13 +150,25 @@
 
 </div>
 
-<!-- Bottom Apple Menu -->
+<!-- НИЖНЕЕ МЕНЮ -->
 <div class="bottom-menu">
   <a href="index.html">Главная</a>
   <a href="admin.html">Админка</a>
   <a href="#top">Наверх</a>
 </div>
 
-<script src="app."></script>
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- MODAL -->
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <h3 id="modalTitle"></h3>
+    <p id="modalText"></p>
+    <button onclick="closeModal()" class="apple-glass-btn">Закрыть</button>
+  </div>
+</div>
+
+<script src="app.js"></script>
 </body>
 </html>
