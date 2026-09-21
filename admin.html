@@ -2,55 +2,143 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Админка — Заявки</title>
+  <title>Панель оператора — Эвакуатор Краснодар 24/7</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="style.css?v=5000">
+  <link rel="stylesheet" href="style.css?v=9000">
+  <link rel="icon" href="favicon.png">
 </head>
-<body>
+
+<body class="theme-dark">
 
 <div class="container">
 
   <!-- HERO -->
-  <header class="hero">
+  <header class="hero fade-in">
     <div class="hero-bg"></div>
   </header>
 
-  <!-- Заголовок -->
-  <section class="section glass-section">
-    <h2>Заявки</h2>
+  <!-- LOGO -->
+  <div class="logo-wrapper fade-in">
+    <img src="logo.svg" class="logo-animated" alt="logo">
+  </div>
+
+  <!-- Theme Switch -->
+  <button id="themeToggle" class="apple-glass-btn theme-btn fade-in">
+    Светлая / Тёмная
+  </button>
+
+  <!-- ADMIN TITLE -->
+  <section class="section fade-in">
+    <h2>Панель оператора</h2>
     <p class="muted">
-      История заявок доступна в вашей группе VK.<br>
-      Этот раздел создан для визуальной целостности сайта.
+      Здесь будут отображаться заявки, геолокации клиентов и маршруты.
+      Сейчас панель работает в демо‑режиме, так как подключение к VK мы сделаем позже.
     </p>
   </section>
 
-  <!-- Информация -->
-  <section class="section glass-section">
-    <h2>Где смотреть заявки</h2>
+  <!-- REQUESTS BLOCK -->
+  <section class="section fade-in">
+    <h2>Заявки</h2>
 
-    <div class="service-card glass-soft">
-      <h3>Группа VK</h3>
-      <p>
-        Все заявки отправляются напрямую в вашу группу VK:<br>
-        <a href="https://vk.ru/evakuator.krasnodar" class="apple-glass-btn" style="margin-top:12px;">
-          Открыть VK
-        </a>
-      </p>
+    <div class="services-list">
+
+      <div class="service-card">
+        <h3>Заявки VK</h3>
+        <p class="muted">Подключение будет выполнено позже.</p>
+        <a class="apple-glass-btn" href="https://vk.ru/evakuator.krasnodar">Открыть VK</a>
+      </div>
+
+      <div class="service-card">
+        <h3>Заявки WhatsApp</h3>
+        <p class="muted">Переход в чат.</p>
+        <a class="apple-glass-btn" href="https://chat.whatsapp.com/Da9sLiLpm6SLjmW7WZBZze">Открыть WhatsApp</a>
+      </div>
+
+      <div class="service-card">
+        <h3>Заявки Telegram</h3>
+        <p class="muted">Переход в канал.</p>
+        <a class="apple-glass-btn" href="https://t.me/evakuatorkrasnodar24">Открыть Telegram</a>
+      </div>
+
     </div>
   </section>
 
-  <!-- Возврат -->
-  <section class="section glass-section">
-    <h2>Навигация</h2>
+  <!-- GEO BLOCK -->
+  <section class="section fade-in">
+    <h2>Геолокации клиентов</h2>
 
-    <a href="index.html" class="apple-glass-btn" style="margin-top:12px;">
-      На главную
-    </a>
+    <p class="muted">
+      После подключения сервера здесь будут отображаться координаты клиентов
+      и кнопка «Открыть в навигаторе».
+    </p>
+
+    <div class="service-card">
+      <h3>Пример записи</h3>
+      <p>Клиент: Иван</p>
+      <p>Телефон: +7 (900) 000‑00‑00</p>
+      <p>Адрес: ул. Примерная 12</p>
+      <p>Геолокация: 45.03547, 38.97531</p>
+      <a class="apple-glass-btn" href="#">
+        Открыть в навигаторе
+      </a>
+    </div>
+
   </section>
+
+  <!-- FUTURE BLOCK -->
+  <section class="section fade-in">
+    <h2>Будущие функции</h2>
+
+    <div class="services-list">
+      <div class="service-card">
+        <h3>Логирование заявок</h3>
+        <p class="muted">Будет добавлено позже.</p>
+      </div>
+
+      <div class="service-card">
+        <h3>Push‑уведомления</h3>
+        <p class="muted">Будет добавлено позже.</p>
+      </div>
+
+      <div class="service-card">
+        <h3>Маршруты в навигатор</h3>
+        <p class="muted">Будет добавлено позже.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer fade-in">
+    <div class="footer-grid">
+      <div>
+        <h3>Эвакуатор Краснодар 24/7</h3>
+        <p>Круглосуточно, по городу и краю.</p>
+      </div>
+      <div>
+        <h3>Телефон</h3>
+        <p><a href="tel:+79888717018">+7 (988) 871‑70‑18</a></p>
+      </div>
+      <div>
+        <h3>Страницы</h3>
+        <p><a href="index.html">Главная</a> · <a href="prices.html">Цены</a></p>
+      </div>
+    </div>
+
+    <p class="muted" style="margin-top:16px;">
+      Адрес: г. Краснодар, ул. Дзержинского 100
+    </p>
+  </footer>
 
 </div>
 
-<script src="app.js?v=5000"></script>
+<!-- Bottom Apple Menu -->
+<div class="bottom-menu">
+  <a href="index.html">Главная</a>
+  <a href="admin.html">Админка</a>
+  <a href="#top">Наверх</a>
+</div>
+
+<script src="app.js?v=9000"></script>
 </body>
 </html>
