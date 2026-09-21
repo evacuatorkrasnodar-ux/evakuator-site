@@ -7,59 +7,96 @@
 
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="favicon.png">
+  <link rel="apple-touch-icon" href="icon-192.png">
+
+  <meta name="theme-color" content="#000000">
 </head>
 
 <body class="theme-dark">
 
 <div class="container">
 
+  <!-- HERO -->
   <header class="hero fade-in">
     <div class="hero-bg"></div>
   </header>
 
+  <!-- ЛОГО -->
+  <div class="logo-wrapper fade-in" style="text-align:center; margin-bottom:20px;">
+    <img src="icon-192.png" alt="logo" style="width:120px; height:120px;">
+  </div>
+
+  <!-- ТЕМА -->
   <button id="themeToggle" class="apple-glass-btn theme-btn fade-in">
     Светлая / Тёмная
   </button>
 
+  <!-- OFFLINE MESSAGE -->
   <section class="section fade-in">
     <h2>Нет подключения к интернету</h2>
-    <p class="muted">Вы офлайн. Некоторые функции недоступны.</p>
+    <p class="muted">
+      Вы офлайн. Некоторые функции временно недоступны:
+    </p>
 
     <div class="services-list">
-      <div class="service-card"><h3>Заявки</h3><p class="muted">Отправка недоступна.</p></div>
-      <div class="service-card"><h3>Геолокация</h3><p class="muted">Отправка координат недоступна.</p></div>
-      <div class="service-card"><h3>Соцсети</h3><p class="muted">Переход невозможен.</p></div>
+      <div class="service-card">
+        <h3>Заявки</h3>
+        <p class="muted">Отправка недоступна без интернета.</p>
+      </div>
+
+      <div class="service-card">
+        <h3>Геолокация</h3>
+        <p class="muted">Определение работает, но отправка координат — нет.</p>
+      </div>
+
+      <div class="service-card">
+        <h3>Соцсети</h3>
+        <p class="muted">Переход невозможен без сети.</p>
+      </div>
     </div>
   </section>
 
+  <!-- OFFLINE ACTIONS -->
   <section class="section fade-in">
     <h2>Доступные действия</h2>
 
     <div class="services-list">
       <div class="service-card">
         <h3>Позвонить</h3>
-        <p>Работает без интернета.</p>
+        <p>Звонок работает даже без интернета.</p>
         <a class="apple-glass-btn" href="tel:+79888717018">Позвонить эвакуатору</a>
       </div>
 
       <div class="service-card">
-        <h3>Открыть приложение</h3>
-        <p>PWA работает офлайн.</p>
+        <h3>Перезагрузить</h3>
+        <p>Если вы установили приложение — оно работает офлайн.</p>
         <button class="apple-glass-btn" onclick="location.reload()">Перезагрузить</button>
       </div>
     </div>
   </section>
 
+  <!-- ФУТЕР -->
   <footer class="footer fade-in">
     <div class="footer-grid">
-      <div><h3>Эвакуатор Краснодар 24/7</h3><p>Круглосуточно.</p></div>
-      <div><h3>Телефон</h3><p><a href="tel:+79888717018">+7 (988) 871‑70‑18</a></p></div>
-      <div><h3>Страницы</h3><p><a href="index.html">Главная</a></p></div>
+      <div>
+        <h3>Эвакуатор Краснодар 24/7</h3>
+        <p>Работаем круглосуточно.</p>
+        <p>Адрес: Дзержинского 100</p>
+      </div>
+      <div>
+        <h3>Телефон</h3>
+        <p><a href="tel:+79888717018">+7 (988) 871‑70‑18</a></p>
+      </div>
+      <div class="footer-right">
+        <h3>Версия</h3>
+        <p><a href="en.html">English</a></p>
+      </div>
     </div>
   </footer>
 
 </div>
 
+<!-- НИЖНЕЕ МЕНЮ -->
 <div class="bottom-menu">
   <a href="index.html">Главная</a>
   <a href="offline.html">Офлайн</a>
