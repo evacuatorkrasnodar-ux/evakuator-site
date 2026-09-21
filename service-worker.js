@@ -1,4 +1,4 @@
-const CACHE_NAME = "evacuator-v2";
+const CACHE_NAME = "evacuator-v3";
 
 const ASSETS = [
   "/",
@@ -12,11 +12,10 @@ const ASSETS = [
   "/contacts.html",
   "/reviews.html",
 
-  "/style.css?v=9000",
-  "/app.js?v=9000",
+  "/style.css",
+  "/app.js",
 
   "/favicon.png",
-  "/favicon.ico",
   "/машинка.ico",
   "/logo.svg",
   "/banner-top.png"
