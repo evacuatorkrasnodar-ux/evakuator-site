@@ -5,15 +5,26 @@
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#050608",
-  "theme_color": "#050608",
-  "description": "Круглосуточный эвакуатор в Краснодаре.",
-  "categories": ["transportation", "service", "utilities"],
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "description": "Круглосуточный эвакуатор в Краснодаре. Подача от 15 минут. Аккуратная погрузка, честные цены.",
+
+  "categories": ["transportation", "utilities", "service"],
 
   "icons": [
-    { "src": "logo.png", "sizes": "64x64", "type": "image/png" },
-    { "src": "logo.png", "sizes": "128x128", "type": "image/png" },
-    { "src": "logo.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
-    { "src": "logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
-  ]
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+
+  "prefer_related_applications": false
 }
