@@ -7,9 +7,7 @@
   "orientation": "portrait",
   "background_color": "#000000",
   "theme_color": "#000000",
-  "description": "Круглосуточный эвакуатор в Краснодаре. Подача от 15 минут. Аккуратная погрузка, честные цены.",
-
-  "categories": ["transportation", "utilities", "service"],
+  "description": "Круглосуточный эвакуатор в Краснодаре. Подача от 15 минут. Работаем по городу и краю.",
 
   "icons": [
     {
@@ -24,7 +22,5 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
-  ],
-
-  "prefer_related_applications": false
+  ]
 }
