@@ -1,20 +1,52 @@
-// ====== ЛЁГКИЙ, БЕЗОПАСНЫЙ SERVICE WORKER ======
+const CACHE_NAME = "evacuator-final-v1";
 
-self.addEventListener('install', () => {
+const ASSETS = [
+  "/",
+  "/index.html",
+  "/prices.html",
+  "/en.html",
+  "/admin.html",
+  "/request.html",
+  "/offline.html",
+  "/about.html",
+  "/contacts.html",
+  "/reviews.html",
+
+  "/style.css",
+  "/app.js",
+
+  "/favicon.png",
+  "/logo.png",
+  "/banner-top.png"
+];
+
+self.addEventListener("install", (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
+  );
   self.skipWaiting();
 });
 
-self.addEventListener('activate', () => {
-  clients.claim();
-  console.log("Service Worker активирован");
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) =>
+      Promise.all(
+        keys.map((key) => {
+          if (key !== CACHE_NAME) return caches.delete(key);
+        })
+      )
+    )
+  );
+  self.clients.claim();
 });
 
-// ====== БЕЗ КЭШИРОВАНИЯ (СТАБИЛЬНЫЙ РЕЖИМ) ======
-
-self.addEventListener('fetch', (event) => {
+self.addEventListener("fetch", (event) => {
   event.respondWith(
-    fetch(event.request).catch(() => {
-      return caches.match('offline.html');
+    caches.match(event.request).then((cached) => {
+      return (
+        cached ||
+        fetch(event.request).catch(() => caches.match("/offline.html"))
+      );
     })
   );
 });
