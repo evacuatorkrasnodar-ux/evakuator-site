@@ -56,13 +56,12 @@ body.theme-light {
 .hero-bg {
   position:absolute;
   inset:0;
-  background-image:url('banner-top.png?v=8');
-  background-size:contain;
+  background-image:url('banner-top.png?v=10');
+  background-size:cover;
   background-position:center;
   background-repeat:no-repeat;
   animation:heroMove 18s ease-in-out infinite alternate;
 }
-
 
 .hero-bg {
   position:absolute;
