@@ -2,38 +2,49 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Tow Truck Krasnodar 24/7</title>
+  <title>Towing Service Krasnodar 24/7 — Apple Glass Edition</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="style.css?v=5000">
+  <link rel="stylesheet" href="style.css?v=9000">
+  <link rel="icon" href="favicon.png">
 </head>
-<body>
+
+<body class="theme-dark">
 
 <div class="container">
 
   <!-- HERO -->
-  <header class="hero">
+  <header class="hero fade-in">
     <div class="hero-bg"></div>
   </header>
 
+  <!-- LOGO -->
+  <div class="logo-wrapper fade-in">
+    <img src="logo.svg" class="logo-animated" alt="logo">
+  </div>
+
+  <!-- Theme Switch -->
+  <button id="themeToggle" class="apple-glass-btn theme-btn fade-in">
+    Light / Dark
+  </button>
+
   <!-- Install App -->
-  <button id="installBtn" class="apple-glass-btn install-btn">
+  <button id="installBtn" class="apple-glass-btn install-btn fade-in">
     Install App
   </button>
 
   <!-- Main Buttons -->
-  <div class="btn-row">
+  <div class="btn-row fade-in">
     <a class="apple-glass-btn" href="tel:+79888717018">Call</a>
-    <button class="apple-glass-btn" id="geoSend">Location</button>
-    <a class="apple-glass-btn" href="#requestForm">Send Request</a>
+    <button class="apple-glass-btn" id="geoSend">Find me by geolocation</button>
+    <a class="apple-glass-btn" href="#requestForm">Send request</a>
   </div>
 
-  <div id="geoStatus" class="status-box"></div>
+  <div id="geoStatus" class="status-box fade-in"></div>
 
   <!-- Social -->
-  <section class="section glass-section">
+  <section class="section fade-in">
     <h2>Social Networks</h2>
-
     <div class="social-row">
       <a class="social-glass" href="https://t.me/evakuatorkrasnodar24">Telegram</a>
       <a class="social-glass" href="https://chat.whatsapp.com/Da9sLiLpm6SLjmW7WZBZze">WhatsApp</a>
@@ -42,56 +53,76 @@
     </div>
   </section>
 
-  <!-- Services -->
-  <section class="section glass-section">
-    <h2>Services</h2>
+  <!-- About Us -->
+  <section class="section fade-in" id="about">
+    <h2>About Us</h2>
+    <p class="muted">
+      Towing Service Krasnodar 24/7 — professional vehicle evacuation across the city
+      and the entire Krasnodar region. We transport sedans, crossovers, minivans,
+      commercial vehicles and premium cars. Fast, careful and safe.
+    </p>
+    <p class="muted">
+      Our team consists of experienced specialists with modern equipment.
+      We always arrive on time, agree on the cost in advance and ensure careful loading.
+      You can send a request via VK, WhatsApp or Telegram.
+    </p>
+  </section>
+
+  <!-- Reviews -->
+  <section class="section fade-in" id="reviews">
+    <h2>Reviews</h2>
 
     <div class="services-list">
-      <div class="service-card glass-soft"><h3>Passenger Cars</h3><p>Up to 3.5 t</p></div>
-      <div class="service-card glass-soft"><h3>SUV / Crossovers</h3><p>Platform + winch</p></div>
-      <div class="service-card glass-soft"><h3>Minivans</h3><p>Careful loading</p></div>
-      <div class="service-card glass-soft"><h3>Light Commercial</h3><p>Up to 3.5 t</p></div>
+      <div class="service-card"><h3>Aleksei</h3><p>Arrived quickly, loaded the car carefully. Fair price.</p></div>
+      <div class="service-card"><h3>Marina</h3><p>The tow truck arrived in 15 minutes. Very polite driver.</p></div>
+      <div class="service-card"><h3>Igor</h3><p>Transported a crossover — perfect, not a single scratch.</p></div>
+      <div class="service-card"><h3>Sergey</h3><p>The best towing service in Krasnodar. Recommended.</p></div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="section fade-in">
+    <h2>Services</h2>
+    <div class="services-list">
+      <div class="service-card"><h3>Sedans</h3><p>Up to 3.5 t</p></div>
+      <div class="service-card"><h3>Crossovers</h3><p>Platform + winch</p></div>
+      <div class="service-card"><h3>Minivans</h3><p>Careful loading</p></div>
+      <div class="service-card"><h3>Commercial vehicles</h3><p>Up to 3.5 t</p></div>
     </div>
   </section>
 
   <!-- Prices -->
-  <section class="section glass-section">
-    <h2>City Prices</h2>
-
+  <section class="section fade-in">
+    <h2>Prices</h2>
     <div class="services-list">
-      <div class="service-card glass-soft"><h3>Passenger Car</h3><p>2 000 ₽</p></div>
-      <div class="service-card glass-soft"><h3>SUV</h3><p>2 200 ₽</p></div>
-      <div class="service-card glass-soft"><h3>Minivan</h3><p>2 500 ₽</p></div>
-      <div class="service-card glass-soft"><h3>Light Truck</h3><p>3 000 ₽</p></div>
+      <div class="service-card"><h3>Sedan</h3><p>2 000 ₽</p></div>
+      <div class="service-card"><h3>Crossover</h3><p>2 200 ₽</p></div>
+      <div class="service-card"><h3>Minivan</h3><p>2 500 ₽</p></div>
+      <div class="service-card"><h3>Light truck</h3><p>3 000 ₽</p></div>
     </div>
-
-    <div class="adv-item">Out of town — <strong>80 ₽ / km</strong></div>
-
-    <a class="apple-glass-btn" href="prices.html">Full Price List</a>
+    <div class="adv-item">Outside the city — <strong>80 ₽ / km</strong></div>
+    <a class="apple-glass-btn" href="prices.html">Detailed prices</a>
   </section>
 
   <!-- Request -->
-  <section class="section glass-section">
+  <section class="section fade-in">
     <h2>Send Request</h2>
-
     <form id="requestForm" class="request-form">
       <input type="text" name="name" placeholder="Name" required>
       <input type="tel" name="phone" placeholder="Phone" required>
       <input type="text" name="address" placeholder="Address" required>
       <textarea name="comment" placeholder="Comment"></textarea>
-
-      <button class="apple-glass-btn" type="submit">Send Request</button>
-
+      <button class="apple-glass-btn" type="submit">Send request</button>
       <div id="requestStatus" class="status-box"></div>
     </form>
   </section>
 
   <!-- Footer -->
-  <footer class="footer glass-heavy">
+  <footer class="footer fade-in">
     <div class="footer-grid">
       <div>
-        <h3>Tow Truck Krasnodar 24/7</h3>
-        <p>City & region, 24/7.</p>
+        <h3>Towing Service Krasnodar 24/7</h3>
+        <p>24/7, across the city and region.</p>
       </div>
       <div>
         <h3>Phone</h3>
@@ -99,13 +130,24 @@
       </div>
       <div>
         <h3>Pages</h3>
-        <p><a href="prices.html">Prices</a> · <a href="index.html">Russian</a></p>
+        <p><a href="index.html">Home</a> · <a href="prices.html">Prices</a></p>
       </div>
     </div>
+
+    <p class="muted" style="margin-top:16px;">
+      Address: Krasnodar, Dzerzhinskogo 100
+    </p>
   </footer>
 
 </div>
 
-<script src="app.js?v=5000"></script>
+<!-- Bottom Apple Menu -->
+<div class="bottom-menu">
+  <a href="index.html">Home</a>
+  <a href="prices.html">Prices</a>
+  <a href="#top">Top</a>
+</div>
+
+<script src="app.js?v=9000"></script>
 </body>
 </html>
