@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Заявка — Эвакуатор Краснодар 24/7</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="style.css?v=9000">
+  <link rel="icon" href="favicon.png">
+</head>
+
+<body class="theme-dark">
+
+<div class="container">
+
+  <!-- HERO -->
+  <header class="hero fade-in">
+    <div class="hero-bg"></div>
+  </header>
+
+  <!-- LOGO -->
+  <div class="logo-wrapper fade-in">
+    <img src="logo.svg" class="logo-animated" alt="logo">
+  </div>
+
+  <!-- Theme Switch -->
+  <button id="themeToggle" class="apple-glass-btn theme-btn fade-in">
+    Светлая / Тёмная
+  </button>
+
+  <!-- Request Section -->
+  <section class="section fade-in">
+    <h2>Оставить заявку</h2>
+    <p class="muted">
+      Заполните форму ниже, и оператор свяжется с вами для уточнения деталей.
+      Заявка отправляется моментально.
+    </p>
+
+    <form id="requestForm" class="request-form">
+      <input type="text" name="name" placeholder="Имя" required>
+      <input type="tel" name="phone" placeholder="Телефон" required>
+      <input type="text" name="address" placeholder="Адрес подачи эвакуатора" required>
+      <textarea name="comment" placeholder="Комментарий (марка авто, состояние, особенности подъезда)"></textarea>
+      <button class="apple-glass-btn" type="submit">Оставить заявку</button>
+      <div id="requestStatus" class="status-box"></div>
+    </form>
+  </section>
+
+  <section class="section fade-in">
+    <h2>Альтернативные способы связи</h2>
+    <div class="services-list">
+      <div class="service-card">
+        <h3>Позвонить</h3>
+        <p>Быстрее всего — звонок напрямую.</p>
+        <a class="apple-glass-btn" href="tel:+79888717018">Позвонить</a>
+      </div>
+      <div class="service-card">
+        <h3>WhatsApp</h3>
+        <p>Удобно отправить геолокацию и фото.</p>
+        <a class="apple-glass-btn" href="https://chat.whatsapp.com/Da9sLiLpm6SLjmW7WZBZze">Открыть WhatsApp</a>
+      </div>
+      <div class="service-card">
+        <h3>Telegram</h3>
+        <p>Быстрые сообщения и заявки.</p>
+        <a class="apple-glass-btn" href="https://t.me/evakuatorkrasnodar24">Открыть Telegram</a>
+      </div>
+      <div class="service-card">
+        <h3>VK</h3>
+        <p>Заявки через сообщения сообщества.</p>
+        <a class="apple-glass-btn" href="https://vk.ru/evakuator.krasnodar">Открыть VK</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer fade-in">
+    <div class="footer-grid">
+      <div>
+        <h3>Эвакуатор Краснодар 24/7</h3>
+        <p>Круглосуточно, по городу и краю.</p>
+      </div>
+      <div>
+        <h3>Телефон</h3>
+        <p><a href="tel:+79888717018">+7 (988) 871‑70‑18</a></p>
+      </div>
+      <div>
+        <h3>Страницы</h3>
+        <p><a href="index.html">Главная</a> · <a href="prices.html">Цены</a></p>
+      </div>
+    </div>
+
+    <p class="muted" style="margin-top:16px;">
+      Адрес: г. Краснодар, ул. Дзержинского 100
+    </p>
+  </footer>
+
+</div>
+
+<!-- Bottom Apple Menu -->
+<div class="bottom-menu">
+  <a href="index.html">Главная</a>
+  <a href="request.html">Заявка</a>
+  <a href="#top">Наверх</a>
+</div>
+
+<script src="app.js?v=9000"></script>
+</body>
+</html>
