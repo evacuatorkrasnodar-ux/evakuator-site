@@ -36,31 +36,35 @@
   <section class="section fade-in">
     <h2>Оставить заявку</h2>
     <p class="muted">
-      Заполните форму — мы свяжемся с вами и отправим эвакуатор.
+      Заполните форму — мы свяжемся с вами в течение нескольких минут.
     </p>
   </section>
 
-  <!-- ФОРМА ЗАЯВКИ -->
+  <!-- ФОРМА -->
   <section class="section fade-in">
-    <form id="requestForm" class="request-form">
 
-      <input type="text" name="name" placeholder="Ваше имя" required>
-      <input type="tel" name="phone" placeholder="Телефон" required>
-      <input type="text" name="address" placeholder="Адрес подачи" required>
-      <textarea name="comment" placeholder="Комментарий (необязательно)"></textarea>
+    <form id="requestForm">
 
-      <button class="apple-glass-btn" type="submit">Отправить заявку</button>
+      <label>Ваше имя</label>
+      <input type="text" name="name" required class="apple-input">
 
-      <div id="requestStatus" class="status-box"></div>
+      <label>Телефон</label>
+      <input type="tel" name="phone" required class="apple-input">
+
+      <label>Адрес подачи</label>
+      <input type="text" name="address" required class="apple-input">
+
+      <label>Комментарий</label>
+      <textarea name="comment" class="apple-input"></textarea>
+
+      <button type="submit" class="apple-glass-btn" style="margin-top:15px;">
+        Отправить заявку
+      </button>
+
     </form>
-  </section>
 
-  <!-- ДОП. ИНФОРМАЦИЯ -->
-  <section class="section fade-in">
-    <h2>Можно также позвонить</h2>
-    <a href="tel:+79888717018" class="apple-glass-btn">
-      +7 (988) 871‑70‑18
-    </a>
+    <div id="requestStatus" class="muted" style="margin-top:15px;"></div>
+
   </section>
 
   <!-- ФУТЕР -->
@@ -87,8 +91,8 @@
 <!-- НИЖНЕЕ МЕНЮ -->
 <div class="bottom-menu">
   <a href="index.html">Главная</a>
-  <a href="request.html">Заявка</a>
   <a href="prices.html">Цены</a>
+  <a href="request.html">Заявка</a>
   <a href="#top">Наверх</a>
 </div>
 
