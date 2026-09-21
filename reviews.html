@@ -4,27 +4,127 @@
   <meta charset="UTF-8">
   <title>Отзывы — Эвакуатор Краснодар 24/7</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="favicon.png">
+  <link rel="apple-touch-icon" href="icon-192.png">
+
+  <meta name="theme-color" content="#000000">
 </head>
-<body>
+
+<body class="theme-dark">
 
 <div class="container">
 
+  <!-- HERO -->
   <header class="hero fade-in">
     <div class="hero-bg"></div>
   </header>
 
-  <div class="logo-wrapper fade-in">
-    <img src="logo.png" class="logo-animated" alt="logo">
-  </div>
+  <!-- ТЕМА -->
+  <button id="themeToggle" class="apple-glass-btn theme-btn fade-in">
+    Светлая / Тёмная
+  </button>
 
-  <section class="section glass-section fade-in">
+  <!-- УСТАНОВКА -->
+  <button id="installBtn" class="apple-glass-btn install-btn fade-in">
+    Установить приложение
+  </button>
+
+  <!-- ОТЗЫВЫ -->
+  <section class="section fade-in">
     <h2>Отзывы клиентов</h2>
-    <p class="muted">Реальные отзывы наших клиентов.</p>
+    <p class="muted">
+      Мы работаем честно, быстро и аккуратно — поэтому клиенты оставляют реальные отзывы.
+    </p>
   </section>
 
-  <section class="section glass-section fade-in">
+  <!-- СПИСОК ОТЗЫВОВ -->
+  <section class="section fade-in">
     <div class="services-list">
-      <div class="service-card glass-soft"><h3>Алексей</h3><
+
+      <div class="service-card">
+        <h3>Алексей</h3>
+        <p class="muted">Эвакуатор приехал за 15 минут. Погрузили аккуратно, без единой царапины.</p>
+      </div>
+
+      <div class="service-card">
+        <h3>Марина</h3>
+        <p class="muted">Очень вежливый водитель, помог закатить машину с заблокированными колёсами.</p>
+      </div>
+
+      <div class="service-card">
+        <h3>Игорь</h3>
+        <p class="muted">Перевозили кроссовер — всё идеально. Рекомендую.</p>
+      </div>
+
+      <div class="service-card">
+        <h3>Сергей</h3>
+        <p class="muted">Лучший эвакуатор в Краснодаре. Цена честная, без доплат.</p>
+      </div>
+
+      <div class="service-card">
+        <h3>Владимир</h3>
+        <p class="muted">Нужно было перевезти премиальный седан — сделали всё максимально аккуратно.</p>
+      </div>
+
+      <div class="service-card">
+        <h3>Анна</h3>
+        <p class="muted">Сломалась ночью — приехали быстро, помогли, доставили до сервиса.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ДОБАВИТЬ ОТЗЫВ -->
+  <section class="section fade-in">
+    <h2>Оставить отзыв</h2>
+    <p class="muted">Вы можете оставить отзыв через форму заявки.</p>
+    <a href="request.html" class="apple-glass-btn">Оставить отзыв</a>
+  </section>
+
+  <!-- ФУТЕР -->
+  <footer class="footer fade-in">
+    <div class="footer-grid">
+      <div>
+        <h3>Эвакуатор Краснодар 24/7</h3>
+        <p>Работаем круглосуточно.</p>
+        <p>Адрес: Дзержинского 100</p>
+      </div>
+      <div>
+        <h3>Телефон</h3>
+        <p><a href="tel:+79888717018">+7 (988) 871‑70‑18</a></p>
+      </div>
+      <div class="footer-right">
+        <h3>Версия</h3>
+        <p><a href="en.html">English</a></p>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<!-- НИЖНЕЕ МЕНЮ -->
+<div class="bottom-menu">
+  <a href="index.html">Главная</a>
+  <a href="reviews.html">Отзывы</a>
+  <a href="prices.html">Цены</a>
+  <a href="#top">Наверх</a>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- MODAL -->
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <h3 id="modalTitle"></h3>
+    <p id="modalText"></p>
+    <button onclick="closeModal()" class="apple-glass-btn">Закрыть</button>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
