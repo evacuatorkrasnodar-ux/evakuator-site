@@ -60,7 +60,7 @@ body.theme-light {
 .hero-bg {
   position:absolute;
   inset:0;
-  background-image:url('banner-top.png');
+  background-image:url('banner-top.png?v=1');
   background-size:contain;
   background-repeat:no-repeat;
   background-position:center;
