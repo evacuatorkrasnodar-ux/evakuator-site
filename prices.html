@@ -5,91 +5,114 @@
   <title>Цены — Эвакуатор Краснодар 24/7</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="style.css?v=5000">
+  <link rel="stylesheet" href="style.css?v=9000">
+  <link rel="icon" href="favicon.png">
 </head>
-<body>
+
+<body class="theme-dark">
 
 <div class="container">
 
-  <header class="section glass-section">
-    <h2>Цены</h2>
-    <p class="muted">
-      Фиксированная стоимость по городу. За город — по расстоянию.
-    </p>
+  <!-- HERO -->
+  <header class="hero fade-in">
+    <div class="hero-bg"></div>
   </header>
 
-  <section class="section glass-section">
-    <h2>По городу</h2>
+  <!-- LOGO -->
+  <div class="logo-wrapper fade-in">
+    <img src="logo.svg" class="logo-animated" alt="logo">
+  </div>
+
+  <!-- Theme Switch -->
+  <button id="themeToggle" class="apple-glass-btn theme-btn fade-in">
+    Светлая / Тёмная
+  </button>
+
+  <!-- PRICES SECTION -->
+  <section class="section fade-in">
+    <h2>Цены по городу</h2>
 
     <div class="services-list">
-      <div class="service-card glass-soft">
+      <div class="service-card">
         <h3>Легковой автомобиль</h3>
         <p>2 000 ₽</p>
       </div>
 
-      <div class="service-card glass-soft">
+      <div class="service-card">
         <h3>Кроссовер / внедорожник</h3>
         <p>2 200 ₽</p>
       </div>
 
-      <div class="service-card glass-soft">
+      <div class="service-card">
         <h3>Минивэн</h3>
         <p>2 500 ₽</p>
       </div>
 
-      <div class="service-card glass-soft">
+      <div class="service-card">
         <h3>Малый грузовой автомобиль</h3>
         <p>3 000 ₽</p>
       </div>
     </div>
   </section>
 
-  <section class="section glass-section">
+  <section class="section fade-in">
     <h2>За город</h2>
 
     <p class="muted">
-      Работаем по всему Краснодарскому краю.
+      Работаем по всему Краснодарскому краю.  
       Стоимость рассчитывается по расстоянию:
     </p>
 
-    <div class="service-card glass-soft">
+    <div class="service-card">
       <h3>Выезд за пределы города</h3>
       <p>80 ₽ / км</p>
     </div>
   </section>
 
-  <section class="section glass-section">
+  <section class="section fade-in">
     <h2>Что эвакуируем</h2>
 
     <div class="services-list">
-      <div class="service-card glass-soft"><h3>Легковые авто</h3><p>До 3,5 т</p></div>
-      <div class="service-card glass-soft"><h3>Кроссоверы</h3><p>Платформа + лебёдка</p></div>
-      <div class="service-card glass-soft"><h3>Минивэны</h3><p>Аккуратная погрузка</p></div>
-      <div class="service-card glass-soft"><h3>Коммерческий транспорт</h3><p>До 3,5 т</p></div>
-      <div class="service-card glass-soft"><h3>Мототехника</h3><p>Перевозка мотоциклов</p></div>
-      <div class="service-card glass-soft"><h3>Премиальные авто</h3><p>Низкие и дорогие машины</p></div>
+      <div class="service-card"><h3>Легковые авто</h3><p>До 3,5 т</p></div>
+      <div class="service-card"><h3>Кроссоверы</h3><p>Платформа + лебёдка</p></div>
+      <div class="service-card"><h3>Минивэны</h3><p>Аккуратная погрузка</p></div>
+      <div class="service-card"><h3>Коммерческий транспорт</h3><p>До 3,5 т</p></div>
+      <div class="service-card"><h3>Мототехника</h3><p>Перевозка мотоциклов</p></div>
+      <div class="service-card"><h3>Премиальные авто</h3><p>Низкие и дорогие машины</p></div>
     </div>
   </section>
 
-  <section class="section glass-section">
-    <h2>Режим работы</h2>
+  <!-- Footer -->
+  <footer class="footer fade-in">
+    <div class="footer-grid">
+      <div>
+        <h3>Эвакуатор Краснодар 24/7</h3>
+        <p>Круглосуточно, по городу и краю.</p>
+      </div>
+      <div>
+        <h3>Телефон</h3>
+        <p><a href="tel:+79888717018">+7 (988) 871‑70‑18</a></p>
+      </div>
+      <div>
+        <h3>Страницы</h3>
+        <p><a href="index.html">Главная</a> · <a href="en.html">English</a></p>
+      </div>
+    </div>
 
-    <p class="muted">
-      Краснодар и Краснодарский край.<br>
-      Круглосуточно, без выходных.<br>
-      Стоимость согласовываем заранее.
+    <p class="muted" style="margin-top:16px;">
+      Адрес: г. Краснодар, ул. Дзержинского 100
     </p>
-
-    <a href="tel:+79888717018" class="apple-glass-btn" style="margin-top:12px;">
-      Позвонить
-    </a>
-
-    <a href="index.html" class="apple-glass-btn" style="margin-top:12px;">
-      На главную
-    </a>
-  </section>
+  </footer>
 
 </div>
 
+<!-- Bottom Apple Menu -->
+<div class="bottom-menu">
+  <a href="index.html">Главная</a>
+  <a href="prices.html">Цены</a>
+  <a href="#top">Наверх</a>
+</div>
+
+<script src="app.js?v=9000"></script>
 </body>
 </html>
