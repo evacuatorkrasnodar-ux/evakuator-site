@@ -48,13 +48,19 @@ body.theme-light {
 }
 
 /* HERO */
+
 .hero {
-  position:relative;
-  height:420px;
-  border-radius:var(--radius);
-  overflow:hidden;
-  box-shadow:var(--shadow-heavy);
-  margin-bottom:28px;
+  height: 520px;
+}
+
+.hero-bg {
+  position:absolute;
+  inset:0;
+  background-image:url('banner-top.png?v=7');
+  background-size:contain;
+  background-position:center;
+  background-repeat:no-repeat;
+  animation:heroMove 18s ease-in-out infinite alternate;
 }
 
 .hero-bg {
