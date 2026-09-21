@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Эвакуатор Краснодар 24/7 — Главная</title>
+  <title>Эвакуатор Краснодар 24/7 — Быстро, Надёжно</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link rel="stylesheet" href="style.css">
@@ -14,96 +14,92 @@
 
 <div class="container">
 
-  <!-- HERO -->
   <header class="hero fade-in">
     <div class="hero-bg"></div>
   </header>
 
-  <!-- LOGO -->
-  <div class="logo-wrapper fade-in">
-    <img src="logo.png" class="logo-animated" alt="Эвакуатор Краснодар 24/7">
-  </div>
+  <button id="themeToggle" class="apple-glass-btn theme-btn fade-in">
+    Светлая / Тёмная
+  </button>
 
-  <!-- BUTTONS -->
+  <button id="installBtn" class="apple-glass-btn install-btn fade-in">
+    Установить приложение
+  </button>
+
   <div class="btn-row fade-in">
-    <a class="apple-glass-btn install-btn" id="installPWA">Установить приложение</a>
-    <button id="themeToggle" class="apple-glass-btn theme-btn">
-      Светлая / Тёмная
-    </button>
+    <a class="apple-glass-btn" href="tel:+79888717018">Позвонить</a>
+    <button class="apple-glass-btn" id="geoSend">Геолокация</button>
+    <a class="apple-glass-btn" href="#requestForm">Оставить заявку</a>
   </div>
 
-  <!-- MAIN SERVICES -->
-  <section class="section fade-in">
-    <h2>Эвакуатор Краснодар 24/7</h2>
-    <p class="muted">Круглосуточный эвакуатор по Краснодару и краю. Быстро, аккуратно, без сюрпризов.</p>
+  <div id="geoStatus" class="status-box fade-in"></div>
 
-    <div class="services-list">
-      <div class="service-card">
-        <h3>По городу</h3>
-        <p>Подача эвакуатора по Краснодару от 2 000 ₽.</p>
-      </div>
-      <div class="service-card">
-        <h3>За город</h3>
-        <p>Работаем по всему Краснодарскому краю, расчёт по километражу.</p>
-      </div>
-      <div class="service-card">
-        <h3>Премиальные авто</h3>
-        <p>Низкие, дорогие и спортивные машины — аккуратная погрузка.</p>
-      </div>
-      <div class="service-card">
-        <h3>Коммерческий транспорт</h3>
-        <p>До 3,5 т — малотоннажные грузовики, фургоны, минивэны.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACTS -->
   <section class="section fade-in">
-    <h2>Связаться сейчас</h2>
+    <h2>Мы в соцсетях</h2>
     <div class="social-row">
-      <a class="social-glass" href="tel:+79888717018">Позвонить: +7 (988) 871‑70‑18</a>
       <a class="social-glass" href="https://t.me/evakuatorkrasnodar24">Telegram</a>
       <a class="social-glass" href="https://chat.whatsapp.com/Da9sLiLpm6SLjmW7WZBZze">WhatsApp</a>
+      <a class="social-glass" href="https://web.max.ru/">МАХ</a>
       <a class="social-glass" href="https://vk.ru/evakuator.krasnodar">VK</a>
     </div>
   </section>
 
-  <!-- REQUEST -->
-  <section class="section fade-in">
-    <h2>Онлайн‑заявка</h2>
-    <p class="muted">Заполните форму — оператор перезвонит и уточнит детали.</p>
-    <a class="apple-glass-btn" href="request.html">Оставить заявку</a>
+  <section class="section fade-in" id="about">
+    <h2>О нас</h2>
+    <p class="muted">Эвакуатор Краснодар 24/7 — профессиональная служба эвакуации.</p>
+    <p class="muted">Работаем по городу и краю, круглосуточно.</p>
   </section>
 
-  <!-- FOOTER -->
+  <section class="section fade-in" id="reviews">
+    <h2>Отзывы</h2>
+    <div class="services-list">
+      <div class="service-card"><h3>Алексей</h3><p>Быстро приехали, аккуратно погрузили авто.</p></div>
+      <div class="service-card"><h3>Марина</h3><p>Эвакуатор приехал через 15 минут.</p></div>
+      <div class="service-card"><h3>Игорь</h3><p>Перевозили кроссовер — идеально.</p></div>
+      <div class="service-card"><h3>Сергей</h3><p>Лучший эвакуатор в Краснодаре.</p></div>
+    </div>
+  </section>
+
+  <section class="section fade-in">
+    <h2>Цены</h2>
+    <div class="services-list">
+      <div class="service-card"><h3>Легковой</h3><p>2 000 ₽</p></div>
+      <div class="service-card"><h3>Кроссовер</h3><p>2 200 ₽</p></div>
+      <div class="service-card"><h3>Минивэн</h3><p>2 500 ₽</p></div>
+      <div class="service-card"><h3>Грузовой</h3><p>3 000 ₽</p></div>
+    </div>
+    <div class="adv-item">За город — <strong>80 ₽ / км</strong></div>
+    <a class="apple-glass-btn" href="prices.html">Подробные цены</a>
+  </section>
+
+  <section class="section fade-in">
+    <h2>Оставить заявку</h2>
+    <form id="requestForm" class="request-form">
+      <input type="text" name="name" placeholder="Имя" required>
+      <input type="tel" name="phone" placeholder="Телефон" required>
+      <input type="text" name="address" placeholder="Адрес" required>
+      <textarea name="comment" placeholder="Комментарий"></textarea>
+      <button class="apple-glass-btn" type="submit">Отправить</button>
+      <div id="requestStatus" class="status-box"></div>
+    </form>
+  </section>
+
   <footer class="footer fade-in">
     <div class="footer-grid">
-      <div>
-        <h3>Эвакуатор Краснодар 24/7</h3>
-        <p>Работаем круглосуточно, без выходных.</p>
-      </div>
-      <div>
-        <h3>Телефон</h3>
-        <p><a href="tel:+79888717018">+7 (988) 871‑70‑18</a></p>
-      </div>
-      <div>
-        <h3>Страницы</h3>
-        <p>
-          <a href="prices.html">Цены</a><br>
-          <a href="request.html">Заявка</a><br>
-          <a href="offline.html">Офлайн</a>
-        </p>
-      </div>
+      <div><h3>Эвакуатор Краснодар 24/7</h3><p>Круглосуточно.</p></div>
+      <div><h3>Телефон</h3><p><a href="tel:+79888717018">+7 (988) 871‑70‑18</a></p></div>
+      <div><h3>Страницы</h3><p><a href="prices.html">Цены</a> · <a href="en.html">English</a></p></div>
     </div>
   </footer>
 
 </div>
 
-<!-- BOTTOM MENU -->
 <div class="bottom-menu">
   <a href="index.html">Главная</a>
+  <a href="#requestForm">Заявка</a>
   <a href="prices.html">Цены</a>
-  <a href="request.html">Заявка</a>
+  <a href="#reviews">Отзывы</a>
+  <a href="#about">О нас</a>
 </div>
 
 <script src="app.js"></script>
