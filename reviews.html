@@ -4,27 +4,92 @@
   <meta charset="UTF-8">
   <title>Отзывы — Эвакуатор Краснодар 24/7</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <link rel="stylesheet" href="style.css">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="favicon.png">
 </head>
-<body>
+
+<body class="theme-dark">
 
 <div class="container">
 
+  <!-- HERO -->
   <header class="hero fade-in">
     <div class="hero-bg"></div>
   </header>
 
-  <div class="logo-wrapper fade-in">
-    <img src="logo.png" class="logo-animated" alt="logo">
-  </div>
+  <!-- INSTALL PWA — Вариант Б -->
+  <button id="installBtn" class="apple-glass-btn install-btn fade-in" style="display:none;">
+    Установить приложение
+  </button>
 
-  <section class="section glass-section fade-in">
+  <!-- THEME SWITCH -->
+  <button id="themeToggle" class="apple-glass-btn theme-btn fade-in">
+    Светлая / Тёмная
+  </button>
+
+  <!-- TITLE -->
+  <section class="section fade-in">
     <h2>Отзывы клиентов</h2>
     <p class="muted">Реальные отзывы наших клиентов.</p>
   </section>
 
-  <section class="section glass-section fade-in">
+  <!-- REVIEWS -->
+  <section class="section fade-in">
     <div class="services-list">
-      <div class="service-card glass-soft"><h3>Алексей</h3><
+
+      <div class="service-card">
+        <h3>Алексей</h3>
+        <p>Быстро приехали, аккуратно погрузили авто.</p>
+      </div>
+
+      <div class="service-card">
+        <h3>Марина</h3>
+        <p>Эвакуатор приехал через 15 минут.</p>
+      </div>
+
+      <div class="service-card">
+        <h3>Игорь</h3>
+        <p>Перевозили кроссовер — идеально.</p>
+      </div>
+
+      <div class="service-card">
+        <h3>Сергей</h3>
+        <p>Лучший эвакуатор в Краснодаре.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer fade-in">
+    <div class="footer-grid">
+      <div>
+        <h3>Эвакуатор Краснодар 24/7</h3>
+        <p>Круглосуточно.</p>
+      </div>
+      <div>
+        <h3>Телефон</h3>
+        <p><a href="tel:+79888717018">+7 (988) 871‑70‑18</a></p>
+      </div>
+      <div>
+        <h3>Страницы</h3>
+        <p><a href="index.html">Главная</a></p>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<!-- BOTTOM MENU -->
+<div class="bottom-menu">
+  <a href="index.html">Главная</a>
+  <a href="about.html">О компании</a>
+  <a href="reviews.html">Отзывы</a>
+  <a href="contacts.html">Контакты</a>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
