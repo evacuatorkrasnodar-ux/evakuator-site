@@ -1,10 +1,7 @@
 User-agent: *
 Allow: /
 
-# Sitemap для GitHub Pages
-Sitemap: https://evacuatorkrasnodar-ux.github.io/evakuator-site/sitemap.xml
+Sitemap: https://evakuator-krd.online/sitemap.xml
+Host: evakuator-krd.online
 
-# Host для GitHub Pages не используется, поэтому НЕ пишем Host:
-
-# IndexNow — можно оставить тот же ключ
-IndexNow: https://api/indexnow.org/indexnow?key=b7f3e9c1a4d82f7b93c1e7a4d9f2b8c3
+IndexNow: https://api.indexnow.org/indexnow?key=b7f3e9c1a4d82f7b93c1e7a4d9f2b8c3
