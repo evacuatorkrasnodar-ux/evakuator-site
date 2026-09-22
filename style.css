@@ -47,33 +47,36 @@ body.theme-light {
   padding-bottom:120px; /* исправляет проблему с нижним меню */
 }
 
-/* HERO */
-
+/* HERO — Премиальный Apple-стиль */
 .hero {
   position: relative;
   width: 100%;
-  aspect-ratio: 1.66 / 1; /* премиальное соотношение под твой баннер */
-  max-height: 620px;      /* верхний предел */
-  min-height: 360px;      /* нижний предел */
+  aspect-ratio: 1.66 / 1; /* под твой фактический баннер */
+  max-height: 620px;
+  min-height: 360px;
 }
 
 .hero-bg {
   position: absolute;
   inset: 0;
   background-image: url('banner-top.png?v=12');
-  background-size: cover;     /* премиальное заполнение */
+  background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  animation: heroMove 18s ease-in-out infinite alternate;
 }
 
 @keyframes heroMove {
-  0% { background-position:center top; }
-  100% { background-position:center bottom; }
+  0% { background-position: center top; }
+  100% { background-position: center bottom; }
 }
 
-@media (max-width:680px) {
-  .hero { height:220px; }
-  .hero-bg { background-position:center top; }
+/* Кнопка установки приложения внутри HERO */
+.install-btn {
+  position: absolute;
+  bottom: 22px;
+  left: 22px;
+  z-index: 10;
 }
 
 /* Fade-in */
