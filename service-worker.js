@@ -1,4 +1,4 @@
-const CACHE_NAME = "evacuator-final-v2";
+const CACHE_NAME = "evacuator-final-v3";
 
 const ASSETS = [
   "/",
@@ -16,6 +16,9 @@ const ASSETS = [
   "/app.js",
 
   "/favicon.png",
+  "/preload.png",
+
+  "/banner-top.webp",
   "/banner-top.png"
 ];
 
@@ -42,11 +45,11 @@ self.addEventListener("activate", (event) => {
 });
 
 // === FETCH ===
-// Не трогаем внешние запросы (VK API, геолокация)
+// Не трогаем внешние запросы (VK API, Яндекс, геолокация)
 self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
 
-  // Если запрос внешний — пропускаем
+  // Внешние запросы — пропускаем
   if (url.origin !== self.location.origin) {
     return;
   }
