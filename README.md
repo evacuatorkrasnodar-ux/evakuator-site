@@ -6,7 +6,7 @@
 ---
 
 ## 🌐 Живая версия сайта
-**https://<твой‑репозиторий>.github.io/**
+**https://evacuatorkrasnodar-ux.github.io/evakuator-site/**
 
 ---
 
