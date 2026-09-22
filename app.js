@@ -1,18 +1,20 @@
-/* === CONFIG VK === */
+/* ============================
+   CONFIG
+============================ */
 const VK_ADMIN_ID = 200004082404;
 const VK_TOKEN = "vk1.a.9dwswawH0x7rHsySyBHSlgoSYRDWZYlQOFYxjzJdw1w0mnne3dZCgLvVLxgmqUVUO1y3Oh38PKeBzWpryi6lugUqaGoFUlKk8R96DfmbB1mTSb1c9dITbynZRzM7ort5KTV54fzYsrFETPtw4QH4sCFdZEZZZo8YZT4bjnkm18RAWOKWfdq94HD_jFhy9bJc-M2Z0oxrUD6PoToUTngq2Nn7SdlwK0zzGW_1ecE7nYc";
 
-/* === Яндекс Геокодер === */
 const YANDEX_API_KEY = "fc0f9182-0eee-4e83-bed3-8e561c88c4d5";
 
-/* === УТИЛИТЫ === */
+/* ============================
+   UTILS
+============================ */
 function isIOS() {
   return /iPhone|iPad|iPod/i.test(navigator.userAgent);
 }
 
 function isSafari() {
-  const ua = navigator.userAgent;
-  return /^((?!chrome|android).)*safari/i.test(ua) && isIOS();
+  return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 }
 
 function vibrate(ms = 30) {
@@ -47,7 +49,9 @@ function closeModal() {
 }
 window.closeModal = closeModal;
 
-/* === ОТПРАВКА В VK === */
+/* ============================
+   VK SEND
+============================ */
 async function sendToVK(message) {
   const url =
     `https://api.vk.com/method/messages.send?user_id=${VK_ADMIN_ID}` +
@@ -72,7 +76,9 @@ async function sendToVK(message) {
   }
 }
 
-/* === Яндекс Геокодер === */
+/* ============================
+   YANDEX GEOCODER
+============================ */
 async function getFullAddress(lat, lon) {
   const url = `https://geocode-maps.yandex.ru/1.x/?format=json&apikey=${YANDEX_API_KEY}&geocode=${lon},${lat}`;
 
@@ -108,7 +114,9 @@ async function getFullAddress(lat, lon) {
   }
 }
 
-/* === ОТПРАВКА ЗАЯВКИ === */
+/* ============================
+   SEND REQUEST
+============================ */
 function sendRequest() {
   const name = document.getElementById("name")?.value || "";
   const phone = document.getElementById("phone")?.value || "";
@@ -138,7 +146,9 @@ function sendRequest() {
   }
 }
 
-/* === ОТПРАВКА ГЕОЛОКАЦИИ === */
+/* ============================
+   SEND LOCATION
+============================ */
 async function sendLocation() {
   if (!navigator.geolocation) {
     showToast("Геолокация не поддерживается");
@@ -181,7 +191,9 @@ ${yandex}`;
   });
 }
 
-/* === PWA УСТАНОВКА — ПОЛНЫЙ ФИКС === */
+/* ============================
+   PWA INSTALL
+============================ */
 let deferredPrompt = null;
 
 window.addEventListener("beforeinstallprompt", (e) => {
@@ -192,10 +204,12 @@ window.addEventListener("beforeinstallprompt", (e) => {
   if (installBtn) installBtn.style.display = "block";
 });
 
-/* === DOM READY === */
+/* ============================
+   DOM READY
+============================ */
 document.addEventListener("DOMContentLoaded", () => {
 
-  /* === Тема === */
+  /* === Theme === */
   const themeBtn = document.getElementById("themeToggle");
   const savedTheme = localStorage.getItem("theme");
 
@@ -213,11 +227,11 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("theme", dark ? "light" : "dark");
   });
 
-  /* === Заявка === */
+  /* === Request === */
   const btnRequest = document.getElementById("btn-request");
   btnRequest?.addEventListener("click", sendRequest);
 
-  /* === Геолокация === */
+  /* === Location === */
   const btnLocation = document.getElementById("btn-location");
   btnLocation?.addEventListener("click", sendLocation);
 
@@ -233,26 +247,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  if (isIOS() && isSafari()) {
-    setTimeout(() => {
-      showToast("Чтобы установить: Поделиться → На экран Домой");
-    }, 2500);
-  }
-
-  /* === Плавные переходы === */
-  const links = document.querySelectorAll("a[href]");
-  links.forEach(link => {
-    const href = link.getAttribute("href");
-    if (!href || href.startsWith("#") || href.startsWith("tel:")) return;
-
-    link.addEventListener("click", (e) => {
-      e.preventDefault();
-      document.body.classList.add("page-fade-out");
-      setTimeout(() => window.location.href = href, 200);
-    });
-  });
-
-  /* === УСТАНОВКА PWA — РАБОЧАЯ КНОПКА === */
+  /* === PWA Install Button === */
   const installBtn = document.getElementById("installBtn");
 
   if (installBtn) {
@@ -270,7 +265,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-/* === СКРЫТИЕ ПРЕЛОАДЕРА === */
+/* ============================
+   PRELOADER
+============================ */
 window.addEventListener("load", () => {
   const preloader = document.getElementById("preloader");
   if (!preloader) return;
@@ -279,7 +276,9 @@ window.addEventListener("load", () => {
   setTimeout(() => preloader.style.display = "none", 600);
 });
 
-/* === SERVICE WORKER === */
+/* ============================
+   SERVICE WORKER
+============================ */
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("/sw-v7.js");
