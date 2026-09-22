@@ -1,16 +1,14 @@
 // === CONFIG ===
-const CACHE_NAME = "evacuator-v4";
+const CACHE_NAME = "evacuator-v5";
 const OFFLINE_URL = "/offline.html";
 
-// === STATIC ASSETS ===
+// === STATIC ASSETS (без служебных страниц) ===
 const STATIC_ASSETS = [
   "/",
   "/index.html",
   "/prices.html",
   "/en.html",
-  "/admin.html",
   "/request.html",
-  "/offline.html",
   "/about.html",
   "/contacts.html",
   "/reviews.html",
@@ -30,7 +28,7 @@ self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS))
   );
-  self.skipWaiting(); // мгновенная активация новой версии
+  self.skipWaiting();
 });
 
 // === ACTIVATE ===
@@ -38,35 +36,36 @@ self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
       Promise.all(
-        keys.map((key) => {
-          if (key !== CACHE_NAME) return caches.delete(key);
-        })
+        keys
+          .filter((key) => key !== CACHE_NAME)
+          .map((key) => caches.delete(key))
       )
     )
   );
-  self.clients.claim(); // сразу управляем страницами
+  self.clients.claim();
 });
 
 // === FETCH ===
-// Умная стратегия:
-// HTML → network-first (чтобы сайт всегда был свежий)
-// Статика → cache-first (молниеносная загрузка)
-// Изображения → cache-first + догрузка
-// Offline fallback → offline.html
 self.addEventListener("fetch", (event) => {
   const req = event.request;
   const url = new URL(req.url);
 
-  // Внешние запросы (VK, Яндекс, API) — пропускаем
+  // Внешние запросы — пропускаем
   if (url.origin !== self.location.origin) return;
+
+  // Нормализация URL (убираем мусорные параметры)
+  if (url.search) {
+    const cleanUrl = url.origin + url.pathname;
+    event.respondWith(fetch(cleanUrl).catch(() => caches.match(cleanUrl)));
+    return;
+  }
 
   // === HTML: network-first ===
   if (req.headers.get("accept")?.includes("text/html")) {
     event.respondWith(
       fetch(req)
         .then((res) => {
-          const clone = res.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(req, clone));
+          if (!res || res.status >= 400) throw new Error();
           return res;
         })
         .catch(() => caches.match(req).then((cached) => cached || caches.match(OFFLINE_URL)))
@@ -82,8 +81,8 @@ self.addEventListener("fetch", (event) => {
 
         return fetch(req)
           .then((res) => {
-            const clone = res.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(req, clone));
+            if (!res || res.status >= 400) return caches.match("/preload.png");
+            caches.open(CACHE_NAME).then((cache) => cache.put(req, res.clone()));
             return res;
           })
           .catch(() => caches.match("/preload.png"));
@@ -99,8 +98,8 @@ self.addEventListener("fetch", (event) => {
 
       return fetch(req)
         .then((res) => {
-          const clone = res.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(req, clone));
+          if (!res || res.status >= 400) throw new Error();
+          caches.open(CACHE_NAME).then((cache) => cache.put(req, res.clone()));
           return res;
         })
         .catch(() => caches.match(OFFLINE_URL));
