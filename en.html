@@ -19,8 +19,9 @@
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#050608">
 
-  <!-- Apple -->
+  <!-- Apple / Mobile -->
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <link rel="apple-touch-icon" href="preload.png">
 
@@ -48,7 +49,7 @@
   </script>
 </head>
 
-<body class="theme-dark">
+<body class="theme-dark page-fade-in">
 
 <!-- PRELOADER -->
 <div id="preloader">
@@ -66,15 +67,20 @@
     </picture>
   </header>
 
-  <!-- INSTALL PWA -->
-  <button id="installBtn" class="apple-glass-btn install-btn fade-in" style="display:none;">
-    Install App
-  </button>
+  <!-- TOP BUTTONS -->
+  <div class="top-buttons fade-in">
+    <button id="installBtn" class="apple-glass-btn install-btn" style="display:none;">
+      Install App
+    </button>
 
-  <!-- THEME -->
-  <button id="themeToggle" class="apple-glass-btn theme-btn fade-in">
-    Light / Dark
-  </button>
+    <button id="iosInstall" class="apple-glass-btn install-btn" style="display:none;">
+      Install on iPhone
+    </button>
+
+    <button id="themeToggle" class="apple-glass-btn theme-btn">
+      Light / Dark
+    </button>
+  </div>
 
   <!-- MAIN BUTTONS -->
   <div class="btn-row fade-in">
@@ -157,23 +163,11 @@
 </div>
 
 <!-- BOTTOM MENU -->
-<div class="bottom-menu">
+<div class="bottom-menu fade-in">
   <a href="en.html">Home</a>
   <a href="prices.html">Prices</a>
   <a href="request.html">Request</a>
   <a href="#top">Top</a>
-</div>
-
-<!-- TOAST -->
-<div id="toast"></div>
-
-<!-- MODAL -->
-<div id="modal" class="modal">
-  <div class="modal-content">
-    <h3 id="modalTitle"></h3>
-    <p id="modalText"></p>
-    <button onclick="closeModal()" class="apple-glass-btn">Close</button>
-  </div>
 </div>
 
 <script src="app.js"></script>
