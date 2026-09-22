@@ -21,6 +21,7 @@
 
   <!-- Apple -->
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <link rel="apple-touch-icon" href="preload.png">
 
@@ -52,7 +53,30 @@
   </script>
 </head>
 
-<body class="theme-dark">
+<body class="theme-dark page-fade-in">
+
+<!-- PRELOADER -->
+<div id="preloader">
+  <img src="preload.png" alt="Загрузка..." class="preloader-img">
+  <div class="preloader-title">Эвакуатор Краснодар</div>
+</div>
+
+<!-- iOS INSTALL MODAL -->
+<div id="iosModal" class="modal">
+  <div class="modal-content">
+    <h3>Установка на iPhone</h3>
+    <p>
+      Чтобы установить приложение:<br><br>
+      1. Нажмите кнопку <strong>Поделиться</strong> в Safari.<br>
+      2. Выберите <strong>«На экран Домой»</strong>.<br>
+      3. Подтвердите установку.
+    </p>
+    <button class="apple-glass-btn" onclick="closeModal()">Закрыть</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
 
 <div class="container">
 
@@ -64,15 +88,20 @@
     </picture>
   </header>
 
-  <!-- INSTALL PWA -->
-  <button id="installBtn" class="apple-glass-btn install-btn fade-in" style="display:none;">
-    Установить приложение
-  </button>
+  <!-- TOP BUTTONS -->
+  <div class="top-buttons fade-in">
+    <button id="installBtn" class="apple-glass-btn install-btn" style="display:none;">
+      Установить приложение
+    </button>
 
-  <!-- THEME SWITCH -->
-  <button id="themeToggle" class="apple-glass-btn theme-btn fade-in">
-    Светлая / Тёмная
-  </button>
+    <button id="iosInstall" class="apple-glass-btn install-btn" style="display:none;">
+      Установить на iPhone
+    </button>
+
+    <button id="themeToggle" class="apple-glass-btn theme-btn">
+      Светлая / Тёмная
+    </button>
+  </div>
 
   <!-- CITY PRICES -->
   <section class="section fade-in">
@@ -118,7 +147,7 @@
 </div>
 
 <!-- BOTTOM MENU -->
-<div class="bottom-menu">
+<div class="bottom-menu fade-in">
   <a href="index.html">Главная</a>
   <a href="prices.html">Цены</a>
   <a href="#top">Наверх</a>
