@@ -1,8 +1,8 @@
 // === CONFIG ===
-const CACHE_NAME = "evacuator-v5";
+const CACHE_NAME = "evacuator-v6";
 const OFFLINE_URL = "/offline.html";
 
-// === STATIC ASSETS (без служебных страниц) ===
+// === STATIC ASSETS ===
 const STATIC_ASSETS = [
   "/",
   "/index.html",
@@ -53,22 +53,28 @@ self.addEventListener("fetch", (event) => {
   // Внешние запросы — пропускаем
   if (url.origin !== self.location.origin) return;
 
-  // Нормализация URL (убираем мусорные параметры)
-  if (url.search) {
+  // Нормализация URL: убираем мусорные параметры
+  let cacheKey = req;
+  if (url.search && req.method === "GET") {
     const cleanUrl = url.origin + url.pathname;
-    event.respondWith(fetch(cleanUrl).catch(() => caches.match(cleanUrl)));
-    return;
+    cacheKey = new Request(cleanUrl, { method: "GET" });
   }
 
-  // === HTML: network-first ===
+  // === HTML: network-first + кеширование ===
   if (req.headers.get("accept")?.includes("text/html")) {
     event.respondWith(
       fetch(req)
         .then((res) => {
-          if (!res || res.status >= 400) throw new Error();
+          if (!res || res.status >= 400) throw new Error("Bad HTML response");
+
+          const resClone = res.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(cacheKey, resClone));
+
           return res;
         })
-        .catch(() => caches.match(req).then((cached) => cached || caches.match(OFFLINE_URL)))
+        .catch(() =>
+          caches.match(cacheKey).then((cached) => cached || caches.match(OFFLINE_URL))
+        )
     );
     return;
   }
@@ -76,13 +82,16 @@ self.addEventListener("fetch", (event) => {
   // === IMAGES: cache-first ===
   if (req.destination === "image") {
     event.respondWith(
-      caches.match(req).then((cached) => {
+      caches.match(cacheKey).then((cached) => {
         if (cached) return cached;
 
         return fetch(req)
           .then((res) => {
             if (!res || res.status >= 400) return caches.match("/preload.png");
-            caches.open(CACHE_NAME).then((cache) => cache.put(req, res.clone()));
+
+            const resClone = res.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(cacheKey, resClone));
+
             return res;
           })
           .catch(() => caches.match("/preload.png"));
@@ -93,13 +102,16 @@ self.addEventListener("fetch", (event) => {
 
   // === STATIC FILES: cache-first ===
   event.respondWith(
-    caches.match(req).then((cached) => {
+    caches.match(cacheKey).then((cached) => {
       if (cached) return cached;
 
       return fetch(req)
         .then((res) => {
-          if (!res || res.status >= 400) throw new Error();
-          caches.open(CACHE_NAME).then((cache) => cache.put(req, res.clone()));
+          if (!res || res.status >= 400) throw new Error("Bad static response");
+
+          const resClone = res.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(cacheKey, resClone));
+
           return res;
         })
         .catch(() => caches.match(OFFLINE_URL));
