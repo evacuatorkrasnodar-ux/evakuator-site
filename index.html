@@ -9,26 +9,67 @@
   <meta name="description" content="Круглосуточный эвакуатор в Краснодаре. Подача от 15–25 минут. Аккуратная погрузка, фиксированная цена, работа по Краснодарскому краю.">
   <meta name="keywords" content="эвакуатор краснодар, эвакуатор 24/7, эвакуатор срочно, эвакуатор недорого, эвакуатор круглосуточно, эвакуатор краснодарский край">
   <meta name="author" content="Эвакуатор Краснодар 24/7">
+  <meta name="robots" content="index, follow">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://evakuator-krd.online/">
 
   <!-- OpenGraph -->
   <meta property="og:title" content="Эвакуатор Краснодар 24/7 — Быстро, Надёжно">
   <meta property="og:description" content="Круглосуточный эвакуатор в Краснодаре. Подача от 15–25 минут. Аккуратная погрузка, честные цены.">
-  <meta property="og:image" content="/preload.png">
+  <meta property="og:image" content="https://evakuator-krd.online/preload.png">
   <meta property="og:type" content="website">
+  <meta property="og:url" content="https://evakuator-krd.online/">
 
   <!-- PWA -->
-  <link rel="manifest" href="manifest.json">
+  <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#050608">
 
   <!-- iPhone PWA -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <link rel="apple-touch-icon" href="preload.png">
+  <link rel="apple-touch-icon" href="/preload.png">
+
+  <!-- Preload critical assets -->
+  <link rel="preload" href="/style.css" as="style">
+  <link rel="preload" href="/banner-top.webp" as="image">
 
   <!-- Styles -->
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="favicon.png">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="icon" type="image/png" href="/favicon.png">
+
+  <!-- LocalBusiness Schema.org -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Эвакуатор Краснодар 24/7",
+    "description": "Круглосуточный эвакуатор в Краснодаре и Краснодарском крае. Подача от 15–25 минут, фиксированная цена.",
+    "url": "https://evakuator-krd.online/",
+    "telephone": "+7-988-871-70-18",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Краснодар",
+      "addressRegion": "Краснодарский край",
+      "streetAddress": "ул. Дзержинского, 100",
+      "addressCountry": "RU"
+    },
+    "areaServed": {
+      "@type": "AdministrativeArea",
+      "name": "Краснодар и Краснодарский край"
+    },
+    "openingHoursSpecification": [{
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"
+      ],
+      "opens": "00:00",
+      "closes": "23:59"
+    }],
+    "image": "https://evakuator-krd.online/preload.png"
+  }
+  </script>
 </head>
 
 <body class="theme-dark page-fade-in">
@@ -235,11 +276,11 @@
 </div>
 
 <!-- SCRIPTS -->
-<script src="app.js"></script>
+<script src="/app.js"></script>
 
 <script>
   if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/sw.js")
+    navigator.serviceWorker.register("/sw-v7.js")
       .then(() => console.log("SW зарегистрирован"))
       .catch(err => console.error("SW ошибка:", err));
   }
