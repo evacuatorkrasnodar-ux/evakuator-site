@@ -2,27 +2,71 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Towing Service Krasnodar 24/7 — Fast Arrival</title>
+  <title>Towing Service Krasnodar 24/7 — Fast & Reliable</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="style.css">
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" href="favicon.png">
-  <link rel="apple-touch-icon" href="icon-192.png">
+  <!-- SEO -->
+  <meta name="description" content="Professional towing service in Krasnodar. Fast arrival from 15 minutes. 24/7 operation across the city and region.">
+  <meta name="keywords" content="towing krasnodar, tow truck, towing service, emergency towing, 24/7 towing">
 
-  <meta name="theme-color" content="#000000">
+  <!-- OpenGraph -->
+  <meta property="og:title" content="Towing Service Krasnodar 24/7 — Fast & Reliable">
+  <meta property="og:description" content="Fast arrival from 15 minutes. Professional towing across Krasnodar and the region.">
+  <meta property="og:image" content="/preload.png">
+  <meta property="og:type" content="website">
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#050608">
+
+  <!-- Apple -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <link rel="apple-touch-icon" href="preload.png">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="favicon.png">
+
+  <!-- Schema.org -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Towing Service Krasnodar 24/7",
+    "description": "Professional towing assistance across Krasnodar and the region.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Krasnodar",
+      "streetAddress": "Dzerzhinskogo 100"
+    },
+    "telephone": "+7-988-871-70-18",
+    "openingHours": "Mo-Su 00:00-23:59",
+    "areaServed": "Krasnodar Region",
+    "image": "/preload.png"
+  }
+  </script>
 </head>
 
 <body class="theme-dark">
+
+<!-- PRELOADER -->
+<div id="preloader">
+  <img src="preload.png" alt="Loading..." class="preloader-img">
+  <div class="preloader-title">Towing Service Krasnodar</div>
+</div>
 
 <div class="container">
 
   <!-- HERO -->
   <header class="hero fade-in">
-    <div class="hero-bg"></div>
+    <picture>
+      <source srcset="banner-top.webp" type="image/webp">
+      <img src="banner-top.png" alt="Towing Service Krasnodar 24/7" class="hero-img">
+    </picture>
   </header>
 
-  <!-- INSTALL PWA — Variant B -->
+  <!-- INSTALL PWA -->
   <button id="installBtn" class="apple-glass-btn install-btn fade-in" style="display:none;">
     Install App
   </button>
@@ -47,7 +91,7 @@
     <h2>About Us</h2>
     <p class="muted">
       Towing Service Krasnodar 24/7 — professional towing assistance.
-      Fast arrival from 15 minutes. We operate across the city and region.
+      Fast arrival from 15–25 minutes. We operate across the city and the entire region.
     </p>
     <a class="apple-glass-btn" href="about.html">More Info</a>
   </section>
