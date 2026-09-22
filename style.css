@@ -1,3 +1,5 @@
+
+```css
 :root {
   --bg-dark:#050608;
   --bg-light:#f5f7fa;
@@ -47,7 +49,7 @@ body.theme-light {
   padding-bottom:120px;
 }
 
-/* HERO — адаптивный баннер */
+/* HERO */
 .hero {
   position:relative;
   width:100%;
@@ -392,7 +394,7 @@ body.theme-light .footer p { color:var(--muted-light); }
   text-decoration:none;
 }
 
-/* BOTTOM MENU */
+/* BOTTOM MENU — исправлено */
 .bottom-menu {
   position:fixed;
   bottom:0;
@@ -404,13 +406,9 @@ body.theme-light .footer p { color:var(--muted-light); }
   background:rgba(20,20,20,.55);
   border-top:1px solid rgba(255,255,255,.15);
   box-shadow:0 -10px 40px rgba(0,0,0,.45);
-  z-index:999;
-  animation:menuFloat 6s ease-in-out infinite alternate;
-}
-
-@keyframes menuFloat {
-  0% { transform:translateY(0); }
-  100% { transform:translateY(-4px); }
+  z-index:9999;
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
 }
 
 body.theme-light .bottom-menu {
@@ -427,6 +425,11 @@ body.theme-light .bottom-menu {
   border-radius:12px;
   background:rgba(255,255,255,.08);
   border:1px solid rgba(255,255,255,.15);
+  transition:.25s ease;
+}
+
+.bottom-menu a:hover {
+  transform:translateY(-3px);
 }
 
 body.theme-light .bottom-menu a {
@@ -511,7 +514,7 @@ body.theme-light .bottom-menu a {
   100% { opacity:1; }
 }
 
-/* MODAL (iPhone установка) */
+/* MODAL */
 .modal {
   position:fixed;
   inset:0;
