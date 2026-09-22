@@ -103,7 +103,7 @@
   <header class="hero fade-in">
     <picture>
       <source srcset="banner-top.webp" type="image/webp">
-      <img src="banner-top.png" alt="Эвакуатор Краснодар 24/7" class="hero-img">
+      <img src="banner-top.png" alt="Эвакуатор Краснодар 24/7" class="hero-img" loading="lazy">
     </picture>
   </header>
 
@@ -267,13 +267,14 @@
 </div>
 
 <!-- BOTTOM MENU -->
-<div class="bottom-menu fade-in">
-  <a href="/">Главная</a>
-  <a href="#requestForm">Заявка</a>
+<nav class="bottom-menu fade-in" aria-label="Основная навигация">
+  <a href="index.html">Главная</a>
+  <a href="#about">О нас</a>
   <a href="prices.html">Цены</a>
   <a href="#reviews">Отзывы</a>
-  <a href="#about">О нас</a>
-</div>
+  <a href="#requestForm">Заявка</a>
+  <a href="tel:+79888717018">Позвонить</a>
+</nav>
 
 <!-- SCRIPTS -->
 <script src="/app.js"></script>
