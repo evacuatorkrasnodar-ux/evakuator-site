@@ -47,35 +47,59 @@ body.theme-light {
   padding-bottom:120px;
 }
 
-/* HERO — Премиальный Apple-стиль */
+/* HERO — адаптивный баннер */
 .hero {
   position: relative;
   width: 100%;
-  aspect-ratio: 1.66 / 1;
   max-height: 620px;
   min-height: 360px;
-  overflow: hidden; /* фиксирует Edge и Яндекс */
+  overflow: hidden;
 }
 
-.hero-bg {
-  position: absolute;
-  inset: 0;
-  background-image: url('banner-top.png?v=12');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  animation: heroMove 18s ease-in-out infinite alternate;
-}
-
-@keyframes heroMove {
-  0% { background-position: center top; }
-  100% { background-position: center bottom; }
-}
-
-/* Кнопка установки — Вариант Б (под баннером) */
-.install-btn {
+.hero picture,
+.hero img {
   width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* PRELOADER */
+#preloader {
+  position: fixed;
+  inset: 0;
+  background: #050608;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  opacity: 1;
+  transition: opacity .6s ease;
+}
+
+.preloader-img {
+  width: 160px;
+  height: auto;
   margin-bottom: 20px;
+  animation: preloaderFade 1.4s ease-in-out infinite alternate;
+}
+
+.preloader-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #f3f5f7;
+  letter-spacing: 1px;
+  animation: preloaderText 1.4s ease-in-out infinite alternate;
+}
+
+@keyframes preloaderFade {
+  0% { opacity: .6; transform: scale(.96); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes preloaderText {
+  0% { opacity: .6; }
+  100% { opacity: 1; }
 }
 
 /* Fade-in */
