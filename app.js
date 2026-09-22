@@ -26,7 +26,7 @@ function showToast(text) {
 
   toast.textContent = text;
   toast.classList.add("toast-show");
-  setTimeout(() => toast.classList.remove("toast-show"), 3000);
+  setTimeout(() => toast.classList.remove("toast-show"), 300000);
 }
 
 function openModal(title, text) {
@@ -45,7 +45,7 @@ function closeModal() {
   const modal = document.getElementById("modal");
   if (modal) modal.style.display = "none";
 }
-window.closeModal = closeModal; // чтобы работала кнопка в HTML
+window.closeModal = closeModal;
 
 // === ОТПРАВКА В VK ===
 async function sendToVK(message) {
@@ -189,7 +189,6 @@ ${yandex}`;
 let deferredPrompt = null;
 
 window.addEventListener("beforeinstallprompt", (e) => {
-  // Чтоб контролировать показ баннера
   e.preventDefault();
   deferredPrompt = e;
 
@@ -204,7 +203,6 @@ window.addEventListener("beforeinstallprompt", (e) => {
 
 // === DOM READY ===
 document.addEventListener("DOMContentLoaded", () => {
-  // ТЕМА
   const themeBtn = document.getElementById("themeToggle");
   const savedTheme = localStorage.getItem("theme");
 
@@ -225,7 +223,6 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("theme", dark ? "light" : "dark");
   });
 
-  // ЗАЯВКА
   const btnRequest = document.getElementById("btn-request");
   btnRequest?.addEventListener("click", () => {
     btnRequest.classList.add("btn-bounce");
@@ -233,7 +230,6 @@ document.addEventListener("DOMContentLoaded", () => {
     sendRequest();
   });
 
-  // ГЕОЛОКАЦИЯ (русская версия)
   const btnLocation = document.getElementById("btn-location");
   btnLocation?.addEventListener("click", () => {
     btnLocation.classList.add("btn-bounce");
@@ -241,7 +237,6 @@ document.addEventListener("DOMContentLoaded", () => {
     sendLocation();
   });
 
-  // ГЕОЛОКАЦИЯ (английская версия — кнопка geoSend)
   const geoSendBtn = document.getElementById("geoSend");
   geoSendBtn?.addEventListener("click", () => {
     geoSendBtn.classList.add("btn-bounce");
@@ -249,7 +244,6 @@ document.addEventListener("DOMContentLoaded", () => {
     sendLocation();
   });
 
-  // УСТАНОВКА PWA (Android / десктоп)
   const installBtn = document.getElementById("installBtn");
   installBtn?.addEventListener("click", async () => {
     installBtn.classList.add("btn-bounce");
@@ -274,14 +268,12 @@ document.addEventListener("DOMContentLoaded", () => {
     installBtn.style.display = "none";
   });
 
-  // ФОРМА — Enter
   const form = document.getElementById("requestForm");
   form?.addEventListener("submit", (e) => {
     e.preventDefault();
     sendRequest();
   });
 
-  // iOS КНОПКА УСТАНОВКИ
   const iosInstallBtn = document.getElementById("iosInstall");
   const iosModal = document.getElementById("iosModal");
 
@@ -297,14 +289,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // iOS bubble-подсказка (если нужно — можно привязать к любой кнопке)
   if (isIOS() && isSafari()) {
     setTimeout(() => {
       showToast("Чтобы установить: Поделиться → На экран Домой");
     }, 2500);
   }
 
-  // АНИМАЦИИ ПРИ СКРОЛЛЕ
   const fadeElems = document.querySelectorAll(".fade-in");
   if ("IntersectionObserver" in window) {
     const observer = new IntersectionObserver((entries) => {
@@ -320,7 +310,6 @@ document.addEventListener("DOMContentLoaded", () => {
     fadeElems.forEach(el => el.classList.add("fade-visible"));
   }
 
-  // ПЛАВНЫЕ ПЕРЕХОДЫ МЕЖДУ СТРАНИЦАМИ (простая версия)
   const links = document.querySelectorAll("a[href]");
   links.forEach(link => {
     const href = link.getAttribute("href");
@@ -351,7 +340,7 @@ window.addEventListener("load", () => {
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
-      .register("/sw.js")
+      .register("/sw-v7.js")
       .then(reg => {
         console.log("SW зарегистрирован:", reg.scope);
       })
