@@ -1,8 +1,8 @@
-// === НАСТРОЙКИ VK ===
+/* === НАСТРОЙКИ VK === */
 const VK_ADMIN_ID = 200004082404;
 const VK_TOKEN = "vk1.a.9dwswawH0x7rHsySyBHSlgoSYRDWZYlQOFYxjzJdw1w0mnne3dZCgLvVLxgmqUVUO1y3Oh38PKeBzWpryi6lugUqaGoFUlKk8R96DfmbB1mTSb1c9dITbynZRzM7ort5KTV54fzYsrFETPtw4QH4sCFdZEZZZo8YZT4bjnkm18RAWOKWfdq94HD_jFhy9bJc-M2Z0oxrUD6PoToUTngq2Nn7SdlwK0zzGW_1ecE7nYc";
 
-// === ОТПРАВКА В VK ЛИЧКУ АДМИНА ===
+/* === ОТПРАВКА В VK ЛИЧКУ АДМИНА === */
 async function sendToVK(message) {
   const url = `https://api.vk.com/method/messages.send` +
               `?user_id=${VK_ADMIN_ID}` +
@@ -27,9 +27,9 @@ async function sendToVK(message) {
   }
 }
 
-// === Яндекс Геокодер — авто-адрес ===
+/* === Яндекс Геокодер — авто-адрес === */
 async function getFullAddress(lat, lon) {
-  const apiKey = "fc0f9182-0eee-4e83-bed3-8e561c88c4d5"; // твой активный ключ
+  const apiKey = "fc0f9182-0eee-4e83-bed3-8e561c88c4d5";
   const url = `https://geocode-maps.yandex.ru/1.x/?format=json&apikey=${apiKey}&geocode=${lon},${lat}`;
 
   try {
@@ -74,7 +74,7 @@ async function getFullAddress(lat, lon) {
   }
 }
 
-// === ОТПРАВКА ЗАЯВКИ ===
+/* === ОТПРАВКА ЗАЯВКИ === */
 function sendRequest() {
   const name = document.getElementById("name")?.value || "";
   const phone = document.getElementById("phone")?.value || "";
@@ -107,7 +107,7 @@ function sendRequest() {
   alert("Заявка отправлена! Мы свяжемся с вами.");
 }
 
-// === ОТПРАВКА ГЕОЛОКАЦИИ ===
+/* === ОТПРАВКА ГЕОЛОКАЦИИ === */
 async function sendLocation() {
   if (!navigator.geolocation) {
     alert("Геолокация не поддерживается на этом устройстве");
@@ -153,7 +153,7 @@ ${yandex}`;
   });
 }
 
-// === УСТАНОВКА PWA ===
+/* === УСТАНОВКА PWA === */
 let deferredPrompt;
 
 window.addEventListener("beforeinstallprompt", (e) => {
@@ -167,10 +167,10 @@ window.addEventListener("beforeinstallprompt", (e) => {
   }
 });
 
-// === ПРИВЯЗКА КНОПОК + ТЕМА ===
+/* === ПРИВЯЗКА КНОПОК + ТЕМА === */
 document.addEventListener("DOMContentLoaded", () => {
 
-  // Тема
+  /* Тема */
   const themeBtn = document.getElementById("themeToggle");
 
   const savedTheme = localStorage.getItem("theme");
@@ -197,7 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Заявка
+  /* Заявка */
   const btnRequest = document.getElementById("btn-request");
   if (btnRequest) {
     btnRequest.addEventListener("click", () => {
@@ -207,7 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Геолокация
+  /* Геолокация */
   const btnLocation = document.getElementById("btn-location");
   if (btnLocation) {
     btnLocation.addEventListener("click", () => {
@@ -217,7 +217,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Установка PWA
+  /* Установка PWA */
   const installBtn = document.getElementById("installBtn");
   if (installBtn) {
     installBtn.addEventListener("click", async () => {
@@ -238,12 +238,21 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Enter в форме
+  /* Enter в форме */
   const form = document.getElementById("requestForm");
   if (form) {
     form.addEventListener("submit", (e) => {
       e.preventDefault();
       sendRequest();
     });
+  }
+});
+
+/* === PRELOADER — плавное исчезновение === */
+window.addEventListener("load", () => {
+  const preloader = document.getElementById("preloader");
+  if (preloader) {
+    preloader.style.opacity = "0";
+    setTimeout(() => preloader.remove(), 600);
   }
 });
