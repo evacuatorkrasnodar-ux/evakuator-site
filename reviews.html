@@ -5,21 +5,84 @@
   <title>Отзывы — Эвакуатор Краснодар 24/7</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="style.css">
+  <!-- SEO -->
+  <meta name="description" content="Отзывы клиентов о службе эвакуации Эвакуатор Краснодар 24/7. Реальные истории, быстрая подача, аккуратная погрузка.">
+  <meta name="keywords" content="эвакуатор краснодар отзывы, эвакуатор мнения, эвакуатор рекомендации">
+
+  <!-- OpenGraph -->
+  <meta property="og:title" content="Отзывы — Эвакуатор Краснодар 24/7">
+  <meta property="og:description" content="Реальные отзывы клиентов о нашей службе эвакуации. Работаем круглосуточно, быстро и аккуратно.">
+  <meta property="og:image" content="/preload.png">
+  <meta property="og:type" content="website">
+
+  <!-- PWA -->
   <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#050608">
+
+  <!-- Apple -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <link rel="apple-touch-icon" href="preload.png">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css">
   <link rel="icon" href="favicon.png">
+
+  <!-- Schema.org — отзывы -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ReviewPage",
+    "name": "Отзывы — Эвакуатор Краснодар 24/7",
+    "review": [
+      {
+        "@type": "Review",
+        "author": "Алексей",
+        "reviewBody": "Быстро приехали, аккуратно погрузили авто.",
+        "reviewRating": { "@type": "Rating", "ratingValue": "5" }
+      },
+      {
+        "@type": "Review",
+        "author": "Марина",
+        "reviewBody": "Эвакуатор приехал через 15 минут.",
+        "reviewRating": { "@type": "Rating", "ratingValue": "5" }
+      },
+      {
+        "@type": "Review",
+        "author": "Игорь",
+        "reviewBody": "Перевозили кроссовер — идеально.",
+        "reviewRating": { "@type": "Rating", "ratingValue": "5" }
+      },
+      {
+        "@type": "Review",
+        "author": "Сергей",
+        "reviewBody": "Лучший эвакуатор в Краснодаре.",
+        "reviewRating": { "@type": "Rating", "ratingValue": "5" }
+      }
+    ]
+  }
+  </script>
 </head>
 
 <body class="theme-dark">
+
+<!-- PRELOADER -->
+<div id="preloader">
+  <img src="preload.png" alt="Загрузка..." class="preloader-img">
+  <div class="preloader-title">Эвакуатор Краснодар</div>
+</div>
 
 <div class="container">
 
   <!-- HERO -->
   <header class="hero fade-in">
-    <div class="hero-bg"></div>
+    <picture>
+      <source srcset="banner-top.webp" type="image/webp">
+      <img src="banner-top.png" alt="Отзывы клиентов" class="hero-img">
+    </picture>
   </header>
 
-  <!-- INSTALL PWA — Вариант Б -->
+  <!-- INSTALL PWA -->
   <button id="installBtn" class="apple-glass-btn install-btn fade-in" style="display:none;">
     Установить приложение
   </button>
@@ -32,7 +95,7 @@
   <!-- TITLE -->
   <section class="section fade-in">
     <h2>Отзывы клиентов</h2>
-    <p class="muted">Реальные отзывы наших клиентов.</p>
+    <p class="muted">Реальные отзывы наших клиентов. Мы ценим доверие каждого.</p>
   </section>
 
   <!-- REVIEWS -->
@@ -41,22 +104,22 @@
 
       <div class="service-card">
         <h3>Алексей</h3>
-        <p>Быстро приехали, аккуратно погрузили авто.</p>
+        <p class="muted">Быстро приехали, аккуратно погрузили авто.</p>
       </div>
 
       <div class="service-card">
         <h3>Марина</h3>
-        <p>Эвакуатор приехал через 15 минут.</p>
+        <p class="muted">Эвакуатор приехал через 15 минут.</p>
       </div>
 
       <div class="service-card">
         <h3>Игорь</h3>
-        <p>Перевозили кроссовер — идеально.</p>
+        <p class="muted">Перевозили кроссовер — идеально.</p>
       </div>
 
       <div class="service-card">
         <h3>Сергей</h3>
-        <p>Лучший эвакуатор в Краснодаре.</p>
+        <p class="muted">Лучший эвакуатор в Краснодаре.</p>
       </div>
 
     </div>
