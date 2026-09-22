@@ -181,7 +181,7 @@ ${yandex}`;
   });
 }
 
-/* === PWA УСТАНОВКА === */
+/* === PWA УСТАНОВКА — ПОЛНЫЙ ФИКС === */
 let deferredPrompt = null;
 
 window.addEventListener("beforeinstallprompt", (e) => {
@@ -189,9 +189,7 @@ window.addEventListener("beforeinstallprompt", (e) => {
   deferredPrompt = e;
 
   const installBtn = document.getElementById("installBtn");
-  if (installBtn) {
-    installBtn.style.display = "block";
-  }
+  if (installBtn) installBtn.style.display = "block";
 });
 
 /* === DOM READY === */
@@ -253,6 +251,23 @@ document.addEventListener("DOMContentLoaded", () => {
       setTimeout(() => window.location.href = href, 200);
     });
   });
+
+  /* === УСТАНОВКА PWA — РАБОЧАЯ КНОПКА === */
+  const installBtn = document.getElementById("installBtn");
+
+  if (installBtn) {
+    installBtn.style.display = "block";
+
+    installBtn.addEventListener("click", async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        await deferredPrompt.userChoice;
+        deferredPrompt = null;
+      } else {
+        showToast("Добавьте сайт в приложения через меню браузера");
+      }
+    });
+  }
 });
 
 /* === СКРЫТИЕ ПРЕЛОАДЕРА === */
