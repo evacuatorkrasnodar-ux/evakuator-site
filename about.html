@@ -5,20 +5,68 @@
   <title>О компании — Эвакуатор Краснодар 24/7</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- SEO -->
+  <meta name="description" content="О компании Эвакуатор Краснодар 24/7. Круглосуточная эвакуация автомобилей по городу и краю. Быстрая подача, аккуратная погрузка, честные цены.">
+  <meta name="keywords" content="эвакуатор краснодар о компании, эвакуатор информация, эвакуатор служба эвакуации">
+
+  <!-- OpenGraph -->
+  <meta property="og:title" content="О компании — Эвакуатор Краснодар 24/7">
+  <meta property="og:description" content="Профессиональная служба эвакуации автомобилей в Краснодаре. Работаем круглосуточно, аккуратно и честно.">
+  <meta property="og:image" content="/preload.png">
+  <meta property="og:type" content="website">
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#050608">
+
+  <!-- Apple -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <link rel="apple-touch-icon" href="preload.png">
+
+  <!-- Styles -->
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="favicon.png">
+
+  <!-- Schema.org -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Эвакуатор Краснодар 24/7",
+    "description": "Профессиональная служба эвакуации автомобилей по Краснодару и краю.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Краснодар",
+      "streetAddress": "ул. Дзержинского, 100"
+    },
+    "telephone": "+7-988-871-70-18",
+    "openingHours": "Mo-Su 00:00-23:59",
+    "areaServed": "Краснодарский край",
+    "image": "/preload.png"
+  }
+  </script>
 </head>
 
 <body class="theme-dark">
+
+<!-- PRELOADER -->
+<div id="preloader">
+  <img src="preload.png" alt="Загрузка..." class="preloader-img">
+  <div class="preloader-title">Эвакуатор Краснодар</div>
+</div>
 
 <div class="container">
 
   <!-- HERO -->
   <header class="hero fade-in">
-    <div class="hero-bg"></div>
+    <picture>
+      <source srcset="banner-top.webp" type="image/webp">
+      <img src="banner-top.png" alt="Эвакуатор Краснодар 24/7" class="hero-img">
+    </picture>
   </header>
 
-  <!-- INSTALL PWA — Вариант Б -->
+  <!-- INSTALL PWA -->
   <button id="installBtn" class="apple-glass-btn install-btn fade-in" style="display:none;">
     Установить приложение
   </button>
@@ -31,10 +79,10 @@
   <!-- ABOUT SECTION -->
   <section class="section fade-in">
     <h2>О компании</h2>
-    <p class="muted">Мы — профессиональная служба эвакуации автомобилей в Краснодаре.</p>
-    <p class="muted">Работаем круглосуточно, аккуратно, без скрытых доплат.</p>
-    <p class="muted">Наши эвакуаторы оснащены современной платформой и лебёдкой, что позволяет безопасно перевозить любые автомобили — от легковых до коммерческих.</p>
-    <p class="muted">Мы ценим ваше время: подача эвакуатора по городу обычно занимает 15–25 минут.</p>
+    <p class="muted">Мы — профессиональная служба эвакуации автомобилей в Краснодаре, работающая круглосуточно и без выходных.</p>
+    <p class="muted">Наши эвакуаторы оснащены современной платформой, лебёдкой и оборудованием для безопасной перевозки любых автомобилей — от легковых до коммерческих.</p>
+    <p class="muted">Мы ценим ваше время: подача эвакуатора по городу обычно занимает <strong>15–25 минут</strong>.</p>
+    <p class="muted">Стоимость фиксированная и согласовывается заранее — никаких скрытых доплат.</p>
   </section>
 
   <!-- ADVANTAGES -->
