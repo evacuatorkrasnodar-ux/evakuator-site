@@ -19,8 +19,9 @@
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#050608">
 
-  <!-- Apple -->
+  <!-- Apple / Mobile -->
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <link rel="apple-touch-icon" href="preload.png">
 
@@ -46,7 +47,7 @@
   </script>
 </head>
 
-<body class="theme-dark">
+<body class="theme-dark page-fade-in">
 
 <!-- PRELOADER -->
 <div id="preloader">
@@ -64,10 +65,20 @@
     </picture>
   </header>
 
-  <!-- THEME SWITCH -->
-  <button id="themeToggle" class="apple-glass-btn theme-btn fade-in">
-    Светлая / Тёмная
-  </button>
+  <!-- TOP BUTTONS -->
+  <div class="top-buttons fade-in">
+    <button id="installBtn" class="apple-glass-btn install-btn" style="display:none;">
+      Установить приложение
+    </button>
+
+    <button id="iosInstall" class="apple-glass-btn install-btn" style="display:none;">
+      Установить на iPhone
+    </button>
+
+    <button id="themeToggle" class="apple-glass-btn theme-btn">
+      Светлая / Тёмная
+    </button>
+  </div>
 
   <!-- REQUEST FORM -->
   <section class="section fade-in">
@@ -81,12 +92,10 @@
       <input id="address" type="text" name="address" placeholder="Адрес подачи эвакуатора" required>
       <textarea id="comment" name="comment" placeholder="Комментарий (марка авто, состояние, особенности подъезда)"></textarea>
 
-      <!-- Кнопка отправки заявки -->
       <button id="btn-request" class="apple-glass-btn" type="button">
         Оставить заявку
       </button>
 
-      <!-- Кнопка отправки геолокации -->
       <button id="btn-location" class="apple-glass-btn" type="button">
         Отправить геолокацию
       </button>
@@ -136,7 +145,7 @@
       </div>
       <div>
         <h3>Страницы</h3>
-        <p><a href="index.html">Главная</a></p>
+        <p><a href="index.html">Главная</a> · <a href="prices.html">Цены</a></p>
       </div>
     </div>
   </footer>
@@ -144,7 +153,7 @@
 </div>
 
 <!-- BOTTOM MENU -->
-<div class="bottom-menu">
+<div class="bottom-menu fade-in">
   <a href="index.html">Главная</a>
   <a href="request.html">Заявка</a>
   <a href="#top">Наверх</a>
