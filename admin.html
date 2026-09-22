@@ -5,21 +5,63 @@
   <title>Панель оператора — Эвакуатор Краснодар 24/7</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="style.css">
+  <!-- SEO -->
+  <meta name="description" content="Панель оператора службы эвакуации. Просмотр заявок, геолокаций, статусов и маршрутов.">
+  <meta name="keywords" content="эвакуатор панель оператора, эвакуатор админка, эвакуатор заявки">
+
+  <!-- OpenGraph -->
+  <meta property="og:title" content="Панель оператора — Эвакуатор Краснодар 24/7">
+  <meta property="og:description" content="Просмотр заявок, геолокаций и статусов. Панель оператора эвакуатора.">
+  <meta property="og:image" content="/preload.png">
+  <meta property="og:type" content="website">
+
+  <!-- PWA -->
   <link rel="manifest" href="manifest.json">
-  <link rel="icon" href="favicon.png">
+  <meta name="theme-color" content="#050608">
+
+  <!-- Apple -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <link rel="apple-touch-icon" href="icon-192.png">
 
-  <meta name="theme-color" content="#000000">
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="favicon.png">
+
+  <!-- Schema.org -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Панель оператора — Эвакуатор Краснодар 24/7",
+    "description": "Панель оператора для просмотра заявок и геолокаций клиентов.",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "provider": {
+      "@type": "LocalBusiness",
+      "name": "Эвакуатор Краснодар 24/7",
+      "telephone": "+7-988-871-70-18"
+    }
+  }
+  </script>
 </head>
 
 <body class="theme-dark">
+
+<!-- PRELOADER -->
+<div id="preloader">
+  <img src="preload.png" alt="Загрузка..." class="preloader-img">
+  <div class="preloader-title">Эвакуатор Краснодар</div>
+</div>
 
 <div class="container">
 
   <!-- HERO -->
   <header class="hero fade-in">
-    <div class="hero-bg"></div>
+    <picture>
+      <source srcset="banner-top.webp" type="image/webp">
+      <img src="banner-top.png" alt="Панель оператора" class="hero-img">
+    </picture>
   </header>
 
   <!-- LOGO -->
@@ -27,7 +69,7 @@
     <img src="icon-192.png" alt="logo" style="width:120px; height:120px;">
   </div>
 
-  <!-- ТЕМА -->
+  <!-- THEME SWITCH -->
   <button id="themeToggle" class="apple-glass-btn theme-btn fade-in">
     Светлая / Тёмная
   </button>
@@ -36,8 +78,8 @@
   <section class="section fade-in">
     <h2>Панель оператора</h2>
     <p class="muted">
-      Здесь будут отображаться заявки, геолокации клиентов, статусы и маршруты.
-      Сейчас панель работает в демо‑режиме.
+      Здесь отображаются заявки, геолокации клиентов, статусы и маршруты.
+      Панель работает в демо‑режиме.
     </p>
   </section>
 
@@ -126,7 +168,7 @@
     </div>
   </section>
 
-  <!-- ФУТЕР -->
+  <!-- FOOTER -->
   <footer class="footer fade-in">
     <div class="footer-grid">
       <div>
@@ -150,23 +192,11 @@
 
 </div>
 
-<!-- НИЖНЕЕ МЕНЮ -->
+<!-- BOTTOM MENU -->
 <div class="bottom-menu">
   <a href="index.html">Главная</a>
   <a href="admin.html">Админка</a>
   <a href="#top">Наверх</a>
-</div>
-
-<!-- TOAST -->
-<div id="toast"></div>
-
-<!-- MODAL -->
-<div id="modal" class="modal">
-  <div class="modal-content">
-    <h3 id="modalTitle"></h3>
-    <p id="modalText"></p>
-    <button onclick="closeModal()" class="apple-glass-btn">Закрыть</button>
-  </div>
 </div>
 
 <script src="app.js"></script>
