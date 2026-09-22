@@ -50,18 +50,22 @@ body.theme-light {
 /* HERO */
 
 .hero {
-  height: 580px;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1.66 / 1; /* премиальное соотношение под твой баннер */
+  max-height: 620px;      /* верхний предел */
+  min-height: 360px;      /* нижний предел */
 }
 
 .hero-bg {
-  position:absolute;
-  inset:0;
-  background-image:url('banner-top.png?v=10');
-  background-size:cover;
-  background-position:center;
-  background-repeat:no-repeat;
-  animation:heroMove 18s ease-in-out infinite alternate;
+  position: absolute;
+  inset: 0;
+  background-image: url('banner-top.png?v=12');
+  background-size: cover;     /* премиальное заполнение */
+  background-position: center;
+  background-repeat: no-repeat;
 }
+
 
 .hero-bg {
   position:absolute;
