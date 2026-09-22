@@ -1,48 +1,49 @@
 {
-  "id": "/",
-  "lang": "ru",
   "name": "Эвакуатор Краснодар 24/7",
   "short_name": "Эвакуатор",
-  "description": "Круглосуточный эвакуатор в Краснодаре. Подача от 15–25 минут. Аккуратная погрузка, честные цены.",
-
   "start_url": "/index.html",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
-
-  "theme_color": "#050608",
   "background_color": "#050608",
-
+  "theme_color": "#050608",
+  "description": "Круглосуточный эвакуатор в Краснодаре. Подача от 15–25 минут. Аккуратная погрузка, честные цены.",
   "categories": ["transportation", "service", "utilities"],
 
   "icons": [
     {
-      "src": "/icons/icon-192.png",
+      "src": "/preload.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/icon-256.png",
+      "src": "/preload.png",
       "sizes": "256x256",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/icon-384.png",
+      "src": "/preload.png",
       "sizes": "384x384",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/icon-512.png",
+      "src": "/preload.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/icon-512-maskable.png",
+      "src": "/preload.png",
       "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/preload.png",
+      "sizes": "180x180",
       "type": "image/png",
       "purpose": "maskable"
     }
@@ -50,31 +51,10 @@
 
   "screenshots": [
     {
-      "src": "/screenshots/screen-1080x1920.png",
+      "src": "/preload.png",
       "sizes": "1080x1920",
       "type": "image/png",
       "form_factor": "wide"
-    }
-  ],
-
-  "shortcuts": [
-    {
-      "name": "Позвонить эвакуатору",
-      "short_name": "Позвонить",
-      "url": "tel:+79888717018",
-      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
-    },
-    {
-      "name": "Оставить заявку",
-      "short_name": "Заявка",
-      "url": "/request.html",
-      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
-    },
-    {
-      "name": "Цены",
-      "short_name": "Цены",
-      "url": "/prices.html",
-      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
     }
   ],
 
