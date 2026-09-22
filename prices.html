@@ -5,8 +5,51 @@
   <title>Цены — Эвакуатор Краснодар 24/7</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- SEO -->
+  <meta name="description" content="Цены на эвакуатор в Краснодаре. Легковые авто, кроссоверы, минивэны, грузовые машины. Работаем по городу и краю.">
+  <meta name="keywords" content="цены эвакуатор краснодар, эвакуатор стоимость, эвакуатор недорого, эвакуатор прайс">
+
+  <!-- OpenGraph -->
+  <meta property="og:title" content="Цены — Эвакуатор Краснодар 24/7">
+  <meta property="og:description" content="Актуальные цены на эвакуатор в Краснодаре. Подача от 15–25 минут. Работаем круглосуточно.">
+  <meta property="og:image" content="/preload.png">
+  <meta property="og:type" content="website">
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#050608">
+
+  <!-- Apple -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <link rel="apple-touch-icon" href="preload.png">
+
+  <!-- Styles -->
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="favicon.png">
+
+  <!-- Schema.org -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Эвакуатор Краснодар 24/7",
+    "description": "Круглосуточная эвакуация автомобилей по Краснодару и краю.",
+    "areaServed": "Краснодарский край",
+    "provider": {
+      "@type": "LocalBusiness",
+      "name": "Эвакуатор Краснодар 24/7",
+      "telephone": "+7-988-871-70-18"
+    },
+    "offers": [
+      { "@type": "Offer", "name": "Легковой автомобиль", "price": "2000 RUB" },
+      { "@type": "Offer", "name": "Кроссовер / внедорожник", "price": "2200 RUB" },
+      { "@type": "Offer", "name": "Минивэн", "price": "2500 RUB" },
+      { "@type": "Offer", "name": "Малый грузовой автомобиль", "price": "3000 RUB" },
+      { "@type": "Offer", "name": "За город", "price": "80 RUB", "priceCurrency": "RUB", "priceSpecification": "per km" }
+    ]
+  }
+  </script>
 </head>
 
 <body class="theme-dark">
@@ -15,10 +58,13 @@
 
   <!-- HERO -->
   <header class="hero fade-in">
-    <div class="hero-bg"></div>
+    <picture>
+      <source srcset="banner-top.webp" type="image/webp">
+      <img src="banner-top.png" alt="Цены на эвакуатор в Краснодаре" class="hero-img">
+    </picture>
   </header>
 
-  <!-- INSTALL PWA — Вариант Б -->
+  <!-- INSTALL PWA -->
   <button id="installBtn" class="apple-glass-btn install-btn fade-in" style="display:none;">
     Установить приложение
   </button>
