@@ -5,21 +5,70 @@
   <title>Контакты — Эвакуатор Краснодар 24/7</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="style.css">
+  <!-- SEO -->
+  <meta name="description" content="Контакты службы эвакуации Эвакуатор Краснодар 24/7. Телефон, мессенджеры, соцсети. Работаем круглосуточно.">
+  <meta name="keywords" content="эвакуатор краснодар контакты, эвакуатор телефон, эвакуатор мессенджеры">
+
+  <!-- OpenGraph -->
+  <meta property="og:title" content="Контакты — Эвакуатор Краснодар 24/7">
+  <meta property="og:description" content="Свяжитесь с нами удобным способом. Круглосуточно, без выходных.">
+  <meta property="og:image" content="/preload.png">
+  <meta property="og:type" content="website">
+
+  <!-- PWA -->
   <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#050608">
+
+  <!-- Apple -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <link rel="apple-touch-icon" href="preload.png">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css">
   <link rel="icon" href="favicon.png">
+
+  <!-- Schema.org -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Контакты — Эвакуатор Краснодар 24/7",
+    "description": "Контакты службы эвакуации автомобилей по Краснодару и краю.",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+7-988-871-70-18",
+      "contactType": "customer service",
+      "availableLanguage": ["Russian"]
+    },
+    "sameAs": [
+      "https://t.me/evakuatorkrasnodar24",
+      "https://vk.ru/evakuator.krasnodar",
+      "https://chat.whatsapp.com/Da9sLiLpm6SLjmW7WZBZze"
+    ]
+  }
+  </script>
 </head>
 
 <body class="theme-dark">
+
+<!-- PRELOADER -->
+<div id="preloader">
+  <img src="preload.png" alt="Загрузка..." class="preloader-img">
+  <div class="preloader-title">Эвакуатор Краснодар</div>
+</div>
 
 <div class="container">
 
   <!-- HERO -->
   <header class="hero fade-in">
-    <div class="hero-bg"></div>
+    <picture>
+      <source srcset="banner-top.webp" type="image/webp">
+      <img src="banner-top.png" alt="Контакты Эвакуатор Краснодар 24/7" class="hero-img">
+    </picture>
   </header>
 
-  <!-- INSTALL PWA — Вариант Б -->
+  <!-- INSTALL PWA -->
   <button id="installBtn" class="apple-glass-btn install-btn fade-in" style="display:none;">
     Установить приложение
   </button>
@@ -32,24 +81,32 @@
   <!-- CONTACTS -->
   <section class="section fade-in">
     <h2>Контакты</h2>
-    <p class="muted">Свяжитесь с нами удобным способом.</p>
+    <p class="muted">Свяжитесь с нами удобным способом. Мы всегда на связи.</p>
   </section>
 
   <!-- PHONE -->
   <section class="section fade-in">
     <h2>Телефон</h2>
     <a href="tel:+79888717018" class="apple-glass-btn">+7 (988) 871‑70‑18</a>
+    <p class="muted" style="margin-top:10px;">Звонок работает даже без интернета.</p>
   </section>
 
   <!-- SOCIAL -->
   <section class="section fade-in">
-    <h2>Мессенджеры</h2>
+    <h2>Мессенджеры и соцсети</h2>
     <div class="social-row">
       <a class="social-glass" href="https://t.me/evakuatorkrasnodar24">Telegram</a>
       <a class="social-glass" href="https://chat.whatsapp.com/Da9sLiLpm6SLjmW7WZBZze">WhatsApp</a>
       <a class="social-glass" href="https://web.max.ru/">МАХ</a>
       <a class="social-glass" href="https://vk.ru/evakuator.krasnodar">VK</a>
     </div>
+  </section>
+
+  <!-- ADDRESS -->
+  <section class="section fade-in">
+    <h2>Адрес</h2>
+    <p class="muted"><strong>г. Краснодар, ул. Дзержинского, 100</strong></p>
+    <p class="muted">Работаем круглосуточно, без выходных и праздников.</p>
   </section>
 
   <!-- FOOTER -->
