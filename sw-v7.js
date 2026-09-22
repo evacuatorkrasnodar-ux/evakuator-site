@@ -1,4 +1,4 @@
-// === CONFIG ===
+/* === CONFIG === */
 const CACHE_NAME = "evacuator-v7";
 const OFFLINE_URL = "/offline.html";
 
@@ -22,7 +22,7 @@ const STATIC_ASSETS = [
   "/banner-top.png"
 ];
 
-// === INSTALL ===
+/* === INSTALL === */
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS))
@@ -30,7 +30,7 @@ self.addEventListener("install", (event) => {
   self.skipWaiting();
 });
 
-// === ACTIVATE ===
+/* === ACTIVATE === */
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
@@ -44,18 +44,18 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
-// === FETCH ===
+/* === FETCH === */
 self.addEventListener("fetch", (event) => {
   const req = event.request;
   const url = new URL(req.url);
 
-  // Внешние запросы не трогаем
+  /* Внешние запросы не трогаем */
   if (url.origin !== self.location.origin) return;
 
   const isHtml = req.headers.get("accept")?.includes("text/html");
   const isImage = req.destination === "image";
 
-  // Нормализация: убираем query, но выравниваем fetch и cacheKey
+  /* Нормализация URL */
   let cleanUrl = url.origin + url.pathname;
   let cacheKey = cleanUrl;
   let fetchRequest = req;
@@ -69,7 +69,7 @@ self.addEventListener("fetch", (event) => {
     cacheKey = req;
   }
 
-  // HTML: network-first + кеш
+  /* === HTML: network-first === */
   if (isHtml) {
     event.respondWith(
       (async () => {
@@ -92,7 +92,7 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // IMAGES: cache-first
+  /* === IMAGES: cache-first === */
   if (isImage) {
     event.respondWith(
       (async () => {
@@ -120,7 +120,7 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // STATIC: cache-first
+  /* === STATIC: cache-first === */
   event.respondWith(
     (async () => {
       const cached = await caches.match(cacheKey);
