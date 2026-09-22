@@ -1,49 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset 
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
+  <!-- Главная -->
   <url>
     <loc>https://evakuator-krd.online/</loc>
+    <lastmod>2026-09-22</lastmod>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
+
+    <xhtml:link rel="alternate" hreflang="ru" href="https://evakuator-krd.online/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://evakuator-krd.online/en.html"/>
   </url>
 
+  <!-- Цены -->
   <url>
     <loc>https://evakuator-krd.online/prices.html</loc>
+    <lastmod>2026-09-22</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
+  <!-- О компании -->
   <url>
     <loc>https://evakuator-krd.online/about.html</loc>
+    <lastmod>2026-09-22</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
 
+  <!-- Контакты -->
   <url>
     <loc>https://evakuator-krd.online/contacts.html</loc>
+    <lastmod>2026-09-22</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
 
+  <!-- Отзывы -->
   <url>
     <loc>https://evakuator-krd.online/reviews.html</loc>
+    <lastmod>2026-09-22</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
 
+  <!-- Заявка -->
   <url>
     <loc>https://evakuator-krd.online/request.html</loc>
+    <lastmod>2026-09-22</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
-  <url>
-    <loc>https://evakuator-krd.online/admin.html</loc>
-    <priority>0.5</priority>
-  </url>
-
+  <!-- Английская версия -->
   <url>
     <loc>https://evakuator-krd.online/en.html</loc>
+    <lastmod>2026-09-22</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.5</priority>
-  </url>
 
-  <url>
-    <loc>https://evakuator-krd.online/offline.html</loc>
-    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://evakuator-krd.online/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://evakuator-krd.online/en.html"/>
   </url>
 
 </urlset>
