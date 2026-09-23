@@ -1,3 +1,5 @@
+/* ——— твой файл начинается ——— */
+
 :root {
   --bg-dark:#050608;
   --bg-light:#f5f7fa;
@@ -392,7 +394,7 @@ body.theme-light .footer p { color:var(--muted-light); }
   text-decoration:none;
 }
 
-/* BOTTOM MENU */
+/* ——— СТАРОЕ МЕНЮ (оставляем, но не трогаем) ——— */
 .bottom-menu {
   position:fixed;
   bottom:0;
@@ -567,31 +569,4 @@ body.theme-light .modal-content {
   opacity:0;
   pointer-events:none;
   transition:opacity .35s ease, transform .35s ease;
-  box-shadow:var(--shadow-medium);
-  z-index:10001;
-}
-
-body.theme-dark #toast {
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.04)),
-    rgba(10,10,10,.92);
-  border:1px solid rgba(255,255,255,.22);
-  color:var(--text-dark);
-}
-
-body.theme-light #toast {
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,255,255,.92));
-  border:1px solid rgba(0,0,0,.12);
-  color:var(--text-light);
-}
-
-#toast.toast-show {
-  opacity:1;
-  transform:translateX(-50%) translateY(0);
-}
-
-/* Page fade helper */
-.page-fade-in {
-  animation:pageLoad .8s ease forwards;
-}
+  box-shadow:var(--
