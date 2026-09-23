@@ -311,14 +311,6 @@ document.addEventListener(
     const savedTheme =
       localStorage.getItem("theme");
 
-    /*
-     * Сохраняем исходную систему классов:
-     * theme-dark / theme-light.
-     *
-     * Если тема ещё не сохранена,
-     * оставляем текущую тему страницы.
-     */
-
     if (savedTheme === "light") {
 
       document.body.classList.remove(
@@ -354,12 +346,6 @@ document.addEventListener(
             "btn-bounce"
           );
         }, 250);
-
-        /*
-         * Исправлено:
-         * определяем текущую тему
-         * независимо от наличия второго класса.
-         */
 
         const dark =
           document.body.classList.contains(
@@ -453,7 +439,7 @@ document.addEventListener(
 
 
     // ====================================
-    // ГЕОЛОКАЦИЯ — АНГЛИЙСКАЯ ВЕРСИЯ
+    // ГЕОЛОКАЦИЯ — АНГЛЛИЙСКАЯ ВЕРСИЯ
     // ====================================
 
     const geoSendBtn =
@@ -676,13 +662,6 @@ document.addEventListener(
       const href =
         link.getAttribute("href");
 
-      /*
-       * Не трогаем:
-       * якоря
-       * телефон
-       * HTTPS
-       */
-
       if (
         !href ||
         href.startsWith("#") ||
@@ -744,38 +723,21 @@ window.addEventListener(
 
 
 // ========================================
-// SERVICE WORKER
+// SERVICE WORKER — ИСПРАВЛЕНО
 // ========================================
 
-if (
-  "serviceWorker" in navigator
-) {
+if ("serviceWorker" in navigator) {
 
-  window.addEventListener(
-    "load",
-    () => {
+  window.addEventListener("load", () => {
 
-      navigator.serviceWorker
-        .register(
-          "/service-worker.js"
-        )
-        .then(reg => {
+    navigator.serviceWorker
+      .register("/sw.js")   // ← ИСПРАВЛЕНО
+      .then(reg => {
+        console.log("SW зарегистрирован:", reg.scope);
+      })
+      .catch(err => {
+        console.error("SW ошибка:", err);
+      });
 
-          console.log(
-            "SW зарегистрирован:",
-            reg.scope
-          );
-
-        })
-        .catch(err => {
-
-          console.error(
-            "SW ошибка:",
-            err
-          );
-
-        });
-
-    }
-  );
+  });
 }
