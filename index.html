@@ -6,8 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- SEO -->
-  <meta name="description" content="Круглосуточный эвакуатор в Краснодаре. Подача от 15–25 минут. Аккуратная погрузка, фиксированная цена.">
-  <meta name="keywords" content="эвакуатор краснодар, эвакуатор 24/7, эвакуатор срочно, эвакуатор недорого">
+  <meta name="description" content="Круглосуточный эвакуатор в Краснодаре. Подача от 15–25 минут. Аккуратная погрузка, фиксированная цена, работа по Краснодарскому краю.">
+  <meta name="keywords" content="эвакуатор краснодар, эвакуатор 24/7, эвакуатор срочно, эвакуатор недорого, эвакуатор круглосуточно, эвакуатор краснодарский край">
+  <meta name="author" content="Эвакуатор Краснодар 24/7">
   <meta name="robots" content="index, follow">
 
   <!-- Canonical -->
@@ -24,21 +25,58 @@
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#050608">
 
-  <!-- iPhone -->
+  <!-- iPhone PWA -->
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <link rel="apple-touch-icon" href="/preload.png">
 
+  <!-- Preload critical assets -->
+  <link rel="preload" href="/_root.css" as="style">
+  <link rel="preload" href="/banner-top.webp" as="image">
+
   <!-- Styles -->
   <link rel="stylesheet" href="/_root.css">
-  <link rel="icon" href="/favicon.png">
+  <link rel="icon" type="image/png" href="/favicon.png">
+
+  <!-- LocalBusiness Schema.org -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Эвакуатор Краснодар 24/7",
+    "description": "Круглосуточный эвакуатор в Краснодаре и Краснодарском крае. Подача от 15–25 минут, фиксированная цена.",
+    "url": "https://evakuator-krd.online/",
+    "telephone": "+7-988-871-70-18",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Краснодар",
+      "addressRegion": "Краснодарский край",
+      "streetAddress": "ул. Дзержинского, 100",
+      "addressCountry": "RU"
+    },
+    "areaServed": {
+      "@type": "AdministrativeArea",
+      "name": "Краснодар и Краснодарский край"
+    },
+    "openingHoursSpecification": [{
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"
+      ],
+      "opens": "00:00",
+      "closes": "23:59"
+    }],
+    "image": "https://evakuator-krd.online/preload.png"
+  }
+  </script>
 </head>
 
 <body class="theme-dark">
 
 <!-- PRELOADER -->
 <div id="preloader">
-  <img src="preload.png" class="preloader-img" alt="">
+  <img src="preload.png" alt="Загрузка..." class="preloader-img">
   <div class="preloader-title">Эвакуатор Краснодар</div>
 </div>
 
@@ -91,7 +129,7 @@
     <a class="apple-glass-btn" href="#requestForm">Оставить заявку</a>
   </div>
 
-  <div id="geoStatus" class="status-box"></div>
+  <div id="geoStatus" class="status-box fade-in"></div>
 
   <!-- SOCIAL -->
   <section class="section fade-in">
@@ -108,7 +146,7 @@
   <section class="section fade-in" id="about">
     <h2>О нас</h2>
     <p class="muted">Эвакуатор Краснодар 24/7 — профессиональная служба эвакуации. Работаем по городу и краю, круглосуточно, без выходных и праздников.</p>
-    <p class="muted">Подача эвакуатора ориентировочно от 15–25 минут. Стоимость фиксированная и согласовывается заранее.</p>
+    <p class="muted">Подача эвакуатора ориентировочно от 15–25 минут по городу. Стоимость фиксированная и согласовывается заранее.</p>
   </section>
 
   <!-- REVIEWS -->
@@ -131,8 +169,74 @@
       <div class="service-card"><h3>Минивэн</h3><p>2 500 ₽</p></div>
       <div class="service-card"><h3>Грузовой</h3><p>3 000 ₽</p></div>
     </div>
-    <p class="muted">За город — <strong>80 ₽ / км</strong></p>
+    <div class="adv-item muted">За город — <strong>80 ₽ / км</strong></div>
     <a class="apple-glass-btn" href="prices.html">Подробные цены</a>
+  </section>
+
+  <!-- SEO SECTION 1 -->
+  <section class="section fade-in">
+    <h2>Почему выбирают наш эвакуатор</h2>
+    <p class="muted">Мы работаем круглосуточно по Краснодару и Краснодарскому краю. Подача эвакуатора — от 15 до 25 минут. Стоимость фиксированная, без скрытых доплат.</p>
+
+    <ul class="muted">
+      <li>Быстрая подача эвакуатора 24/7</li>
+      <li>Фиксированная цена без сюрпризов</li>
+      <li>Аккуратная погрузка любых автомобилей</li>
+      <li>Работаем по городу и всему Краснодарскому краю</li>
+      <li>Фото‑ и видеоотчёт по запросу</li>
+    </ul>
+  </section>
+
+  <!-- SEO SECTION 2 -->
+  <section class="section fade-in">
+    <h2>Оборудование и аккуратная погрузка</h2>
+    <p class="muted">Мы используем современный эвакуатор с лебёдкой и пневмоподвеской. Платформу можно опустить для аккуратной погрузки низких автомобилей.</p>
+
+    <ul class="muted">
+      <li>Эвакуатор с лебёдкой</li>
+      <li>Пневмоподвеска для низких авто</li>
+      <li>Надёжная фиксация автомобиля</li>
+      <li>Работа в труднодоступных местах</li>
+      <li>Перевозка премиальных и бизнес‑авто</li>
+    </ul>
+  </section>
+
+  <!-- SEO SECTION 3 -->
+  <section class="section fade-in">
+    <h2>Когда нужен эвакуатор</h2>
+    <p class="muted">Мы поможем в любой ситуации, когда автомобиль не может продолжать движение.</p>
+
+    <ul class="muted">
+      <li>Автомобиль не заводится</li>
+      <li>Поломка на дороге</li>
+      <li>ДТП</li>
+      <li>Пробито колесо</li>
+      <li>Заблокировано рулевое управление</li>
+      <li>Неисправна коробка передач</li>
+      <li>Доставка авто в автосервис</li>
+      <li>Перевозка после ремонта</li>
+      <li>Перевозка в другой район или населённый пункт</li>
+    </ul>
+  </section>
+
+  <!-- SEO SECTION 4 -->
+  <section class="section fade-in">
+    <h2>Работаем по Краснодару и краю</h2>
+    <p class="muted">Работаем по всему Краснодарскому краю. Выезд за пределы города рассчитывается по расстоянию. Стоимость за 1 км — 80 ₽/км.</p>
+
+    <ul class="muted">
+      <li>Краснодар — все районы города</li>
+      <li>Дзержинского, Пашковский, Гидрострой, Фестивальный, Юбилейный</li>
+      <li>Пригород и весь Краснодарский край</li>
+      <li>Доставка авто на любые расстояния</li>
+    </ul>
+  </section>
+
+  <!-- ADDRESS -->
+  <section class="section fade-in">
+    <h2>Наш адрес</h2>
+    <p class="muted"><strong>г. Краснодар, ул. Дзержинского, 100</strong></p>
+    <p class="muted">Работаем круглосуточно, без выходных и праздников.</p>
   </section>
 
   <!-- REQUEST FORM -->
@@ -140,10 +244,10 @@
     <h2>Оставить заявку</h2>
 
     <form id="requestForm" class="request-form">
-      <input id="name" type="text" placeholder="Имя">
-      <input id="phone" type="tel" placeholder="Телефон" required>
-      <input id="address" type="text" placeholder="Адрес">
-      <textarea id="comment" placeholder="Комментарий"></textarea>
+      <input id="name" type="text" name="name" placeholder="Имя">
+      <input id="phone" type="tel" name="phone" placeholder="Телефон" required>
+      <input id="address" type="text" name="address" placeholder="Адрес">
+      <textarea id="comment" name="comment" placeholder="Комментарий"></textarea>
 
       <button id="btn-request" class="apple-glass-btn" type="button">Отправить</button>
 
@@ -154,36 +258,64 @@
   <!-- FOOTER -->
   <footer class="footer fade-in">
     <div class="footer-grid">
-      <div>
-        <h3>Эвакуатор Краснодар 24/7</h3>
-        <p>Круглосуточно.</p>
-      </div>
-
-      <div>
-        <h3>Телефон</h3>
-        <p><a href="tel:+79888717018">+7 (988) 871‑70‑18</a></p>
-      </div>
-
-      <div>
-        <h3>Страницы</h3>
-        <p>
-          <a href="prices.html">Цены</a> ·
-          <a href="en.html">English</a>
-        </p>
-      </div>
+      <div><h3>Эвакуатор Краснодар 24/7</h3><p>Круглосуточно.</p></div>
+      <div><h3>Телефон</h3><p><a href="tel:+79888717018">+7 (988) 871‑70‑18</a></p></div>
+      <div><h3>Страницы</h3><p><a href="prices.html">Цены</a> · <a href="en.html">English</a></p></div>
     </div>
   </footer>
 
 </div>
 
-<!-- BOTTOM MENU — восстановленное -->
+<!-- BOTTOM MENU — стеклянное, не фиксированное -->
 <nav class="bottom-menu fade-in">
-  <a href="/">Главная</a>
-  <a href="#about">О нас</a>
-  <a href="prices.html">Цены</a>
-  <a href="#reviews">Отзывы</a>
-  <a href="#requestForm">Заявка</a>
-  <a href="tel:+79888717018">Позвонить</a>
+  <a href="/">
+    <span class="bottom-menu-icon">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 10.5L12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1v-9.5z"/>
+      </svg>
+    </span>
+    <span class="bottom-menu-label">Главная</span>
+  </a>
+  <a href="#about">
+    <span class="bottom-menu-icon">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4zm0 2c-4.41 0-8 2.24-8 5v1h16v-1c0-2.76-3.59-5-8-5z"/>
+      </svg>
+    </span>
+    <span class="bottom-menu-label">О нас</span>
+  </a>
+  <a href="prices.html">
+    <span class="bottom-menu-icon">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M7 4h10a2 2 0 0 1 2 2v2H5V6a2 2 0 0 1 2-2zm-2 8h14v6a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2z"/>
+      </svg>
+    </span>
+    <span class="bottom-menu-label">Цены</span>
+  </a>
+  <a href="#reviews">
+    <span class="bottom-menu-icon">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 17.27 18.18 21 16.54 13.97 22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+      </svg>
+    </span>
+    <span class="bottom-menu-label">Отзывы</span>
+  </a>
+  <a href="#requestForm">
+    <span class="bottom-menu-icon">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 4h16v2H4zm0 4h10v2H4zm0 4h8v2H4zm0 4h6v2H4z"/>
+      </svg>
+    </span>
+    <span class="bottom-menu-label">Заявка</span>
+  </a>
+  <a href="tel:+79888717018">
+    <span class="bottom-menu-icon">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1-.24 11.36 11.36 0 0 0 3.56.57 1 1 0 0 1 1 1v3.5a1 1 0 0 1-1 1A17.5 17.5 0 0 1 3 5a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.36 11.36 0 0 0 .57 3.56 1 1 0 0 1-.24 1z"/>
+      </svg>
+    </span>
+    <span class="bottom-menu-label">Позвонить</span>
+  </a>
 </nav>
 
 <!-- SCRIPTS -->
