@@ -76,7 +76,7 @@ body.theme-light {
   to { opacity:1; transform:translateY(0); }
 }
 
-/* TOP BUTTONS — симметричное расположение */
+/* TOP BUTTONS — «Установить приложение» не скрываем */
 .top-buttons {
   display:grid;
   grid-template-columns:repeat(2, minmax(0, 1fr));
@@ -86,17 +86,24 @@ body.theme-light {
   margin-bottom:24px;
 }
 
-.install-btn,
-.theme-btn {
+.top-buttons .install-btn,
+.top-buttons .theme-btn {
+  display:flex;
   width:100%;
   min-width:0;
-  margin:0;
-}
-
-.install-btn.apple-glass-btn,
-.theme-btn.apple-glass-btn {
   min-height:52px;
   margin:0;
+  align-items:center;
+  justify-content:center;
+}
+
+.top-buttons .install-btn {
+  visibility:visible;
+  opacity:1;
+}
+
+.top-buttons .install-btn[style*="display: none"] {
+  display:flex !important;
 }
 
 /* BUTTONS */
