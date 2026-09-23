@@ -29,11 +29,23 @@ function showToast(text) {
   setTimeout(() => toast.classList.remove("toast-show"), 3000);
 }
 
+function openModal(title, text) {
+  const modal = document.getElementById("modal");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalText = document.getElementById("modalText");
+
+  if (!modal || !modalTitle || !modalText) return;
+
+  modalTitle.textContent = title;
+  modalText.textContent = text;
+  modal.style.display = "flex";
+}
+
 function closeModal() {
-  const modal = document.getElementById("iosModal");
+  const modal = document.getElementById("modal");
   if (modal) modal.style.display = "none";
 }
-window.closeModal = closeModal;
+window.closeModal = closeModal; // чтобы работала кнопка в HTML
 
 // === ОТПРАВКА В VK ===
 async function sendToVK(message) {
@@ -52,6 +64,7 @@ async function sendToVK(message) {
       console.error("VK Error:", data.error);
       showToast("Ошибка отправки в VK");
     } else {
+      console.log("Отправлено в VK:", data);
       showToast("Сообщение отправлено в VK");
     }
   } catch (err) {
@@ -124,6 +137,8 @@ function sendRequest() {
     status.classList.add("status-show");
     setTimeout(() => status.classList.remove("status-show"), 3000);
   }
+
+  showToast("Заявка отправлена! Мы свяжемся с вами.");
 }
 
 // === ОТПРАВКА ГЕОЛОКАЦИИ ===
@@ -163,6 +178,7 @@ ${yandex}`;
       setTimeout(() => geoStatus.classList.remove("status-show"), 3000);
     }
 
+    showToast("Геолокация отправлена! Открой сообщение в VK.");
   }, err => {
     console.error("Geo Error:", err);
     showToast("Не удалось получить геолокацию");
@@ -173,17 +189,22 @@ ${yandex}`;
 let deferredPrompt = null;
 
 window.addEventListener("beforeinstallprompt", (e) => {
+  // Чтоб контролировать показ баннера
   e.preventDefault();
   deferredPrompt = e;
 
   const installBtn = document.getElementById("installBtn");
   if (installBtn) {
     installBtn.style.display = "block";
+    installBtn.classList.add("popIn");
   }
+
+  console.log("beforeinstallprompt пойман");
 });
 
 // === DOM READY ===
 document.addEventListener("DOMContentLoaded", () => {
+  // ТЕМА
   const themeBtn = document.getElementById("themeToggle");
   const savedTheme = localStorage.getItem("theme");
 
@@ -193,6 +214,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   themeBtn?.addEventListener("click", () => {
+    themeBtn.classList.add("btn-bounce");
+    setTimeout(() => themeBtn.classList.remove("btn-bounce"), 250);
+
     const dark = document.body.classList.contains("theme-dark");
 
     document.body.classList.toggle("theme-dark", !dark);
@@ -201,14 +225,36 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("theme", dark ? "light" : "dark");
   });
 
+  // ЗАЯВКА
   const btnRequest = document.getElementById("btn-request");
-  btnRequest?.addEventListener("click", sendRequest);
+  btnRequest?.addEventListener("click", () => {
+    btnRequest.classList.add("btn-bounce");
+    setTimeout(() => btnRequest.classList.remove("btn-bounce"), 250);
+    sendRequest();
+  });
 
+  // ГЕОЛОКАЦИЯ (русская версия)
   const btnLocation = document.getElementById("btn-location");
-  btnLocation?.addEventListener("click", sendLocation);
+  btnLocation?.addEventListener("click", () => {
+    btnLocation.classList.add("btn-bounce");
+    setTimeout(() => btnLocation.classList.remove("btn-bounce"), 250);
+    sendLocation();
+  });
 
+  // ГЕОЛОКАЦИЯ (английская версия — кнопка geoSend)
+  const geoSendBtn = document.getElementById("geoSend");
+  geoSendBtn?.addEventListener("click", () => {
+    geoSendBtn.classList.add("btn-bounce");
+    setTimeout(() => geoSendBtn.classList.remove("btn-bounce"), 250);
+    sendLocation();
+  });
+
+  // УСТАНОВКА PWA (Android / десктоп)
   const installBtn = document.getElementById("installBtn");
   installBtn?.addEventListener("click", async () => {
+    installBtn.classList.add("btn-bounce");
+    setTimeout(() => installBtn.classList.remove("btn-bounce"), 250);
+
     if (!deferredPrompt) {
       showToast("Установка недоступна. Попробуйте позже.");
       return;
@@ -216,6 +262,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     deferredPrompt.prompt();
     const choice = await deferredPrompt.userChoice;
+    console.log("User choice:", choice);
 
     if (choice.outcome === "accepted") {
       showToast("Приложение установлено");
@@ -227,23 +274,37 @@ document.addEventListener("DOMContentLoaded", () => {
     installBtn.style.display = "none";
   });
 
+  // ФОРМА — Enter
+  const form = document.getElementById("requestForm");
+  form?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    sendRequest();
+  });
+
+  // iOS КНОПКА УСТАНОВКИ
   const iosInstallBtn = document.getElementById("iosInstall");
   const iosModal = document.getElementById("iosModal");
 
   if (iosInstallBtn && iosModal) {
-    iosInstallBtn.style.display = isIOS() ? "block" : "none";
+    if (isIOS()) {
+      iosInstallBtn.style.display = "block";
+    } else {
+      iosInstallBtn.style.display = "none";
+    }
 
     iosInstallBtn.addEventListener("click", () => {
       iosModal.style.display = "flex";
     });
   }
 
+  // iOS bubble-подсказка (если нужно — можно привязать к любой кнопке)
   if (isIOS() && isSafari()) {
     setTimeout(() => {
       showToast("Чтобы установить: Поделиться → На экран Домой");
     }, 2500);
   }
 
+  // АНИМАЦИИ ПРИ СКРОЛЛЕ
   const fadeElems = document.querySelectorAll(".fade-in");
   if ("IntersectionObserver" in window) {
     const observer = new IntersectionObserver((entries) => {
@@ -259,6 +320,7 @@ document.addEventListener("DOMContentLoaded", () => {
     fadeElems.forEach(el => el.classList.add("fade-visible"));
   }
 
+  // ПЛАВНЫЕ ПЕРЕХОДЫ МЕЖДУ СТРАНИЦАМИ (простая версия)
   const links = document.querySelectorAll("a[href]");
   links.forEach(link => {
     const href = link.getAttribute("href");
@@ -289,7 +351,10 @@ window.addEventListener("load", () => {
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
-      .register("/sw-v7.js")
+      .register("/sw.js")
+      .then(reg => {
+        console.log("SW зарегистрирован:", reg.scope);
+      })
       .catch(err => {
         console.error("SW ошибка:", err);
       });
