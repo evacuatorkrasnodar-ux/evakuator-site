@@ -1,6 +1,7 @@
 // === КОНФИГ VK ===
 const VK_ADMIN_ID = 200004082404;
-const VK_TOKEN = "vk1.a.9dwswawH0x7rHsySyBHSlgoSYRDWZYlQOFYxjzJdw1w0mnne3dZCgLvVLxgmqUVUO1y3Oh38PKeBzWpryi6lugUqaGoFUlKk8R96DfmbB1mTSb1c9dITbynZRzM7ort5KTV54fzYsrFETPtw4QH4sCFdZEZZZo8YZT4bjnkm18RAWOKWfdq94HD_jFhy9bJc-M2Z0oxrUD6PoToUTngq2Nn7SdlwK0zzGW_1ecE7nYc";
+// ВСТАВЬ СВОЙ ТОКЕН СЮДА:
+const VK_TOKEN = "VK_TOKEN_PLACEHOLDER";
 
 // === Яндекс Геокодер ===
 const YANDEX_API_KEY = "fc0f9182-0eee-4e83-bed3-8e561c88c4d5";
@@ -26,26 +27,8 @@ function showToast(text) {
 
   toast.textContent = text;
   toast.classList.add("toast-show");
-  setTimeout(() => toast.classList.remove("toast-show"), 300000);
+  setTimeout(() => toast.classList.remove("toast-show"), 3000);
 }
-
-function openModal(title, text) {
-  const modal = document.getElementById("modal");
-  const modalTitle = document.getElementById("modalTitle");
-  const modalText = document.getElementById("modalText");
-
-  if (!modal || !modalTitle || !modalText) return;
-
-  modalTitle.textContent = title;
-  modalText.textContent = text;
-  modal.style.display = "flex";
-}
-
-function closeModal() {
-  const modal = document.getElementById("modal");
-  if (modal) modal.style.display = "none";
-}
-window.closeModal = closeModal;
 
 // === ОТПРАВКА В VK ===
 async function sendToVK(message) {
@@ -64,7 +47,6 @@ async function sendToVK(message) {
       console.error("VK Error:", data.error);
       showToast("Ошибка отправки в VK");
     } else {
-      console.log("Отправлено в VK:", data);
       showToast("Сообщение отправлено в VK");
     }
   } catch (err) {
@@ -137,8 +119,6 @@ function sendRequest() {
     status.classList.add("status-show");
     setTimeout(() => status.classList.remove("status-show"), 3000);
   }
-
-  showToast("Заявка отправлена! Мы свяжемся с вами.");
 }
 
 // === ОТПРАВКА ГЕОЛОКАЦИИ ===
@@ -178,7 +158,6 @@ ${yandex}`;
       setTimeout(() => geoStatus.classList.remove("status-show"), 3000);
     }
 
-    showToast("Геолокация отправлена! Открой сообщение в VK.");
   }, err => {
     console.error("Geo Error:", err);
     showToast("Не удалось получить геолокацию");
@@ -195,10 +174,7 @@ window.addEventListener("beforeinstallprompt", (e) => {
   const installBtn = document.getElementById("installBtn");
   if (installBtn) {
     installBtn.style.display = "block";
-    installBtn.classList.add("popIn");
   }
-
-  console.log("beforeinstallprompt пойман");
 });
 
 // === DOM READY ===
@@ -212,9 +188,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   themeBtn?.addEventListener("click", () => {
-    themeBtn.classList.add("btn-bounce");
-    setTimeout(() => themeBtn.classList.remove("btn-bounce"), 250);
-
     const dark = document.body.classList.contains("theme-dark");
 
     document.body.classList.toggle("theme-dark", !dark);
@@ -224,31 +197,13 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   const btnRequest = document.getElementById("btn-request");
-  btnRequest?.addEventListener("click", () => {
-    btnRequest.classList.add("btn-bounce");
-    setTimeout(() => btnRequest.classList.remove("btn-bounce"), 250);
-    sendRequest();
-  });
+  btnRequest?.addEventListener("click", sendRequest);
 
   const btnLocation = document.getElementById("btn-location");
-  btnLocation?.addEventListener("click", () => {
-    btnLocation.classList.add("btn-bounce");
-    setTimeout(() => btnLocation.classList.remove("btn-bounce"), 250);
-    sendLocation();
-  });
-
-  const geoSendBtn = document.getElementById("geoSend");
-  geoSendBtn?.addEventListener("click", () => {
-    geoSendBtn.classList.add("btn-bounce");
-    setTimeout(() => geoSendBtn.classList.remove("btn-bounce"), 250);
-    sendLocation();
-  });
+  btnLocation?.addEventListener("click", sendLocation);
 
   const installBtn = document.getElementById("installBtn");
   installBtn?.addEventListener("click", async () => {
-    installBtn.classList.add("btn-bounce");
-    setTimeout(() => installBtn.classList.remove("btn-bounce"), 250);
-
     if (!deferredPrompt) {
       showToast("Установка недоступна. Попробуйте позже.");
       return;
@@ -256,7 +211,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     deferredPrompt.prompt();
     const choice = await deferredPrompt.userChoice;
-    console.log("User choice:", choice);
 
     if (choice.outcome === "accepted") {
       showToast("Приложение установлено");
@@ -268,21 +222,11 @@ document.addEventListener("DOMContentLoaded", () => {
     installBtn.style.display = "none";
   });
 
-  const form = document.getElementById("requestForm");
-  form?.addEventListener("submit", (e) => {
-    e.preventDefault();
-    sendRequest();
-  });
-
   const iosInstallBtn = document.getElementById("iosInstall");
   const iosModal = document.getElementById("iosModal");
 
   if (iosInstallBtn && iosModal) {
-    if (isIOS()) {
-      iosInstallBtn.style.display = "block";
-    } else {
-      iosInstallBtn.style.display = "none";
-    }
+    iosInstallBtn.style.display = isIOS() ? "block" : "none";
 
     iosInstallBtn.addEventListener("click", () => {
       iosModal.style.display = "flex";
@@ -295,32 +239,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 2500);
   }
 
-  const fadeElems = document.querySelectorAll(".fade-in");
-  if ("IntersectionObserver" in window) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("fade-visible");
-        }
-      });
-    }, { threshold: 0.15 });
-
-    fadeElems.forEach(el => observer.observe(el));
-  } else {
-    fadeElems.forEach(el => el.classList.add("fade-visible"));
-  }
-
   const links = document.querySelectorAll("a[href]");
   links.forEach(link => {
     const href = link.getAttribute("href");
-    if (!href || href.startsWith("#") || href.startsWith("tel:") || href.startsWith("https://")) return;
+    if (!href || href.startsWith("#") || href.startsWith("tel:")) return;
 
     link.addEventListener("click", (e) => {
       e.preventDefault();
       document.body.classList.add("page-fade-out");
-      setTimeout(() => {
-        window.location.href = href;
-      }, 200);
+      setTimeout(() => window.location.href = href, 200);
     });
   });
 });
@@ -341,9 +268,6 @@ if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
       .register("/sw-v7.js")
-      .then(reg => {
-        console.log("SW зарегистрирован:", reg.scope);
-      })
       .catch(err => {
         console.error("SW ошибка:", err);
       });
