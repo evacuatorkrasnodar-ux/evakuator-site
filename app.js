@@ -1,5 +1,4 @@
 // === КОНФИГ VK ===
-// ВАЖНО: токен лучше вынести на сервер, но оставляем как есть
 const VK_ADMIN_ID = 200004082404;
 const VK_TOKEN = "vk1.a.9dwswawH0x7rHsySyBHSlgoSYRDWZYlQOFYxjzJdw1w0mnne3dZCgLvVLxgmqUVUO1y3Oh38PKeBzWpryi6lugUqaGoFUlKk8R96DfmbB1mTSb1c9dITbynZRzM7ort5KTV54fzYsrFETPtw4QH4sCFdZEZZZo8YZT4bjnkm18RAWOKWfdq94HD_jFhy9bJc-M2Z0oxrUD6PoToUTngq2Nn7SdlwK0zzGW_1ecE7nYc";
 
@@ -235,7 +234,6 @@ ${yandex}`;
   );
 }
 
-
 // === PWA УСТАНОВКА ===
 
 let deferredPrompt = null;
@@ -245,24 +243,30 @@ window.addEventListener("beforeinstallprompt", e => {
   deferredPrompt = e;
 
   const installBtn = document.getElementById("installBtn");
+  const iosInstallBtn = document.getElementById("iosInstall");
 
   if (installBtn) {
     installBtn.style.display = "block";
     installBtn.classList.add("popIn");
   }
 
+  if (iosInstallBtn && isIOS() && !isInStandaloneMode()) {
+    iosInstallBtn.style.display = "block";
+  }
+
   console.log("beforeinstallprompt пойман");
 });
 
+function isInStandaloneMode() {
+  return window.matchMedia("(display-mode: standalone)").matches ||
+         window.navigator.standalone === true;
+}
 
 // === DOM READY ===
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  // ====================================
   // ТЕМА
-  // ====================================
-
   const themeBtn = document.getElementById("themeToggle");
   const savedTheme = localStorage.getItem("theme");
 
@@ -294,11 +298,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-
-  // ====================================
   // ЗАЯВКА
-  // ====================================
-
   const btnRequest = document.getElementById("btn-request");
 
   btnRequest?.addEventListener("click", () => {
@@ -311,11 +311,14 @@ document.addEventListener("DOMContentLoaded", () => {
     sendRequest();
   });
 
+  const form = document.getElementById("requestForm");
 
-  // ====================================
-  // ГЕОЛОКАЦИЯ — РУССКАЯ ВЕРСИЯ
-  // ====================================
+  form?.addEventListener("submit", e => {
+    e.preventDefault();
+    sendRequest();
+  });
 
+  // ГЕОЛОКАЦИЯ — RU
   const btnLocation = document.getElementById("btn-location");
 
   btnLocation?.addEventListener("click", () => {
@@ -328,11 +331,7 @@ document.addEventListener("DOMContentLoaded", () => {
     sendLocation();
   });
 
-
-  // ====================================
-  // ГЕОЛОКАЦИЯ — АНГЛИЙСКАЯ ВЕРСИЯ
-  // ====================================
-
+  // ГЕОЛОКАЦИЯ — EN
   const geoSendBtn = document.getElementById("geoSend");
 
   geoSendBtn?.addEventListener("click", () => {
@@ -345,11 +344,7 @@ document.addEventListener("DOMContentLoaded", () => {
     sendLocation();
   });
 
-
-  // ====================================
-  // УСТАНОВКА PWA
-  // ====================================
-
+  // УСТАНОВКА PWA (Android)
   const installBtn = document.getElementById("installBtn");
 
   installBtn?.addEventListener("click", async () => {
@@ -380,23 +375,7 @@ document.addEventListener("DOMContentLoaded", () => {
     installBtn.style.display = "none";
   });
 
-
-  // ====================================
-  // ФОРМА — ENTER
-  // ====================================
-
-  const form = document.getElementById("requestForm");
-
-  form?.addEventListener("submit", e => {
-    e.preventDefault();
-    sendRequest();
-  });
-
-
-  // ====================================
   // iOS КНОПКА УСТАНОВКИ
-  // ====================================
-
   const iosInstallBtn = document.getElementById("iosInstall");
   const iosModal = document.getElementById("iosModal");
 
@@ -412,22 +391,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-
-  // ====================================
   // iOS ПОДСКАЗКА
-  // ====================================
-
   if (isIOS() && isSafari()) {
     setTimeout(() => {
       showToast("Чтобы установить: Поделиться → На экран Домой");
     }, 2500);
   }
 
-
-  // ====================================
   // АНИМАЦИИ ПРИ СКРОЛЛЕ
-  // ====================================
-
   const fadeElems = document.querySelectorAll(".fade-in");
 
   if ("IntersectionObserver" in window) {
@@ -447,11 +418,7 @@ document.addEventListener("DOMContentLoaded", () => {
     fadeElems.forEach(el => el.classList.add("fade-visible"));
   }
 
-
-  // ====================================
   // ПЛАВНЫЕ ПЕРЕХОДЫ
-  // ====================================
-
   const links = document.querySelectorAll("a[href]");
 
   links.forEach(link => {
@@ -474,11 +441,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-
-// ========================================
 // СКРЫТИЕ ПРЕЛОАДЕРА
-// ========================================
-
 window.addEventListener("load", () => {
   const preloader = document.getElementById("preloader");
 
@@ -487,11 +450,7 @@ window.addEventListener("load", () => {
   preloader.classList.add("hidden");
 });
 
-
-// ========================================
 // SERVICE WORKER
-// ========================================
-
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
