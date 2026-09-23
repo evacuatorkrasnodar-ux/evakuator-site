@@ -76,34 +76,17 @@ body.theme-light {
   to { opacity:1; transform:translateY(0); }
 }
 
-/* TOP BUTTONS — «Установить приложение» не скрываем */
+/* TOP BUTTONS */
 .top-buttons {
-  display:grid;
-  grid-template-columns:repeat(2, minmax(0, 1fr));
-  align-items:stretch;
-  gap:14px;
-  width:100%;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
   margin-bottom:24px;
 }
 
-.top-buttons .install-btn,
-.top-buttons .theme-btn {
-  display:flex;
+.install-btn,
+.theme-btn {
   width:100%;
-  min-width:0;
-  min-height:52px;
-  margin:0;
-  align-items:center;
-  justify-content:center;
-}
-
-.top-buttons .install-btn {
-  visibility:visible;
-  opacity:1;
-}
-
-.top-buttons .install-btn[style*="display: none"] {
-  display:flex !important;
 }
 
 /* BUTTONS */
@@ -163,13 +146,6 @@ body.theme-light .apple-glass-btn {
   gap:12px;
   flex-wrap:wrap;
   margin-bottom:20px;
-}
-
-/* ОСНОВНЫЕ ДЕЙСТВИЯ — ровные одинаковые кнопки */
-.btn-row > .apple-glass-btn {
-  flex:1 1 0;
-  min-width:0;
-  margin:0;
 }
 
 /* TEXT */
@@ -416,26 +392,19 @@ body.theme-light .footer p { color:var(--muted-light); }
   text-decoration:none;
 }
 
-/* BOTTOM MENU — оригинальный внешний вид, усиленная видимость */
+/* BOTTOM MENU */
 .bottom-menu {
   position:fixed;
   bottom:0;
   left:0;
   right:0;
-  width:100%;
-  box-sizing:border-box;
   padding:12px;
   display:flex;
-  align-items:center;
   justify-content:space-around;
-  gap:8px;
   background:rgba(20,20,20,.55);
   border-top:1px solid rgba(255,255,255,.15);
   box-shadow:0 -10px 40px rgba(0,0,0,.45);
-  z-index:99999;
-  visibility:visible;
-  opacity:1;
-  pointer-events:auto;
+  z-index:999;
   animation:menuFloat 6s ease-in-out infinite alternate;
 }
 
@@ -450,11 +419,6 @@ body.theme-light .bottom-menu {
 }
 
 .bottom-menu a {
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex:1 1 0;
-  min-width:0;
   color:#fff;
   text-decoration:none;
   font-size:15px;
@@ -463,12 +427,6 @@ body.theme-light .bottom-menu {
   border-radius:12px;
   background:rgba(255,255,255,.08);
   border:1px solid rgba(255,255,255,.15);
-  visibility:visible;
-  opacity:1;
-  position:relative;
-  z-index:1;
-  pointer-events:auto;
-  white-space:nowrap;
 }
 
 body.theme-light .bottom-menu a {
@@ -489,21 +447,6 @@ body.theme-light .bottom-menu a {
 
   .apple-glass-btn {
     width:100%;
-  }
-
-  .top-buttons {
-    grid-template-columns:1fr;
-    gap:12px;
-  }
-
-  .bottom-menu {
-    padding:10px 8px;
-    gap:6px;
-  }
-
-  .bottom-menu a {
-    padding:10px 8px;
-    font-size:14px;
   }
 }
 
