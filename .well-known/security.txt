@@ -1,0 +1,11 @@
+Contact: mailto:evakuator-krd@proton.me
+Contact: tel:+79888717018
+
+Expires: 2027-01-01T00:00:00.000Z
+
+Preferred-Languages: ru, en
+
+Canonical: https://evakuator-krd.online/.well-known/security.txt
+
+Policy: https://evakuator-krd.online/
+Hiring: https://evakuator-krd.online/
