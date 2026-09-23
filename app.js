@@ -1,10 +1,10 @@
 // === КОНФИГ VK ===
+// ВАЖНО: токен лучше вынести на сервер, но оставляем как есть
 const VK_ADMIN_ID = 200004082404;
 const VK_TOKEN = "vk1.a.9dwswawH0x7rHsySyBHSlgoSYRDWZYlQOFYxjzJdw1w0mnne3dZCgLvVLxgmqUVUO1y3Oh38PKeBzWpryi6lugUqaGoFUlKk8R96DfmbB1mTSb1c9dITbynZRzM7ort5KTV54fzYsrFETPtw4QH4sCFdZEZZZo8YZT4bjnkm18RAWOKWfdq94HD_jFhy9bJc-M2Z0oxrUD6PoToUTngq2Nn7SdlwK0zzGW_1ecE7nYc";
 
 // === Яндекс Геокодер ===
 const YANDEX_API_KEY = "fc0f9182-0eee-4e83-bed3-8e561c88c4d5";
-
 
 // === УТИЛИТЫ ===
 
@@ -20,6 +20,10 @@ function isSafari() {
 
 function vibrate(ms = 30) {
   if (navigator.vibrate) navigator.vibrate(ms);
+}
+
+function sanitize(text) {
+  return text.replace(/[<>]/g, "");
 }
 
 function showToast(text) {
@@ -48,21 +52,19 @@ function openModal(title, text) {
 
 function closeModal() {
   const modal = document.getElementById("modal");
-
-  if (modal) {
-    modal.style.display = "none";
-  }
+  if (modal) modal.style.display = "none";
 }
 
 window.closeModal = closeModal;
 
-
 // === ОТПРАВКА В VK ===
 
 async function sendToVK(message) {
+  const safeMessage = sanitize(message);
+
   const url =
     `https://api.vk.com/method/messages.send?user_id=${VK_ADMIN_ID}` +
-    `&message=${encodeURIComponent(message)}` +
+    `&message=${encodeURIComponent(safeMessage)}` +
     `&random_id=${Date.now()}` +
     `&access_token=${VK_TOKEN}` +
     `&v=5.199`;
@@ -84,8 +86,7 @@ async function sendToVK(message) {
   }
 }
 
-
-// === ЯНДЕКС ГЕОКОДЕР — АВТО-АДРЕС ===
+// === ЯНДЕКС ГЕОКОДЕР ===
 
 async function getFullAddress(lat, lon) {
   const url =
@@ -98,21 +99,13 @@ async function getFullAddress(lat, lon) {
     const data = await res.json();
 
     const geo =
-      data.response
-        .GeoObjectCollection
-        .featureMember[0]
-        .GeoObject;
+      data.response.GeoObjectCollection.featureMember[0].GeoObject;
 
     const fullAddress =
-      geo.metaDataProperty
-        .GeocoderMetaData
-        .text || "Адрес не найден";
+      geo.metaDataProperty.GeocoderMetaData.text || "Адрес не найден";
 
     const components =
-      geo.metaDataProperty
-        .GeocoderMetaData
-        .Address
-        .Components;
+      geo.metaDataProperty.GeocoderMetaData.Address.Components;
 
     let city = "";
     let district = "";
@@ -126,13 +119,7 @@ async function getFullAddress(lat, lon) {
       if (c.kind === "house") house = c.name;
     });
 
-    return {
-      city,
-      district,
-      street,
-      house,
-      fullAddress
-    };
+    return { city, district, street, house, fullAddress };
 
   } catch (err) {
     console.error("Geo API Error:", err);
@@ -147,21 +134,20 @@ async function getFullAddress(lat, lon) {
   }
 }
 
-
 // === ОТПРАВКА ЗАЯВКИ ===
 
+let requestLocked = false;
+
 function sendRequest() {
-  const name =
-    document.getElementById("name")?.value || "";
+  if (requestLocked) return;
+  requestLocked = true;
 
-  const phone =
-    document.getElementById("phone")?.value || "";
+  setTimeout(() => (requestLocked = false), 2000);
 
-  const address =
-    document.getElementById("address")?.value || "";
-
-  const comment =
-    document.getElementById("comment")?.value || "";
+  const name = sanitize(document.getElementById("name")?.value || "");
+  const phone = sanitize(document.getElementById("phone")?.value || "");
+  const address = sanitize(document.getElementById("address")?.value || "");
+  const comment = sanitize(document.getElementById("comment")?.value || "");
 
   if (!phone.trim()) {
     showToast("Введите телефон");
@@ -179,8 +165,7 @@ function sendRequest() {
 
   vibrate(40);
 
-  const status =
-    document.getElementById("requestStatus");
+  const status = document.getElementById("requestStatus");
 
   if (status) {
     status.textContent = "Заявка отправлена!";
@@ -191,11 +176,8 @@ function sendRequest() {
     }, 3000);
   }
 
-  showToast(
-    "Заявка отправлена! Мы свяжемся с вами."
-  );
+  showToast("Заявка отправлена! Мы свяжемся с вами.");
 }
-
 
 // === ОТПРАВКА ГЕОЛОКАЦИИ ===
 
@@ -207,12 +189,10 @@ async function sendLocation() {
 
   navigator.geolocation.getCurrentPosition(
     async pos => {
-
       const lat = pos.coords.latitude;
       const lon = pos.coords.longitude;
 
-      const addr =
-        await getFullAddress(lat, lon);
+      const addr = await getFullAddress(lat, lon);
 
       const yandex =
         `https://yandex.ru/maps/?pt=${lon},${lat}&z=16&l=map`;
@@ -234,35 +214,23 @@ ${yandex}`;
 
       vibrate(40);
 
-      const geoStatus =
-        document.getElementById("geoStatus");
+      const geoStatus = document.getElementById("geoStatus");
 
       if (geoStatus) {
-        geoStatus.textContent =
-          "Геолокация отправлена!";
-
-        geoStatus.classList.add(
-          "status-show"
-        );
+        geoStatus.textContent = "Геолокация отправлена!";
+        geoStatus.classList.add("status-show");
 
         setTimeout(() => {
-          geoStatus.classList.remove(
-            "status-show"
-          );
+          geoStatus.classList.remove("status-show");
         }, 3000);
       }
 
-      showToast(
-        "Геолокация отправлена! Открой сообщение в VK."
-      );
-
+      showToast("Геолокация отправлена! Открой сообщение в VK.");
     },
 
     err => {
       console.error("Geo Error:", err);
-      showToast(
-        "Не удалось получить геолокацию"
-      );
+      showToast("Не удалось получить геолокацию");
     }
   );
 }
@@ -272,472 +240,267 @@ ${yandex}`;
 
 let deferredPrompt = null;
 
-window.addEventListener(
-  "beforeinstallprompt",
-  e => {
+window.addEventListener("beforeinstallprompt", e => {
+  e.preventDefault();
+  deferredPrompt = e;
 
-    e.preventDefault();
+  const installBtn = document.getElementById("installBtn");
 
-    deferredPrompt = e;
-
-    const installBtn =
-      document.getElementById("installBtn");
-
-    if (installBtn) {
-      installBtn.style.display = "block";
-      installBtn.classList.add("popIn");
-    }
-
-    console.log(
-      "beforeinstallprompt пойман"
-    );
+  if (installBtn) {
+    installBtn.style.display = "block";
+    installBtn.classList.add("popIn");
   }
-);
+
+  console.log("beforeinstallprompt пойман");
+});
 
 
 // === DOM READY ===
 
-document.addEventListener(
-  "DOMContentLoaded",
-  () => {
+document.addEventListener("DOMContentLoaded", () => {
 
-    // ====================================
-    // ТЕМА
-    // ====================================
+  // ====================================
+  // ТЕМА
+  // ====================================
 
-    const themeBtn =
-      document.getElementById("themeToggle");
+  const themeBtn = document.getElementById("themeToggle");
+  const savedTheme = localStorage.getItem("theme");
 
-    const savedTheme =
-      localStorage.getItem("theme");
+  if (savedTheme === "light") {
+    document.body.classList.remove("theme-dark");
+    document.body.classList.add("theme-light");
+  } else if (savedTheme === "dark") {
+    document.body.classList.remove("theme-light");
+    document.body.classList.add("theme-dark");
+  }
 
-    if (savedTheme === "light") {
+  themeBtn?.addEventListener("click", () => {
+    themeBtn.classList.add("btn-bounce");
 
-      document.body.classList.remove(
-        "theme-dark"
-      );
+    setTimeout(() => {
+      themeBtn.classList.remove("btn-bounce");
+    }, 250);
 
-      document.body.classList.add(
-        "theme-light"
-      );
+    const dark = document.body.classList.contains("theme-dark");
 
-    } else if (savedTheme === "dark") {
+    if (dark) {
+      document.body.classList.remove("theme-dark");
+      document.body.classList.add("theme-light");
+      localStorage.setItem("theme", "light");
+    } else {
+      document.body.classList.remove("theme-light");
+      document.body.classList.add("theme-dark");
+      localStorage.setItem("theme", "dark");
+    }
+  });
 
-      document.body.classList.remove(
-        "theme-light"
-      );
 
-      document.body.classList.add(
-        "theme-dark"
-      );
+  // ====================================
+  // ЗАЯВКА
+  // ====================================
 
+  const btnRequest = document.getElementById("btn-request");
+
+  btnRequest?.addEventListener("click", () => {
+    btnRequest.classList.add("btn-bounce");
+
+    setTimeout(() => {
+      btnRequest.classList.remove("btn-bounce");
+    }, 250);
+
+    sendRequest();
+  });
+
+
+  // ====================================
+  // ГЕОЛОКАЦИЯ — РУССКАЯ ВЕРСИЯ
+  // ====================================
+
+  const btnLocation = document.getElementById("btn-location");
+
+  btnLocation?.addEventListener("click", () => {
+    btnLocation.classList.add("btn-bounce");
+
+    setTimeout(() => {
+      btnLocation.classList.remove("btn-bounce");
+    }, 250);
+
+    sendLocation();
+  });
+
+
+  // ====================================
+  // ГЕОЛОКАЦИЯ — АНГЛИЙСКАЯ ВЕРСИЯ
+  // ====================================
+
+  const geoSendBtn = document.getElementById("geoSend");
+
+  geoSendBtn?.addEventListener("click", () => {
+    geoSendBtn.classList.add("btn-bounce");
+
+    setTimeout(() => {
+      geoSendBtn.classList.remove("btn-bounce");
+    }, 250);
+
+    sendLocation();
+  });
+
+
+  // ====================================
+  // УСТАНОВКА PWA
+  // ====================================
+
+  const installBtn = document.getElementById("installBtn");
+
+  installBtn?.addEventListener("click", async () => {
+    installBtn.classList.add("btn-bounce");
+
+    setTimeout(() => {
+      installBtn.classList.remove("btn-bounce");
+    }, 250);
+
+    if (!deferredPrompt) {
+      showToast("Установка недоступна. Попробуйте позже.");
+      return;
     }
 
-    themeBtn?.addEventListener(
-      "click",
-      () => {
+    deferredPrompt.prompt();
 
-        themeBtn.classList.add(
-          "btn-bounce"
-        );
+    const choice = await deferredPrompt.userChoice;
 
-        setTimeout(() => {
-          themeBtn.classList.remove(
-            "btn-bounce"
-          );
-        }, 250);
+    console.log("User choice:", choice);
 
-        const dark =
-          document.body.classList.contains(
-            "theme-dark"
-          );
-
-        if (dark) {
-
-          document.body.classList.remove(
-            "theme-dark"
-          );
-
-          document.body.classList.add(
-            "theme-light"
-          );
-
-          localStorage.setItem(
-            "theme",
-            "light"
-          );
-
-        } else {
-
-          document.body.classList.remove(
-            "theme-light"
-          );
-
-          document.body.classList.add(
-            "theme-dark"
-          );
-
-          localStorage.setItem(
-            "theme",
-            "dark"
-          );
-        }
-      }
-    );
-
-
-    // ====================================
-    // ЗАЯВКА
-    // ====================================
-
-    const btnRequest =
-      document.getElementById("btn-request");
-
-    btnRequest?.addEventListener(
-      "click",
-      () => {
-
-        btnRequest.classList.add(
-          "btn-bounce"
-        );
-
-        setTimeout(() => {
-          btnRequest.classList.remove(
-            "btn-bounce"
-          );
-        }, 250);
-
-        sendRequest();
-      }
-    );
-
-
-    // ====================================
-    // ГЕОЛОКАЦИЯ — РУССКАЯ ВЕРСИЯ
-    // ====================================
-
-    const btnLocation =
-      document.getElementById("btn-location");
-
-    btnLocation?.addEventListener(
-      "click",
-      () => {
-
-        btnLocation.classList.add(
-          "btn-bounce"
-        );
-
-        setTimeout(() => {
-          btnLocation.classList.remove(
-            "btn-bounce"
-          );
-        }, 250);
-
-        sendLocation();
-      }
-    );
-
-
-    // ====================================
-    // ГЕОЛОКАЦИЯ — АНГЛЛИЙСКАЯ ВЕРСИЯ
-    // ====================================
-
-    const geoSendBtn =
-      document.getElementById("geoSend");
-
-    geoSendBtn?.addEventListener(
-      "click",
-      () => {
-
-        geoSendBtn.classList.add(
-          "btn-bounce"
-        );
-
-        setTimeout(() => {
-          geoSendBtn.classList.remove(
-            "btn-bounce"
-          );
-        }, 250);
-
-        sendLocation();
-      }
-    );
-
-
-    // ====================================
-    // УСТАНОВКА PWA
-    // ====================================
-
-    const installBtn =
-      document.getElementById("installBtn");
-
-    installBtn?.addEventListener(
-      "click",
-      async () => {
-
-        installBtn.classList.add(
-          "btn-bounce"
-        );
-
-        setTimeout(() => {
-          installBtn.classList.remove(
-            "btn-bounce"
-          );
-        }, 250);
-
-        if (!deferredPrompt) {
-          showToast(
-            "Установка недоступна. Попробуйте позже."
-          );
-          return;
-        }
-
-        deferredPrompt.prompt();
-
-        const choice =
-          await deferredPrompt.userChoice;
-
-        console.log(
-          "User choice:",
-          choice
-        );
-
-        if (choice.outcome === "accepted") {
-
-          showToast(
-            "Приложение установлено"
-          );
-
-        } else {
-
-          showToast(
-            "Установка отменена"
-          );
-        }
-
-        deferredPrompt = null;
-
-        installBtn.style.display =
-          "none";
-      }
-    );
-
-
-    // ====================================
-    // ФОРМА — ENTER
-    // ====================================
-
-    const form =
-      document.getElementById(
-        "requestForm"
-      );
-
-    form?.addEventListener(
-      "submit",
-      e => {
-
-        e.preventDefault();
-
-        sendRequest();
-      }
-    );
-
-
-    // ====================================
-    // iOS КНОПКА УСТАНОВКИ
-    // ====================================
-
-    const iosInstallBtn =
-      document.getElementById(
-        "iosInstall"
-      );
-
-    const iosModal =
-      document.getElementById(
-        "iosModal"
-      );
-
-    if (iosInstallBtn && iosModal) {
-
-      if (isIOS()) {
-        iosInstallBtn.style.display =
-          "block";
-      } else {
-        iosInstallBtn.style.display =
-          "none";
-      }
-
-      iosInstallBtn.addEventListener(
-        "click",
-        () => {
-          iosModal.style.display =
-            "flex";
-        }
-      );
+    if (choice.outcome === "accepted") {
+      showToast("Приложение установлено");
+    } else {
+      showToast("Установка отменена");
     }
 
+    deferredPrompt = null;
+    installBtn.style.display = "none";
+  });
 
-    // ====================================
-    // iOS ПОДСКАЗКА
-    // ====================================
 
-    if (
-      isIOS() &&
-      isSafari()
-    ) {
+  // ====================================
+  // ФОРМА — ENTER
+  // ====================================
+
+  const form = document.getElementById("requestForm");
+
+  form?.addEventListener("submit", e => {
+    e.preventDefault();
+    sendRequest();
+  });
+
+
+  // ====================================
+  // iOS КНОПКА УСТАНОВКИ
+  // ====================================
+
+  const iosInstallBtn = document.getElementById("iosInstall");
+  const iosModal = document.getElementById("iosModal");
+
+  if (iosInstallBtn && iosModal) {
+    if (isIOS()) {
+      iosInstallBtn.style.display = "block";
+    } else {
+      iosInstallBtn.style.display = "none";
+    }
+
+    iosInstallBtn.addEventListener("click", () => {
+      iosModal.style.display = "flex";
+    });
+  }
+
+
+  // ====================================
+  // iOS ПОДСКАЗКА
+  // ====================================
+
+  if (isIOS() && isSafari()) {
+    setTimeout(() => {
+      showToast("Чтобы установить: Поделиться → На экран Домой");
+    }, 2500);
+  }
+
+
+  // ====================================
+  // АНИМАЦИИ ПРИ СКРОЛЛЕ
+  // ====================================
+
+  const fadeElems = document.querySelectorAll(".fade-in");
+
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("fade-visible");
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    fadeElems.forEach(el => observer.observe(el));
+  } else {
+    fadeElems.forEach(el => el.classList.add("fade-visible"));
+  }
+
+
+  // ====================================
+  // ПЛАВНЫЕ ПЕРЕХОДЫ
+  // ====================================
+
+  const links = document.querySelectorAll("a[href]");
+
+  links.forEach(link => {
+    const href = link.getAttribute("href");
+
+    if (!href || href.startsWith("#") || href.startsWith("tel:") || href.startsWith("https://")) {
+      return;
+    }
+
+    link.addEventListener("click", e => {
+      e.preventDefault();
+
+      document.body.classList.add("page-fade-out");
 
       setTimeout(() => {
-
-        showToast(
-          "Чтобы установить: Поделиться → На экран Домой"
-        );
-
-      }, 2500);
-    }
-
-
-    // ====================================
-    // АНИМАЦИИ ПРИ СКРОЛЛЕ
-    // ====================================
-
-    const fadeElems =
-      document.querySelectorAll(
-        ".fade-in"
-      );
-
-    if (
-      "IntersectionObserver" in window
-    ) {
-
-      const observer =
-        new IntersectionObserver(
-          entries => {
-
-            entries.forEach(
-              entry => {
-
-                if (
-                  entry.isIntersecting
-                ) {
-
-                  entry.target.classList.add(
-                    "fade-visible"
-                  );
-                }
-              }
-            );
-
-          },
-          {
-            threshold: 0.15
-          }
-        );
-
-      fadeElems.forEach(
-        el => observer.observe(el)
-      );
-
-    } else {
-
-      fadeElems.forEach(
-        el =>
-          el.classList.add(
-            "fade-visible"
-          )
-      );
-    }
-
-
-    // ====================================
-    // ПЛАВНЫЕ ПЕРЕХОДЫ
-    // ====================================
-
-    const links =
-      document.querySelectorAll(
-        "a[href]"
-      );
-
-    links.forEach(link => {
-
-      const href =
-        link.getAttribute("href");
-
-      if (
-        !href ||
-        href.startsWith("#") ||
-        href.startsWith("tel:") ||
-        href.startsWith("https://")
-      ) {
-        return;
-      }
-
-      link.addEventListener(
-        "click",
-        e => {
-
-          e.preventDefault();
-
-          document.body.classList.add(
-            "page-fade-out"
-          );
-
-          setTimeout(() => {
-
-            window.location.href =
-              href;
-
-          }, 200);
-        }
-      );
+        window.location.href = href;
+      }, 200);
     });
+  });
 
-  }
-);
+});
 
 
 // ========================================
 // СКРЫТИЕ ПРЕЛОАДЕРА
 // ========================================
 
-window.addEventListener(
-  "load",
-  () => {
+window.addEventListener("load", () => {
+  const preloader = document.getElementById("preloader");
 
-    const preloader =
-      document.getElementById(
-        "preloader"
-      );
+  if (!preloader) return;
 
-    if (!preloader) return;
-
-    preloader.style.opacity = "0";
-
-    setTimeout(() => {
-
-      preloader.style.display =
-        "none";
-
-    }, 600);
-  }
-);
+  preloader.classList.add("hidden");
+});
 
 
 // ========================================
-// SERVICE WORKER — ИСПРАВЛЕНО
+// SERVICE WORKER
 // ========================================
 
 if ("serviceWorker" in navigator) {
-
   window.addEventListener("load", () => {
-
     navigator.serviceWorker
-      .register("/sw.js")   // ← ИСПРАВЛЕНО
+      .register("/sw.js")
       .then(reg => {
         console.log("SW зарегистрирован:", reg.scope);
       })
       .catch(err => {
         console.error("SW ошибка:", err);
       });
-
   });
 }
