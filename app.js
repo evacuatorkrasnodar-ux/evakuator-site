@@ -1,6 +1,5 @@
 // === КОНФИГ VK ===
 const VK_ADMIN_ID = 200004082404;
-// ВСТАВЬ СВОЙ ТОКЕН СЮДА:
 const VK_TOKEN = "VK_TOKEN_PLACEHOLDER";
 
 // === Яндекс Геокодер ===
@@ -29,6 +28,12 @@ function showToast(text) {
   toast.classList.add("toast-show");
   setTimeout(() => toast.classList.remove("toast-show"), 3000);
 }
+
+function closeModal() {
+  const modal = document.getElementById("iosModal");
+  if (modal) modal.style.display = "none";
+}
+window.closeModal = closeModal;
 
 // === ОТПРАВКА В VK ===
 async function sendToVK(message) {
@@ -239,15 +244,32 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 2500);
   }
 
+  const fadeElems = document.querySelectorAll(".fade-in");
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("fade-visible");
+        }
+      });
+    }, { threshold: 0.15 });
+
+    fadeElems.forEach(el => observer.observe(el));
+  } else {
+    fadeElems.forEach(el => el.classList.add("fade-visible"));
+  }
+
   const links = document.querySelectorAll("a[href]");
   links.forEach(link => {
     const href = link.getAttribute("href");
-    if (!href || href.startsWith("#") || href.startsWith("tel:")) return;
+    if (!href || href.startsWith("#") || href.startsWith("tel:") || href.startsWith("https://")) return;
 
     link.addEventListener("click", (e) => {
       e.preventDefault();
       document.body.classList.add("page-fade-out");
-      setTimeout(() => window.location.href = href, 200);
+      setTimeout(() => {
+        window.location.href = href;
+      }, 200);
     });
   });
 });
