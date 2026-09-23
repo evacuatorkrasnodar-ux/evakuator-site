@@ -570,3 +570,61 @@ body.theme-light .modal-content {
   pointer-events:none;
   transition:opacity .35s ease, transform .35s ease;
   box-shadow:var(--
+
+ /* ——— PREMIUM BOTTOM MENU ——— */
+
+nav.bottom-menu {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(22px) saturate(180%);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+  background: rgba(20,20,20,0.55);
+  border-top: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.45);
+  z-index: 9999;
+}
+
+body.theme-light nav.bottom-menu {
+  background: rgba(255,255,255,0.85);
+  border-top: 1px solid rgba(0,0,0,0.08);
+}
+
+nav.bottom-menu a {
+  flex: 1;
+  text-align: center;
+  text-decoration: none;
+  padding: 8px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 12px;
+  transition: 0.25s ease;
+}
+
+nav.bottom-menu a:hover {
+  transform: translateY(-2px);
+}
+
+.bottom-menu-icon svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+}
+
+body.theme-dark nav.bottom-menu a {
+  color: var(--text-dark);
+}
+
+body.theme-light nav.bottom-menu a {
+  color: var(--text-light);
+}
+                
