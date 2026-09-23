@@ -15,127 +15,124 @@ const STATIC_ASSETS = [
   "/favicon.png",
   "/preload.png",
   "/banner-top.webp",
-  "/banner-top.png"
+  "/banner-top.png",
+  OFFLINE_URL
 ];
 
 self.addEventListener("install", event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(STATIC_ASSETS))
-  );
-
-  self.skipWaiting();
+  event.waitUntil((async () => {
+    try {
+      const cache = await caches.open(CACHE_NAME);
+      // addAll может бросить, поэтому добавляем по одному с обработкой
+      for (const asset of STATIC_ASSETS) {
+        try {
+          await cache.add(asset);
+        } catch (err) {
+          // если какой-то файл недоступен — логируем, но не прерываем установку
+          console.warn("SW: failed to cache", asset, err);
+        }
+      }
+      // Гарантируем, что воркер сразу активируется
+      await self.skipWaiting();
+    } catch (e) {
+      console.error("SW install failed", e);
+    }
+  })());
 });
 
 self.addEventListener("activate", event => {
-  event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
-        keys
-          .filter(key => key !== CACHE_NAME)
-          .map(key => caches.delete(key))
-      )
-    )
-  );
-
-  self.clients.claim();
+  event.waitUntil((async () => {
+    try {
+      const keys = await caches.keys();
+      await Promise.all(
+        keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))
+      );
+      await self.clients.claim();
+    } catch (e) {
+      console.error("SW activate failed", e);
+    }
+  })());
 });
+
+function normalizeCacheKey(url) {
+  // Убираем поисковую строку для кеширования статических GET-запросов
+  try {
+    const u = new URL(url);
+    return u.origin + u.pathname;
+  } catch {
+    return url;
+  }
+}
 
 self.addEventListener("fetch", event => {
   const req = event.request;
   const url = new URL(req.url);
 
+  // Только наш origin
   if (url.origin !== self.location.origin) return;
 
   const isHtml = req.headers.get("accept")?.includes("text/html");
   const isImage = req.destination === "image";
 
-  let cleanUrl = url.origin + url.pathname;
-  let cacheKey = cleanUrl;
-  let fetchRequest = req;
-
-  if (url.search && req.method === "GET") {
-    fetchRequest = new Request(cleanUrl, {
-      method: "GET",
-      headers: req.headers
-    });
-  } else {
-    cacheKey = req;
-  }
+  // Ключ кеша — строка для консистентности
+  const cacheKey = (req.method === "GET") ? normalizeCacheKey(req.url) : req.url;
 
   if (isHtml) {
-    event.respondWith(
-      fetch(fetchRequest)
-        .then(response => {
+    event.respondWith((async () => {
+      try {
+        const response = await fetch(req);
+        // Клонируем и сохраняем в кеш (если ответ валиден)
+        if (response && response.ok) {
           const clone = response.clone();
-
-          caches.open(CACHE_NAME)
-            .then(cache => cache.put(cacheKey, clone));
-
-          return response;
-        })
-        .catch(() =>
-          caches.match(cacheKey)
-            .then(cached =>
-              cached || caches.match(OFFLINE_URL)
-            )
-        )
-    );
-
+          const cache = await caches.open(CACHE_NAME);
+          await cache.put(cacheKey, clone);
+        }
+        return response;
+      } catch (err) {
+        // При ошибке возвращаем кеш или offline.html
+        const cached = await caches.match(cacheKey);
+        return cached || caches.match(OFFLINE_URL);
+      }
+    })());
     return;
   }
 
   if (isImage) {
-    event.respondWith(
-      caches.match(cacheKey)
-        .then(cached => {
-          if (cached) return cached;
+    event.respondWith((async () => {
+      const cache = await caches.open(CACHE_NAME);
+      const cached = await cache.match(cacheKey);
+      if (cached) return cached;
 
-          return fetch(fetchRequest)
-            .then(response => {
-              if (!response || !response.ok) {
-                return caches.match("/preload.png");
-              }
-
-              const clone = response.clone();
-
-              caches.open(CACHE_NAME)
-                .then(cache => cache.put(cacheKey, clone));
-
-              return response;
-            })
-            .catch(() =>
-              caches.match("/preload.png")
-            );
-        })
-    );
-
+      try {
+        const response = await fetch(req);
+        // Если ответ валиден — кешируем; если opaque — всё равно можно кешировать
+        if (response && (response.ok || response.type === "opaque")) {
+          try { await cache.put(cacheKey, response.clone()); } catch (e) { /* ignore */ }
+          return response;
+        } else {
+          return caches.match("/preload.png");
+        }
+      } catch (e) {
+        return caches.match("/preload.png");
+      }
+    })());
     return;
   }
 
-  event.respondWith(
-    caches.match(cacheKey)
-      .then(cached => {
-        if (cached) return cached;
+  // Для остальных ресурсов: кеш-первоочередно, затем сеть, затем offline
+  event.respondWith((async () => {
+    const cache = await caches.open(CACHE_NAME);
+    const cached = await cache.match(cacheKey);
+    if (cached) return cached;
 
-        return fetch(fetchRequest)
-          .then(response => {
-            if (
-              response &&
-              response.ok &&
-              response.type === "basic"
-            ) {
-              const clone = response.clone();
-
-              caches.open(CACHE_NAME)
-                .then(cache => cache.put(cacheKey, clone));
-            }
-
-            return response;
-          })
-          .catch(() =>
-            caches.match(OFFLINE_URL)
-          );
-      })
-  );
+    try {
+      const response = await fetch(req);
+      if (response && response.ok && response.type === "basic") {
+        try { await cache.put(cacheKey, response.clone()); } catch (e) { /* ignore */ }
+      }
+      return response;
+    } catch (e) {
+      return caches.match(OFFLINE_URL);
+    }
+  })());
 });
