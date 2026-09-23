@@ -1,18 +1,17 @@
 {
+  "id": "evakuator-krd-online",
+  "lang": "ru",
   "name": "Эвакуатор Краснодар 24/7",
   "short_name": "Эвакуатор",
-  "start_url": "/index.html",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#050608",
   "theme_color": "#050608",
   "description": "Круглосуточный эвакуатор в Краснодаре. Подача от 15–25 минут. Аккуратная погрузка, честные цены.",
-  "categories": [
-    "transportation",
-    "service",
-    "utilities"
-  ],
+  "categories": ["transportation", "service", "utilities"],
+
   "icons": [
     {
       "src": "/preload.png",
@@ -43,14 +42,9 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
-    },
-    {
-      "src": "/preload.png",
-      "sizes": "180x180",
-      "type": "image/png",
-      "purpose": "maskable"
     }
   ],
+
   "screenshots": [
     {
       "src": "/preload.png",
@@ -59,5 +53,27 @@
       "form_factor": "wide"
     }
   ],
+
+  "shortcuts": [
+    {
+      "name": "Позвонить эвакуатору",
+      "short_name": "Позвонить",
+      "url": "tel:+79888717018",
+      "icons": [{ "src": "/preload.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Оставить заявку",
+      "short_name": "Заявка",
+      "url": "/request.html",
+      "icons": [{ "src": "/preload.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Цены",
+      "short_name": "Цены",
+      "url": "/prices.html",
+      "icons": [{ "src": "/preload.png", "sizes": "192x192", "type": "image/png" }]
+    }
+  ],
+
   "prefer_related_applications": false
 }
