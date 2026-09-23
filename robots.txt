@@ -1,7 +1,33 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://evakuator-krd.online/sitemap.xml
-Host: evakuator-krd.online
+# Разрешаем важные файлы
+Allow: /manifest.json
+Allow: /sw.js
+Allow: /style.css
+Allow: /app.js
+Allow: /preload.png
+Allow: /banner-top.webp
+Allow: /banner-top.png
 
+# Запрещаем мусорные боты
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12Bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: PetalBot
+Disallow: /
+
+# Sitemap
+Sitemap: https://evakuator-krd.online/sitemap.xml
+
+# IndexNow (не мешает)
 IndexNow: https://api.indexnow.org/indexnow?key=b7f3e9c1a4d82f7b93c1e7a4d9f2b8c3
