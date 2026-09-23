@@ -1,36 +1,58 @@
-// === CONFIG ===
-const CACHE_NAME = "evacuator-v7";
+const CACHE_NAME = "evacuator-krasnodar-v8";
 const OFFLINE_URL = "/offline.html";
 
 const STATIC_ASSETS = [
   "/",
   "/index.html",
-  "/prices.html",
-  "/en.html",
-  "/request.html",
   "/about.html",
   "/contacts.html",
+  "/prices.html",
   "/reviews.html",
+  "/request.html",
+  "/en.html",
+  "/offline.html",
 
   "/style.css",
   "/app.js",
+  "/manifest.json",
 
   "/favicon.png",
   "/preload.png",
-
   "/banner-top.webp",
   "/banner-top.png"
 ];
 
-// === INSTALL ===
+/* =========================
+   INSTALL
+========================= */
+
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS))
+    caches.open(CACHE_NAME).then(async (cache) => {
+      const results = await Promise.allSettled(
+        STATIC_ASSETS.map((asset) => cache.add(asset))
+      );
+
+      results.forEach((result, index) => {
+        if (result.status === "rejected") {
+          console.warn(
+            "[SW] Не удалось добавить в кэш:",
+            STATIC_ASSETS[index],
+            result.reason
+          );
+        }
+      });
+    })
   );
+
   self.skipWaiting();
 });
 
-// === ACTIVATE ===
+
+/* =========================
+   ACTIVATE
+========================= */
+
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
@@ -41,106 +63,187 @@ self.addEventListener("activate", (event) => {
       )
     )
   );
+
   self.clients.claim();
 });
 
-// === FETCH ===
+
+/* =========================
+   FETCH
+========================= */
+
 self.addEventListener("fetch", (event) => {
-  const req = event.request;
-  const url = new URL(req.url);
+  const request = event.request;
 
-  // Внешние запросы не трогаем
-  if (url.origin !== self.location.origin) return;
-
-  const isHtml = req.headers.get("accept")?.includes("text/html");
-  const isImage = req.destination === "image";
-
-  // Нормализация: убираем query, но выравниваем fetch и cacheKey
-  let cleanUrl = url.origin + url.pathname;
-  let cacheKey = cleanUrl;
-  let fetchRequest = req;
-
-  if (url.search && req.method === "GET") {
-    fetchRequest = new Request(cleanUrl, {
-      method: "GET",
-      headers: req.headers
-    });
-  } else {
-    cacheKey = req;
-  }
-
-  // HTML: network-first + кеш
-  if (isHtml) {
-    event.respondWith(
-      (async () => {
-        try {
-          const res = await fetch(fetchRequest);
-          if (!res || !res.ok) throw new Error("Bad HTML");
-
-          const resClone = res.clone();
-          const cache = await caches.open(CACHE_NAME);
-          await cache.put(cacheKey, resClone);
-
-          return res;
-        } catch (e) {
-          const cached = await caches.match(cacheKey);
-          if (cached) return cached;
-          return caches.match(OFFLINE_URL);
-        }
-      })()
-    );
+  /*
+   * Service Worker работает только с GET.
+   * POST-запросы формы, API и другие методы
+   * браузер обрабатывает напрямую.
+   */
+  if (request.method !== "GET") {
     return;
   }
 
-  // IMAGES: cache-first
-  if (isImage) {
-    event.respondWith(
-      (async () => {
-        const cached = await caches.match(cacheKey);
-        if (cached) return cached;
+  const url = new URL(request.url);
 
-        try {
-          const res = await fetch(fetchRequest);
-          if (!res || !res.ok || res.type !== "basic") {
-            const fallback = await caches.match("/preload.png");
-            return fallback || res;
-          }
-
-          const resClone = res.clone();
-          const cache = await caches.open(CACHE_NAME);
-          await cache.put(cacheKey, resClone);
-
-          return res;
-        } catch (e) {
-          const fallback = await caches.match("/preload.png");
-          return fallback;
-        }
-      })()
-    );
+  /*
+   * Не трогаем внешние домены:
+   * Telegram, VK, WhatsApp, карты и т.д.
+   */
+  if (url.origin !== self.location.origin) {
     return;
   }
 
-  // STATIC: cache-first
-  event.respondWith(
-    (async () => {
-      const cached = await caches.match(cacheKey);
-      if (cached) return cached;
+  /*
+   * HTML:
+   * сначала сеть, затем кэш.
+   * Если интернета нет — показываем сохранённую
+   * страницу или offline.html.
+   */
+  if (
+    request.mode === "navigate" ||
+    request.headers.get("accept")?.includes("text/html")
+  ) {
+    event.respondWith(networkFirst(request));
+    return;
+  }
 
-      try {
-        const res = await fetch(fetchRequest);
-        if (!res || !res.ok || res.type !== "basic") {
-          throw new Error("Bad static");
-        }
+  /*
+   * Изображения:
+   * сначала кэш, затем сеть.
+   */
+  if (request.destination === "image") {
+    event.respondWith(cacheFirstImage(request));
+    return;
+  }
 
-        const resClone = res.clone();
-        const cache = await caches.open(CACHE_NAME);
-        await cache.put(cacheKey, resClone);
-
-        return res;
-      } catch (e) {
-        const fallback = await caches.match(OFFLINE_URL);
-        return fallback;
-      }
-    })()
-  );
+  /*
+   * CSS / JS / manifest и остальные локальные GET.
+   */
+  event.respondWith(cacheFirst(request));
 });
+
+
+/* =========================
+   NETWORK FIRST
+========================= */
+
+async function networkFirst(request) {
+  const cache = await caches.open(CACHE_NAME);
+
+  try {
+    const response = await fetch(request);
+
+    /*
+     * Сохраняем только нормальные ответы.
+     */
+    if (response && response.ok) {
+      await cache.put(request, response.clone());
+    }
+
+    return response;
+  } catch (error) {
+    const cachedResponse = await cache.match(request);
+
+    if (cachedResponse) {
+      return cachedResponse;
+    }
+
+    const offlineResponse = await cache.match(OFFLINE_URL);
+
+    if (offlineResponse) {
+      return offlineResponse;
+    }
+
+    return new Response(
+      `
+        <!DOCTYPE html>
+        <html lang="ru">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width,initial-scale=1">
+            <title>Нет подключения</title>
+          </head>
+          <body>
+            <h1>Нет подключения к интернету</h1>
+            <p>Позвоните: <a href="tel:+79888717018">+7 (988) 871-70-18</a></p>
+          </body>
+        </html>
+      `,
+      {
+        status: 503,
+        headers: {
+          "Content-Type": "text/html; charset=utf-8"
+        }
+      }
+    );
+  }
+}
+
+
+/* =========================
+   CACHE FIRST
+========================= */
+
+async function cacheFirst(request) {
+  const cache = await caches.open(CACHE_NAME);
+  const cachedResponse = await cache.match(request);
+
+  if (cachedResponse) {
+    return cachedResponse;
+  }
+
+  try {
+    const response = await fetch(request);
+
+    if (response && response.ok) {
+      await cache.put(request, response.clone());
+    }
+
+    return response;
+  } catch (error) {
+    return new Response("", {
+      status: 503,
+      statusText: "Service Unavailable"
+    });
+  }
+}
+
+
+/* =========================
+   CACHE FIRST — IMAGES
+========================= */
+
+async function cacheFirstImage(request) {
+  const cache = await caches.open(CACHE_NAME);
+  const cachedResponse = await cache.match(request);
+
+  if (cachedResponse) {
+    return cachedResponse;
+  }
+
+  try {
+    const response = await fetch(request);
+
+    if (response && response.ok) {
+      await cache.put(request, response.clone());
+    }
+
+    return response;
+  } catch (error) {
+    /*
+     * Если изображение недоступно,
+     * используем preload.png.
+     */
+    const fallback = await cache.match("/preload.png");
+
+    if (fallback) {
+      return fallback;
+    }
+
+    return new Response("", {
+      status: 404,
+      statusText: "Image Not Found"
+    });
+  }
+}
