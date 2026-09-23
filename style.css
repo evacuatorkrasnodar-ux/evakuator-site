@@ -319,7 +319,7 @@ body.theme-light .footer {
   gap:18px;
 }
 
-/* PRELOADER — ниже меню */
+/* PRELOADER */
 #preloader {
   position:fixed;
   inset:0;
@@ -428,49 +428,26 @@ body.theme-light #toast {
   transform:translateX(-50%) translateY(0);
 }
 
-/* BOTTOM MENU — идеальная версия */
+/* BOTTOM MENU — обычная версия */
 .bottom-menu {
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-
-  height:70px;
-  padding:12px;
-
+  margin-top:40px;
+  padding:20px;
   display:flex;
-  justify-content:space-around;
-  align-items:center;
-
-  background:rgba(20,20,20,.45);
-  backdrop-filter:blur(18px);
-  -webkit-backdrop-filter:blur(18px);
-
-  border-top:1px solid rgba(255,255,255,.15);
-  box-shadow:0 -10px 40px rgba(0,0,0,.45);
-
-  z-index:99999;
-}
-
-body.theme-light .bottom-menu {
-  background:rgba(255,255,255,.85);
-  border-top:1px solid rgba(0,0,0,.08);
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:12px;
 }
 
 .bottom-menu a {
-  color:#fff;
-  text-decoration:none;
-  font-size:15px;
+  flex:1;
+  text-align:center;
+  padding:12px 14px;
+  border-radius:14px;
   font-weight:600;
-  padding:10px 14px;
-  border-radius:12px;
+  text-decoration:none;
   background:rgba(255,255,255,.08);
   border:1px solid rgba(255,255,255,.15);
-  transition:background .25s ease;
-}
-
-.bottom-menu a:hover {
-  background:rgba(255,255,255,.18);
+  color:#fff;
 }
 
 body.theme-light .bottom-menu a {
