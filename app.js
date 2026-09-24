@@ -475,3 +475,41 @@ if (typeof window !== "undefined") {
     showToast
   };
 }
+
+// === Защитник bottom-menu: переместить в body и блокировать transform/animation ===
+document.addEventListener('DOMContentLoaded', () => {
+  const menu = document.querySelector('.bottom-menu');
+  if (!menu) return;
+
+  // Перемещаем в body, если меню вложено в другой контейнер
+  if (menu.parentElement !== document.body) {
+    document.body.appendChild(menu);
+    console.log('bottom-menu перемещено в body');
+  }
+
+  // Немедленно блокируем любые inline-стили, которые могут двигать меню
+  menu.style.transform = 'none';
+  menu.style.animation = 'none';
+  menu.style.transition = 'none';
+
+  // Защитник: периодически проверяем и убираем transform/animation, если кто-то снова добавит
+  const protector = setInterval(() => {
+    const cs = getComputedStyle(menu);
+    if (cs.transform && cs.transform !== 'none') {
+      menu.style.transform = 'none';
+      console.warn('Защитник: убрал transform у bottom-menu');
+    }
+    if (cs.animationName && cs.animationName !== 'none') {
+      menu.style.animation = 'none';
+      console.warn('Защитник: убрал animation у bottom-menu');
+    }
+    if (cs.transition && cs.transition !== 'all 0s ease 0s' && cs.transition !== 'none') {
+      menu.style.transition = 'none';
+      console.warn('Защитник: убрал transition у bottom-menu');
+    }
+  }, 800);
+
+  // Остановим проверку через 20 секунд — этого достаточно для защиты при загрузке/инициализации
+  setTimeout(() => clearInterval(protector), 20000);
+});
+
