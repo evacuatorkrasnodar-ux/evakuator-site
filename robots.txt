@@ -10,7 +10,7 @@ Allow: /preload.png
 Allow: /banner-top.webp
 Allow: /banner-top.png
 
-# Запрещаем мусорные боты
+# Запрещаем нежелательных ботов
 User-agent: AhrefsBot
 Disallow: /
 
