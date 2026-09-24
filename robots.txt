@@ -28,6 +28,3 @@ Disallow: /
 
 # Sitemap
 Sitemap: https://evakuator-krd.online/sitemap.xml
-
-# IndexNow (не мешает)
-IndexNow: https://api.indexnow.org/indexnow?key=b7f3e9c1a4d82f7b93c1e7a4d9f2b8c3
