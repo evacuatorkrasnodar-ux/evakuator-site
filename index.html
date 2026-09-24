@@ -14,42 +14,16 @@
 
   <meta name="author" content="Эвакуатор Краснодар 24/7">
   <meta name="robots" content="index, follow, max-image-preview:large">
-  <meta name="googlebot" content="index, follow">
-  <meta name="bingbot" content="index, follow">
-  <meta name="color-scheme" content="dark light">
-  <meta name="format-detection" content="telephone=no">
 
   <!-- CANONICAL -->
   <link rel="canonical" href="https://evakuator-krd.online/">
 
   <!-- LANGUAGE ALTERNATES -->
-  <link rel="stylesheet" href="/style.css">
-
-<!-- FORCE: меню всегда фиксировано в viewport -->
-<style>
-  .bottom-menu,
-  #bottom-menu-portal,
-  #bottom-menu-portal .bottom-menu {
-    position: fixed !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    top: auto !important;
-    width: 100% !important;
-    transform: none !important;
-    animation: none !important;
-    transition: none !important;
-    z-index: 2147483647 !important;
-    pointer-events: auto !important;
-  }
-
-  /* safe area for iPhone */
-  .bottom-menu { padding-bottom: env(safe-area-inset-bottom); }
-
-  /* отменяем возможные translateY */
-  .bottom-menu[style] { transform: none !important; }
-</style>
-
+  <link
+    rel="alternate"
+    hreflang="ru"
+    href="https://evakuator-krd.online/"
+  >
 
   <link
     rel="alternate"
@@ -127,11 +101,6 @@
   >
 
   <meta
-    name="application-name"
-    content="Эвакуатор Краснодар"
-  >
-
-  <meta
     name="theme-color"
     content="#050608"
   >
@@ -162,22 +131,11 @@
     href="/preload.png"
   >
 
-  <!-- SAFARI MASK ICON -->
-  <link rel="mask-icon" href="/favicon.svg" color="#050608">
-
   <!-- STYLES -->
-<link rel="stylesheet" href="/style.css">
-
-<style>
-  .bottom-menu {
-    position: fixed !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    z-index: 999999 !important;
-  }
-</style>
-
+  <link
+    rel="stylesheet"
+    href="/style.css"
+  >
 
   <!-- FAVICON -->
   <link
@@ -197,34 +155,20 @@
   <!--
     =========================================================
     FINAL FOOTER + FIXED MENU OVERRIDES
+    =========================================================
     Эти стили находятся здесь специально, чтобы старые
     animation / transform из style.css больше не могли
     сдвигать нижнее меню.
-    =========================================================
   -->
+
   <style>
-
-    /* SAFE AREA BODY */
-    body {
-      padding-bottom: calc(140px + env(safe-area-inset-bottom));
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    /* FOOTER SAFE AREA */
-    .footer {
-      padding:
-        20px
-        max(18px, env(safe-area-inset-right))
-        calc(30px + env(safe-area-inset-bottom))
-        max(18px, env(safe-area-inset-left));
-      box-sizing: border-box;
-    }
 
     /* =====================================================
        MRS SIGNATURE
        Вся конструкция справа:
+
        Created & designed by MRS [подпись]
+
        Одна строка.
        ===================================================== */
 
@@ -335,13 +279,6 @@
       display: block !important;
     }
 
-    /* FOOTER GRID */
-    .footer-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-      width: 100%;
-    }
 
     /* =====================================================
        BOTTOM MENU
@@ -623,28 +560,8 @@
 
     }
 
-    /* Basic helpers used by the page (kept minimal to avoid conflicts) */
-    .container { max-width: 1100px; margin: 0 auto; padding: 20px; box-sizing: border-box; }
-    .hero { margin: 0 0 18px 0; }
-    .hero-img { width: 100%; height: auto; display: block; border-radius: 12px; }
-    .apple-glass-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 14px; border-radius: 12px; text-decoration: none; cursor: pointer; user-select: none; }
-    .apple-glass-btn:active { transform: translateY(1px); }
-    .section { margin: 18px 0; }
-    .muted { color: rgba(255,255,255,.75); opacity: .9; }
-    .services-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin: 12px 0; }
-    .service-card { padding: 12px; border-radius: 10px; background: rgba(255,255,255,.03); }
-    .adv-item { margin: 12px 0; font-weight: 600; }
-    .status-box { margin-top: 12px; min-height: 24px; }
-    .btn-row { display:flex; gap:10px; flex-wrap:wrap; margin: 12px 0; }
-    .top-buttons { display:flex; gap:10px; flex-wrap:wrap; margin-bottom: 12px; }
-    .social-row { display:flex; gap:10px; flex-wrap:wrap; }
-    .social-glass { padding: 8px 12px; border-radius: 10px; text-decoration:none; display:inline-block; }
-    .request-form input, .request-form textarea { width:100%; margin:8px 0; padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,.06); background: rgba(0,0,0,.25); color: inherit; box-sizing:border-box; }
-    .request-form button { margin-top:8px; }
-    /* Accessibility focus */
-    a:focus, button:focus, input:focus, textarea:focus { outline: 3px solid rgba(100,150,255,.18); outline-offset: 2px; }
-
   </style>
+
 
   <!-- STRUCTURED DATA -->
   <script type="application/ld+json">
@@ -656,8 +573,7 @@
     "url": "https://evakuator-krd.online/",
     "description": "Круглосуточная услуга эвакуации автомобилей в Краснодаре и Краснодарском крае.",
     "telephone": "+7-988-871-70-18",
-    "image": "https://evakuator-krd.online/preload.webp",
-    "priceRange": "2000-3000 RUB",
+    "image": "https://evakuator-krd.online/preload.png",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "ул. Дзержинского, 100",
@@ -665,34 +581,23 @@
       "addressRegion": "Краснодарский край",
       "addressCountry": "RU"
     },
-    "geo": {
-      "@type": "GeoCoordinates",
-      "latitude": "45.03547",
-      "longitude": "38.97531"
+    "areaServed": {
+      "@type": "AdministrativeArea",
+      "name": "Краснодарский край"
     },
-    "openingHoursSpecification": [{
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
-      "opens": "00:00",
-      "closes": "23:59"
-    }],
-    "sameAs": [
-      "https://t.me/evakuatorkrasnodar24",
-      "https://vk.ru/evakuator.krasnodar",
-      "https://web.max.ru/",
-      "https://chat.whatsapp.com/Da9sLiLpm6SLjmW7WZBZze"
-    ]
+    "openingHours": "Mo-Su 00:00-23:59",
+    "priceRange": "₽₽"
   }
   </script>
 
 </head>
 
+
 <body
   id="top"
   class="theme-dark page-fade-in"
-  itemscope
-  itemtype="https://schema.org/LocalBusiness"
 >
+
 
   <!-- PRELOADER -->
 
@@ -707,8 +612,6 @@
       class="preloader-img"
       width="140"
       height="140"
-      loading="eager"
-      decoding="async"
     >
 
     <div class="preloader-title">
@@ -723,7 +626,7 @@
 
     <!-- HERO -->
 
-    <header class="hero fade-in" itemprop="image">
+    <header class="hero fade-in">
 
       <picture>
 
@@ -738,7 +641,6 @@
           class="hero-img"
           fetchpriority="high"
           decoding="async"
-          loading="eager"
         >
 
       </picture>
@@ -791,7 +693,6 @@
         class="apple-glass-btn"
         href="tel:+79888717018"
         aria-label="Позвонить в службу эвакуации"
-        rel="noopener"
       >
         Позвонить
       </a>
@@ -811,7 +712,6 @@
         class="apple-glass-btn"
         href="/request.html"
         aria-label="Оставить заявку на эвакуатор"
-        rel="noopener"
       >
         Оставить заявку
       </a>
@@ -834,7 +734,6 @@
     <section
       class="section fade-in"
       id="about"
-      itemprop="description"
     >
 
       <h2>
@@ -851,7 +750,6 @@
       <a
         class="apple-glass-btn"
         href="/about.html"
-        rel="noopener"
       >
         Подробнее
       </a>
@@ -937,7 +835,6 @@
       <a
         class="apple-glass-btn"
         href="/prices.html"
-        rel="noopener"
       >
         Полный прайс-лист
       </a>
@@ -947,7 +844,10 @@
 
     <!-- REVIEWS -->
 
-    <section class="section fade-in" id="reviews" itemprop="review">
+    <section
+      class="section fade-in"
+      id="reviews"
+    >
 
       <h2>
         Отзывы клиентов
@@ -957,52 +857,52 @@
       <div class="services-list">
 
 
-        <div class="service-card" itemprop="review">
+        <div class="service-card">
 
-          <h3 itemprop="author">
+          <h3>
             Алексей
           </h3>
 
-          <p itemprop="reviewBody">
+          <p>
             Быстро приехали, аккуратно погрузили авто.
           </p>
 
         </div>
 
 
-        <div class="service-card" itemprop="review">
+        <div class="service-card">
 
-          <h3 itemprop="author">
+          <h3>
             Марина
           </h3>
 
-          <p itemprop="reviewBody">
+          <p>
             Эвакуатор приехал через 15 минут.
           </p>
 
         </div>
 
 
-        <div class="service-card" itemprop="review">
+        <div class="service-card">
 
-          <h3 itemprop="author">
+          <h3>
             Игорь
           </h3>
 
-          <p itemprop="reviewBody">
+          <p>
             Перевозили кроссовер — всё прошло отлично.
           </p>
 
         </div>
 
 
-        <div class="service-card" itemprop="review">
+        <div class="service-card">
 
-          <h3 itemprop="author">
+          <h3>
             Сергей
           </h3>
 
-          <p itemprop="reviewBody">
+          <p>
             Хороший сервис и аккуратная погрузка.
           </p>
 
@@ -1015,7 +915,6 @@
       <a
         class="apple-glass-btn"
         href="/reviews.html"
-        rel="noopener"
       >
         Все отзывы
       </a>
@@ -1025,7 +924,7 @@
 
     <!-- SEO TEXT -->
 
-    <section class="section fade-in" itemprop="description">
+    <section class="section fade-in">
 
       <h2>
         Круглосуточный эвакуатор в Краснодаре
@@ -1111,14 +1010,14 @@
 
     <!-- ADDRESS -->
 
-    <section class="section fade-in" itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+    <section class="section fade-in">
 
       <h2>
         Контакты
       </h2>
 
 
-      <p class="muted" itemprop="streetAddress">
+      <p class="muted">
         Краснодар, ул. Дзержинского, 100
       </p>
 
@@ -1128,8 +1027,6 @@
         <a
           class="apple-glass-btn"
           href="tel:+79888717018"
-          rel="noopener"
-          itemprop="telephone"
         >
           +7 (988) 871-70-18
         </a>
@@ -1145,7 +1042,6 @@
       <a
         class="apple-glass-btn"
         href="/contacts.html"
-        rel="noopener"
       >
         Все контакты
       </a>
@@ -1271,7 +1167,7 @@
 
           <p>
 
-            <a href="tel:+79888717018" rel="noopener">
+            <a href="tel:+79888717018">
               +7 (988) 871-70-18
             </a>
 
@@ -1288,7 +1184,7 @@
 
           <p>
 
-            <a href="/en.html" rel="noopener">
+            <a href="/en.html">
               English version
             </a>
 
