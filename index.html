@@ -23,11 +23,33 @@
   <link rel="canonical" href="https://evakuator-krd.online/">
 
   <!-- LANGUAGE ALTERNATES -->
-  <link
-    rel="alternate"
-    hreflang="ru"
-    href="https://evakuator-krd.online/"
-  >
+  <link rel="stylesheet" href="/style.css">
+
+<!-- FORCE: меню всегда фиксировано в viewport -->
+<style>
+  .bottom-menu,
+  #bottom-menu-portal,
+  #bottom-menu-portal .bottom-menu {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    top: auto !important;
+    width: 100% !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+    z-index: 2147483647 !important;
+    pointer-events: auto !important;
+  }
+
+  /* safe area for iPhone */
+  .bottom-menu { padding-bottom: env(safe-area-inset-bottom); }
+
+  /* отменяем возможные translateY */
+  .bottom-menu[style] { transform: none !important; }
+</style>
+
 
   <link
     rel="alternate"
