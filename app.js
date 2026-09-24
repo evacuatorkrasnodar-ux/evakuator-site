@@ -2,6 +2,7 @@
 // Включает: PWA install, preloader, theme toggle, геолокацию + геокодер,
 // отправку заявок в VK, UI helpers (toast/modal), fade-in observer,
 // service worker registration, безопасные утилиты.
+// В конце добавлена надёжная защита bottom-menu (portal protector).
 
 // -----------------------------
 // === КОНФИГ (проверь свои ключи)
@@ -462,8 +463,6 @@ if ("serviceWorker" in navigator) {
 // -----------------------------
 // === EXPORTS (if module environment)
 // -----------------------------
-// If you use bundlers or modules, you can export helpers.
-// For plain script usage, this is harmless.
 if (typeof window !== "undefined") {
   window.appHelpers = {
     sendRequest,
@@ -476,40 +475,155 @@ if (typeof window !== "undefined") {
   };
 }
 
-// === Защитник bottom-menu: переместить в body и блокировать transform/animation ===
-document.addEventListener('DOMContentLoaded', () => {
-  const menu = document.querySelector('.bottom-menu');
-  if (!menu) return;
+// -----------------------------
+// === Portal protector for bottom-menu (robust fix)
+// -----------------------------
+// Creates a fixed portal in <body>, moves the menu there, injects protective CSS,
+// observes mutations and periodically enforces critical styles.
+// Paste this block at the end of app.js (already included here).
+(function () {
+  document.addEventListener('DOMContentLoaded', () => {
+    const menu = document.querySelector('.bottom-menu');
+    if (!menu) {
+      console.warn('bottom-menu не найден — портал не создан');
+      return;
+    }
 
-  // Перемещаем в body, если меню вложено в другой контейнер
-  if (menu.parentElement !== document.body) {
-    document.body.appendChild(menu);
-    console.log('bottom-menu перемещено в body');
-  }
+    // Если уже есть портал — используем его
+    let portal = document.getElementById('bottom-menu-portal');
+    if (!portal) {
+      portal = document.createElement('div');
+      portal.id = 'bottom-menu-portal';
+      // Стили портала: фиксированное положение внизу, поверх всего
+      Object.assign(portal.style, {
+        position: 'fixed',
+        left: '0',
+        right: '0',
+        bottom: '0',
+        top: 'auto',
+        width: '100%',
+        zIndex: String(2147483647),
+        pointerEvents: 'none', // по умолчанию, кнопки внутри будут принимать события
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        transform: 'none',
+        animation: 'none',
+      });
+      document.body.appendChild(portal);
+    }
 
-  // Немедленно блокируем любые inline-стили, которые могут двигать меню
-  menu.style.transform = 'none';
-  menu.style.animation = 'none';
-  menu.style.transition = 'none';
-
-  // Защитник: периодически проверяем и убираем transform/animation, если кто-то снова добавит
-  const protector = setInterval(() => {
-    const cs = getComputedStyle(menu);
-    if (cs.transform && cs.transform !== 'none') {
+    // Переместим меню внутрь портала (не клонируем) — так ссылки и события сохранятся
+    if (menu.parentElement !== portal) {
+      // Сохраняем inline-стили, если нужны
+      menu.style.position = 'fixed';
+      menu.style.left = '0';
+      menu.style.right = '0';
+      menu.style.bottom = '0';
+      menu.style.top = 'auto';
+      menu.style.width = '100%';
+      menu.style.zIndex = String(2147483647);
+      menu.style.pointerEvents = 'auto';
       menu.style.transform = 'none';
-      console.warn('Защитник: убрал transform у bottom-menu');
-    }
-    if (cs.animationName && cs.animationName !== 'none') {
       menu.style.animation = 'none';
-      console.warn('Защитник: убрал animation у bottom-menu');
-    }
-    if (cs.transition && cs.transition !== 'all 0s ease 0s' && cs.transition !== 'none') {
       menu.style.transition = 'none';
-      console.warn('Защитник: убрал transition у bottom-menu');
+      // Переносим
+      portal.appendChild(menu);
+      console.log('bottom-menu перемещено в портал #bottom-menu-portal');
     }
-  }, 800);
 
-  // Остановим проверку через 20 секунд — этого достаточно для защиты при загрузке/инициализации
-  setTimeout(() => clearInterval(protector), 20000);
-});
+    // Убедимся, что меню принимает события (портал pointerEvents none, меню — auto)
+    portal.style.pointerEvents = 'none';
+    menu.style.pointerEvents = 'auto';
 
+    // Добавим защитный CSS прямо в документ (приоритетно)
+    const cssId = 'bottom-menu-portal-styles';
+    if (!document.getElementById(cssId)) {
+      const style = document.createElement('style');
+      style.id = cssId;
+      style.textContent = `
+        #bottom-menu-portal { pointer-events: none; position: fixed; left: 0; right: 0; bottom: 0; top: auto; z-index: 2147483647; transform: none !important; animation: none !important; }
+        #bottom-menu-portal .bottom-menu {
+          pointer-events: auto !important;
+          position: fixed !important;
+          left: 0 !important;
+          right: 0 !important;
+          bottom: 0 !important;
+          top: auto !important;
+          width: 100% !important;
+          transform: none !important;
+          animation: none !important;
+          transition: none !important;
+          z-index: 2147483647 !important;
+        }
+        /* защита от родительских transform: делаем меню в отдельном stacking context */
+        #bottom-menu-portal { will-change: auto !important; transform: none !important; }
+      `;
+      document.head.appendChild(style);
+    }
+
+    // MutationObserver: если кто-то попытается переместить меню или изменить его стили — вернуть обратно
+    const mo = new MutationObserver(mutations => {
+      for (const m of mutations) {
+        // если меню удалили из портала — вернуть
+        if (m.type === 'childList') {
+          if (![...portal.children].includes(menu)) {
+            portal.appendChild(menu);
+            console.warn('Защитник: menu возвращено в портал');
+          }
+        }
+        // если кто-то меняет inline-стили меню — восстановим критичные
+        if (m.type === 'attributes' && m.target === menu && (m.attributeName === 'style' || m.attributeName === 'class')) {
+          menu.style.position = 'fixed';
+          menu.style.left = '0';
+          menu.style.right = '0';
+          menu.style.bottom = '0';
+          menu.style.top = 'auto';
+          menu.style.transform = 'none';
+          menu.style.animation = 'none';
+          menu.style.transition = 'none';
+          menu.style.zIndex = String(2147483647);
+          menu.style.pointerEvents = 'auto';
+          console.warn('Защитник: восстановил стили bottom-menu');
+        }
+      }
+    });
+
+    mo.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['style', 'class'],
+    });
+
+    // Дополнительно: периодическая проверка (короткий интервал) — на случай сторонних библиотек
+    const interval = setInterval(() => {
+      const cs = getComputedStyle(menu);
+      if (cs.position !== 'fixed' || cs.transform !== 'none' || cs.animationName !== 'none') {
+        menu.style.position = 'fixed';
+        menu.style.left = '0';
+        menu.style.right = '0';
+        menu.style.bottom = '0';
+        menu.style.top = 'auto';
+        menu.style.transform = 'none';
+        menu.style.animation = 'none';
+        menu.style.transition = 'none';
+        menu.style.zIndex = String(2147483647);
+        menu.style.pointerEvents = 'auto';
+        console.warn('Защитник (интервал): восстановил критичные свойства bottom-menu');
+      }
+      // если портал исчез — восстановим
+      if (!document.getElementById('bottom-menu-portal')) {
+        document.body.appendChild(portal);
+        portal.appendChild(menu);
+        console.warn('Защитник: восстановил портал и menu');
+      }
+    }, 700);
+
+    // Остановим интервал через 30 секунд — после инициализации он не нужен, но MutationObserver остаётся
+    setTimeout(() => clearInterval(interval), 30000);
+
+    // Лог успешного включения защиты
+    console.log('Защитник bottom-menu активирован');
+  });
+})();
