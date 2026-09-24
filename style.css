@@ -15,10 +15,15 @@
   --shadow-soft:0 8px 20px rgba(0,0,0,.35);
 }
 
+
+/* ============================================================
+   GLOBAL
+============================================================ */
+
 * {
   box-sizing:border-box;
+
   -webkit-tap-highlight-color:transparent;
-  will-change:transform, opacity;
 }
 
 html {
@@ -26,16 +31,31 @@ html {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   * {
     animation:none !important;
     transition:none !important;
     scroll-behavior:auto !important;
   }
+
 }
+
+
+/* ============================================================
+   BODY
+============================================================ */
 
 body {
   margin:0;
-  font-family:-apple-system, BlinkMacSystemFont, "SF Pro Display", "Manrope", system-ui, sans-serif;
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "Manrope",
+    system-ui,
+    sans-serif;
+
   overflow-x:hidden;
 
   transition:
@@ -43,45 +63,62 @@ body {
     color .35s ease;
 
   opacity:0;
-  animation:pageLoad .8s ease forwards;
+
+  animation:
+    pageLoad .8s ease forwards;
 }
 
+
 @keyframes pageLoad {
+
   to {
     opacity:1;
   }
+
 }
+
 
 body.theme-dark {
   background:var(--bg-dark);
   color:var(--text-dark);
 }
 
+
 body.theme-light {
   background:var(--bg-light);
   color:var(--text-light);
 }
 
+
+/* ============================================================
+   CONTAINER
+============================================================ */
+
 .container {
   max-width:960px;
+
   margin:0 auto;
 
   padding:20px;
 
   /*
     Место снизу под постоянно закреплённое меню.
-    Основной контент не перекрывается меню.
+    Размеры основного блока не меняем.
   */
+
   padding-bottom:120px;
 }
 
-/* =========================
+
+/* ============================================================
    HERO
-========================= */
+============================================================ */
 
 .hero {
   position:relative;
+
   width:100%;
+
   overflow:hidden;
 
   border-radius:18px;
@@ -89,47 +126,53 @@ body.theme-light {
   box-shadow:var(--shadow-heavy);
 
   margin-bottom:28px;
-
-  will-change:transform, opacity;
 }
+
 
 .hero picture,
 .hero img {
   width:100%;
-  height:auto;
-  display:block;
 
-  will-change:opacity;
+  height:auto;
+
+  display:block;
 }
 
-/* =========================
+
+/* ============================================================
    FADE IN
-========================= */
+============================================================ */
 
 .fade-in {
   opacity:0;
+
   transform:translateY(30px);
 
   animation:
     fadeIn 1.1s cubic-bezier(.25,.46,.45,.94) forwards;
-
-  will-change:transform, opacity;
 }
+
 
 @keyframes fadeIn {
+
   to {
     opacity:1;
+
     transform:translateY(0);
   }
+
 }
 
-/* =========================
+
+/* ============================================================
    TOP BUTTONS
-========================= */
+============================================================ */
 
 .top-buttons {
   display:grid;
-  grid-template-columns:repeat(2, minmax(0, 1fr));
+
+  grid-template-columns:
+    repeat(2,minmax(0,1fr));
 
   align-items:stretch;
 
@@ -140,22 +183,28 @@ body.theme-light {
   margin-bottom:24px;
 }
 
+
 .install-btn,
 .theme-btn {
   width:100%;
+
   min-width:0;
+
   margin:0;
 }
+
 
 .install-btn.apple-glass-btn,
 .theme-btn.apple-glass-btn {
   min-height:52px;
+
   margin:0;
 }
 
-/* =========================
+
+/* ============================================================
    BUTTONS
-========================= */
+============================================================ */
 
 .apple-glass-btn {
   display:inline-flex;
@@ -168,6 +217,7 @@ body.theme-light {
   border-radius:14px;
 
   font-size:17px;
+
   font-weight:600;
 
   text-decoration:none;
@@ -183,14 +233,14 @@ body.theme-light {
   position:relative;
 
   user-select:none;
-
-  will-change:transform;
 }
+
 
 .apple-glass-btn::after {
   content:"";
 
   position:absolute;
+
   inset:0;
 
   border-radius:inherit;
@@ -206,6 +256,7 @@ body.theme-light {
 
   pointer-events:none;
 }
+
 
 body.theme-dark .apple-glass-btn {
   color:var(--text-dark);
@@ -225,6 +276,7 @@ body.theme-dark .apple-glass-btn {
   border:1px solid rgba(255,255,255,.22);
 }
 
+
 body.theme-light .apple-glass-btn {
   color:var(--text-light);
 
@@ -238,16 +290,23 @@ body.theme-light .apple-glass-btn {
   border:1px solid rgba(0,0,0,.12);
 }
 
+
 .apple-glass-btn:hover {
-  transform:translateY(-4px) scale(1.03);
+  transform:
+    translateY(-4px)
+    scale(1.03);
 
   box-shadow:
     0 22px 50px rgba(0,0,0,.55);
 }
 
+
 .apple-glass-btn:active {
-  transform:translateY(1px) scale(.97);
+  transform:
+    translateY(1px)
+    scale(.97);
 }
+
 
 .btn-row {
   display:flex;
@@ -261,6 +320,7 @@ body.theme-light .apple-glass-btn {
   margin-bottom:20px;
 }
 
+
 .btn-row > .apple-glass-btn {
   flex:1 1 0;
 
@@ -269,26 +329,31 @@ body.theme-light .apple-glass-btn {
   margin:0;
 }
 
-/* =========================
+
+/* ============================================================
    MUTED
-========================= */
+============================================================ */
 
 .muted {
   font-size:15px;
+
   line-height:1.6;
 }
+
 
 body.theme-dark .muted {
   color:var(--muted-dark);
 }
 
+
 body.theme-light .muted {
   color:var(--muted-light);
 }
 
-/* =========================
+
+/* ============================================================
    SECTIONS
-========================= */
+============================================================ */
 
 .section {
   border-radius:var(--radius);
@@ -305,9 +370,8 @@ body.theme-light .muted {
 
   transition:
     backdrop-filter .35s ease;
-
-  will-change:transform, opacity;
 }
+
 
 body.theme-dark .section {
   background:
@@ -321,6 +385,7 @@ body.theme-dark .section {
   border:1px solid rgba(255,255,255,.12);
 }
 
+
 body.theme-light .section {
   background:
     linear-gradient(
@@ -332,6 +397,7 @@ body.theme-light .section {
   border:1px solid rgba(0,0,0,.06);
 }
 
+
 .section h2 {
   margin:0 0 16px;
 
@@ -340,9 +406,10 @@ body.theme-light .section {
   font-weight:700;
 }
 
-/* =========================
+
+/* ============================================================
    SOCIAL
-========================= */
+============================================================ */
 
 .social-row {
   display:flex;
@@ -352,6 +419,7 @@ body.theme-light .section {
   flex-wrap:wrap;
 }
 
+
 .social-glass {
   flex:1;
 
@@ -360,6 +428,7 @@ body.theme-light .section {
   border-radius:14px;
 
   font-size:15px;
+
   font-weight:600;
 
   text-align:center;
@@ -369,9 +438,8 @@ body.theme-light .section {
   transition:.22s ease;
 
   box-shadow:var(--shadow-soft);
-
-  will-change:transform;
 }
+
 
 body.theme-dark .social-glass {
   color:var(--text-dark);
@@ -387,6 +455,7 @@ body.theme-dark .social-glass {
   border:1px solid rgba(255,255,255,.22);
 }
 
+
 body.theme-light .social-glass {
   color:var(--text-light);
 
@@ -400,21 +469,25 @@ body.theme-light .social-glass {
   border:1px solid rgba(0,0,0,.12);
 }
 
+
 .social-glass:hover {
   transform:translateY(-1px);
 }
 
-/* =========================
+
+/* ============================================================
    SERVICES
-========================= */
+============================================================ */
 
 .services-list {
   display:grid;
 
-  grid-template-columns:repeat(2,1fr);
+  grid-template-columns:
+    repeat(2,1fr);
 
   gap:18px;
 }
+
 
 .service-card {
   padding:18px;
@@ -426,9 +499,8 @@ body.theme-light .social-glass {
   transition:
     transform .25s cubic-bezier(.25,.46,.45,.94),
     box-shadow .25s ease;
-
-  will-change:transform;
 }
+
 
 .service-card:hover {
   transform:translateY(-6px);
@@ -436,6 +508,7 @@ body.theme-light .social-glass {
   box-shadow:
     0 26px 60px rgba(0,0,0,.55);
 }
+
 
 body.theme-dark .service-card {
   background:
@@ -451,6 +524,7 @@ body.theme-dark .service-card {
   color:var(--text-dark);
 }
 
+
 body.theme-light .service-card {
   background:
     linear-gradient(
@@ -464,6 +538,7 @@ body.theme-light .service-card {
   color:var(--text-light);
 }
 
+
 .service-card h3 {
   margin:0 0 8px;
 
@@ -472,19 +547,23 @@ body.theme-light .service-card {
   font-weight:700;
 }
 
+
 .service-card p {
   margin:0;
 
   font-size:15px;
 }
 
+
 body.theme-dark .service-card p {
   color:var(--muted-dark);
 }
 
+
 body.theme-light .service-card p {
   color:var(--muted-light);
 }
+
 
 .adv-item {
   margin-top:14px;
@@ -492,17 +571,20 @@ body.theme-light .service-card p {
   font-size:15px;
 }
 
+
 body.theme-dark .adv-item {
   color:var(--muted-dark);
 }
+
 
 body.theme-light .adv-item {
   color:var(--muted-light);
 }
 
-/* =========================
+
+/* ============================================================
    REQUEST FORM
-========================= */
+============================================================ */
 
 .request-form {
   display:flex;
@@ -511,6 +593,7 @@ body.theme-light .adv-item {
 
   gap:12px;
 }
+
 
 .request-form input,
 .request-form textarea {
@@ -527,6 +610,7 @@ body.theme-light .adv-item {
   outline:none;
 }
 
+
 body.theme-dark .request-form input,
 body.theme-dark .request-form textarea {
   background:
@@ -542,6 +626,7 @@ body.theme-dark .request-form textarea {
   color:var(--text-dark);
 }
 
+
 body.theme-light .request-form input,
 body.theme-light .request-form textarea {
   background:
@@ -556,24 +641,28 @@ body.theme-light .request-form textarea {
   color:var(--text-light);
 }
 
+
 .request-form input::placeholder,
 .request-form textarea::placeholder {
   color:var(--muted-dark);
 }
+
 
 body.theme-light .request-form input::placeholder,
 body.theme-light .request-form textarea::placeholder {
   color:var(--muted-light);
 }
 
+
 .request-form input:focus,
 .request-form textarea:focus {
   border-color:rgba(255,255,255,.35);
 }
 
-/* =========================
+
+/* ============================================================
    STATUS
-========================= */
+============================================================ */
 
 .status-box {
   margin-top:10px;
@@ -589,23 +678,27 @@ body.theme-light .request-form textarea::placeholder {
     transform .45s ease;
 }
 
+
 .status-show {
   opacity:1;
 
   transform:translateY(0);
 }
 
+
 body.theme-dark .status-box {
   color:var(--muted-dark);
 }
+
 
 body.theme-light .status-box {
   color:var(--muted-light);
 }
 
-/* =========================
+
+/* ============================================================
    FOOTER
-========================= */
+============================================================ */
 
 .footer {
   margin-top:30px;
@@ -616,6 +709,7 @@ body.theme-light .status-box {
 
   box-shadow:var(--shadow-medium);
 }
+
 
 body.theme-dark .footer {
   background:
@@ -629,6 +723,7 @@ body.theme-dark .footer {
   border:1px solid rgba(255,255,255,.22);
 }
 
+
 body.theme-light .footer {
   background:
     linear-gradient(
@@ -640,13 +735,16 @@ body.theme-light .footer {
   border:1px solid rgba(0,0,0,.12);
 }
 
+
 .footer-grid {
   display:grid;
 
-  grid-template-columns:repeat(3,1fr);
+  grid-template-columns:
+    repeat(3,1fr);
 
   gap:18px;
 }
+
 
 .footer h3 {
   margin:0 0 6px;
@@ -654,19 +752,23 @@ body.theme-light .footer {
   font-size:16px;
 }
 
+
 .footer p {
   margin:0;
 
   font-size:14px;
 }
 
+
 body.theme-dark .footer p {
   color:var(--muted-dark);
 }
 
+
 body.theme-light .footer p {
   color:var(--muted-light);
 }
+
 
 .footer a {
   color:#4ade80;
@@ -674,99 +776,110 @@ body.theme-light .footer p {
   text-decoration:none;
 }
 
-/* =========================
+
+/* ============================================================
    MRS SIGNATURE
-   Отдельная нижняя строка.
-   Основной footer-grid не меняем.
-========================= */
+   Одна горизонтальная строка.
+   Без изображения.
+============================================================ */
 
 .footer-credit {
   width:100%;
 
   margin-top:18px;
-  padding-top:14px;
-
-  border-top:1px solid rgba(128,128,128,.18);
 
   display:flex;
 
   align-items:center;
-  justify-content:center;
 
-  gap:16px;
+  justify-content:center;
 
   white-space:nowrap;
 
   overflow:hidden;
 }
 
-.footer-credit-text {
-  flex:0 0 auto;
 
-  font-size:12px;
+.mrs-signature {
+  display:inline-block;
+
+  margin:0;
+
+  padding:0;
+
+  white-space:nowrap;
+
+  font-family:
+    "Segoe Script",
+    "Brush Script MT",
+    "URW Chancery L",
+    "Apple Chancery",
+    "Snell Roundhand",
+    cursive;
+
+  font-size:24px;
+
+  line-height:1;
 
   font-weight:500;
 
-  letter-spacing:1.8px;
+  font-style:italic;
 
-  text-transform:none;
+  letter-spacing:.4px;
 
-  opacity:.68;
-}
+  opacity:.78;
 
-body.theme-dark .footer-credit-text {
-  color:var(--text-dark);
-}
-
-body.theme-light .footer-credit-text {
-  color:var(--text-light);
-}
-
-.mrs-signature {
-  display:block;
-
-  width:180px;
-  height:55px;
-
-  object-fit:contain;
-
-  object-position:center;
-
-  flex:0 0 auto;
-
-  opacity:.9;
+  user-select:none;
 
   transition:
     opacity .3s ease,
-    filter .3s ease;
+    transform .3s ease;
 }
 
-/*
-  Если исходная подпись белая:
-  в тёмной теме оставляем белой,
-  в светлой превращаем в тёмную.
-*/
 
 body.theme-dark .mrs-signature {
-  filter:none;
+  color:rgba(243,245,247,.78);
 }
+
 
 body.theme-light .mrs-signature {
-  filter:invert(1);
+  color:rgba(17,19,24,.68);
 }
 
-/* =========================
+
+.mrs-signature:hover {
+  opacity:1;
+
+  transform:scale(1.02);
+}
+
+
+/* ============================================================
    FIXED BOTTOM MENU
-========================= */
+   ЖЁСТКО ЗАКРЕПЛЕНО.
+   НЕ ВЫЕЗЖАЕТ.
+   НЕ ИСЧЕЗАЕТ.
+   НЕ УЧАСТВУЕТ В FADE-IN.
+============================================================ */
 
 .bottom-menu {
-  position:fixed;
+  position:fixed !important;
 
-  left:0;
-  right:0;
-  bottom:0;
+  left:0 !important;
 
-  width:100%;
+  right:0 !important;
+
+  bottom:0 !important;
+
+  top:auto !important;
+
+  width:100% !important;
+
+  height:auto !important;
+
+  min-height:0 !important;
+
+  margin:0 !important;
 
   box-sizing:border-box;
 
@@ -779,42 +892,39 @@ body.theme-light .mrs-signature {
   display:flex;
 
   align-items:center;
+
   justify-content:space-around;
 
   gap:8px;
 
-  /*
-    Всегда видимо.
-    Никакого выезда при прокрутке.
-  */
-  visibility:visible;
-  opacity:1;
+  visibility:visible !important;
 
-  pointer-events:auto;
+  opacity:1 !important;
 
-  /*
-    Убираем старое движение menuFloat.
-  */
-  animation:none !important;
+  pointer-events:auto !important;
 
   transform:none !important;
 
-  /*
-    Меню всегда поверх контента.
-  */
-  z-index:99999;
+  animation:none !important;
 
-  /*
-    Не используем transition/transform,
-    чтобы меню не "плавало" при скролле.
-  */
-  transition:none;
+  transition:none !important;
+
+  will-change:auto !important;
+
+  z-index:2147483647 !important;
+
+  isolation:isolate;
+
+  contain:layout paint;
 }
 
-body.theme-dark .bottom-menu {
-  background:rgba(20,20,20,.78);
 
-  border-top:1px solid rgba(255,255,255,.15);
+body.theme-dark .bottom-menu {
+  background:
+    rgba(20,20,20,.78);
+
+  border-top:
+    1px solid rgba(255,255,255,.15);
 
   box-shadow:
     0 -10px 40px rgba(0,0,0,.45);
@@ -828,10 +938,13 @@ body.theme-dark .bottom-menu {
     blur(20px);
 }
 
-body.theme-light .bottom-menu {
-  background:rgba(255,255,255,.92);
 
-  border-top:1px solid rgba(0,0,0,.08);
+body.theme-light .bottom-menu {
+  background:
+    rgba(255,255,255,.92);
+
+  border-top:
+    1px solid rgba(0,0,0,.08);
 
   box-shadow:
     0 -10px 40px rgba(0,0,0,.15);
@@ -845,10 +958,12 @@ body.theme-light .bottom-menu {
     blur(20px);
 }
 
+
 .bottom-menu a {
   display:flex;
 
   align-items:center;
+
   justify-content:center;
 
   flex:1 1 0;
@@ -860,18 +975,22 @@ body.theme-light .bottom-menu {
   text-decoration:none;
 
   font-size:15px;
+
   font-weight:600;
 
   padding:10px 14px;
 
   border-radius:12px;
 
-  background:rgba(255,255,255,.08);
+  background:
+    rgba(255,255,255,.08);
 
-  border:1px solid rgba(255,255,255,.15);
+  border:
+    1px solid rgba(255,255,255,.15);
 
-  visibility:visible;
-  opacity:1;
+  visibility:visible !important;
+
+  opacity:1 !important;
 
   position:relative;
 
@@ -881,26 +1000,33 @@ body.theme-light .bottom-menu {
 
   white-space:nowrap;
 
+  transform:none;
+
   transition:
     transform .2s ease,
     background .2s ease;
 }
 
+
 .bottom-menu a:hover {
   transform:translateY(-2px);
 }
 
+
 body.theme-light .bottom-menu a {
   color:#111318;
 
-  background:rgba(255,255,255,.95);
+  background:
+    rgba(255,255,255,.95);
 
-  border:1px solid rgba(0,0,0,.06);
+  border:
+    1px solid rgba(0,0,0,.06);
 }
 
-/* =========================
+
+/* ============================================================
    MOBILE
-========================= */
+============================================================ */
 
 @media (max-width:680px) {
 
@@ -908,9 +1034,11 @@ body.theme-light .bottom-menu a {
     grid-template-columns:1fr;
   }
 
+
   .footer-grid {
     grid-template-columns:1fr;
   }
+
 
   .btn-row {
     flex-direction:column;
@@ -918,15 +1046,18 @@ body.theme-light .bottom-menu a {
     gap:14px;
   }
 
+
   .apple-glass-btn {
     width:100%;
   }
+
 
   .top-buttons {
     grid-template-columns:1fr;
 
     gap:12px;
   }
+
 
   .bottom-menu {
     padding:
@@ -936,46 +1067,76 @@ body.theme-light .bottom-menu a {
       8px;
 
     gap:6px;
+
+    position:fixed !important;
+
+    left:0 !important;
+
+    right:0 !important;
+
+    bottom:0 !important;
+
+    top:auto !important;
+
+    transform:none !important;
+
+    animation:none !important;
+
+    transition:none !important;
+
+    will-change:auto !important;
   }
+
 
   .bottom-menu a {
     padding:10px 8px;
 
     font-size:14px;
+
+    transform:none;
   }
 
+
+  .bottom-menu a:hover {
+    transform:none;
+  }
+
+
   /*
-    На телефоне подпись остаётся
-    строго в одной горизонтальной строке.
+    Подпись строго в одну горизонтальную строку.
   */
+
   .footer-credit {
-    gap:10px;
+    gap:0;
 
     justify-content:center;
 
     white-space:nowrap;
+
+    overflow:hidden;
   }
 
-  .footer-credit-text {
-    font-size:9px;
-
-    letter-spacing:1px;
-  }
 
   .mrs-signature {
-    width:130px;
-    height:44px;
+    font-size:20px;
+
+    white-space:nowrap;
+
+    line-height:1;
   }
+
 }
 
-/* =========================
+
+/* ============================================================
    BUTTON BOUNCE
-========================= */
+============================================================ */
 
 .btn-bounce {
   animation:
     btnBounce .25s cubic-bezier(.25,1.25,.45,.94);
 }
+
 
 @keyframes btnBounce {
 
@@ -990,15 +1151,19 @@ body.theme-light .bottom-menu a {
   100% {
     transform:scale(1);
   }
+
 }
 
-/* =========================
+
+/* ============================================================
    GEO PULSE
-========================= */
+============================================================ */
 
 #geoStatus {
-  animation:pulse 2s infinite;
+  animation:
+    pulse 2s infinite;
 }
+
 
 @keyframes pulse {
 
@@ -1013,11 +1178,13 @@ body.theme-light .bottom-menu a {
   100% {
     opacity:.6;
   }
+
 }
 
-/* =========================
+
+/* ============================================================
    PRELOADER
-========================= */
+============================================================ */
 
 #preloader {
   position:fixed;
@@ -1031,20 +1198,24 @@ body.theme-light .bottom-menu a {
   flex-direction:column;
 
   align-items:center;
+
   justify-content:center;
 
   z-index:99999;
 
   opacity:1;
 
-  transition:opacity .6s ease;
+  transition:
+    opacity .6s ease;
 }
+
 
 #preloader.hidden {
   opacity:0;
 
   pointer-events:none;
 }
+
 
 .preloader-img {
   width:140px;
@@ -1056,6 +1227,7 @@ body.theme-light .bottom-menu a {
   animation:
     preloaderFade 1.4s ease-in-out infinite alternate;
 }
+
 
 .preloader-title {
   font-size:20px;
@@ -1070,18 +1242,23 @@ body.theme-light .bottom-menu a {
     preloaderText 1.4s ease-in-out infinite alternate;
 }
 
+
 @keyframes preloaderFade {
 
   0% {
     opacity:.6;
+
     transform:scale(.96);
   }
 
   100% {
     opacity:1;
+
     transform:scale(1);
   }
+
 }
+
 
 @keyframes preloaderText {
 
@@ -1092,4 +1269,5 @@ body.theme-light .bottom-menu a {
   100% {
     opacity:1;
   }
+
 }
