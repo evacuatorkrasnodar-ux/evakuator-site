@@ -25,11 +25,13 @@
     hreflang="ru"
     href="https://evakuator-krd.online/"
   >
+
   <link
     rel="alternate"
     hreflang="en"
     href="https://evakuator-krd.online/en.html"
   >
+
   <link
     rel="alternate"
     hreflang="x-default"
@@ -41,7 +43,11 @@
   <meta property="og:locale" content="ru_RU">
   <meta property="og:locale:alternate" content="en_US">
   <meta property="og:site_name" content="Эвакуатор Краснодар 24/7">
-  <meta property="og:title" content="Эвакуатор Краснодар 24/7 — Быстро, надёжно">
+
+  <meta
+    property="og:title"
+    content="Эвакуатор Краснодар 24/7 — Быстро, надёжно"
+  >
 
   <meta
     property="og:description"
@@ -147,6 +153,417 @@
     type="image/webp"
   >
 
+  <!--
+    =========================================================
+    FINAL FOOTER + FIXED MENU OVERRIDES
+    =========================================================
+    Эти стили находятся здесь специально, чтобы старые
+    animation / transform из style.css больше не могли
+    сдвигать нижнее меню.
+  -->
+
+  <style>
+
+    /* =====================================================
+       MRS SIGNATURE
+       Вся конструкция справа:
+
+       Created & designed by MRS [подпись]
+
+       Одна строка.
+       ===================================================== */
+
+    .footer-credit {
+      width: 100% !important;
+
+      margin-top: 18px !important;
+      padding-top: 14px !important;
+
+      display: flex !important;
+
+      flex-direction: row !important;
+      flex-wrap: nowrap !important;
+
+      align-items: center !important;
+
+      /*
+       * ВАЖНО:
+       * вся конструкция прижата вправо
+       */
+      justify-content: flex-end !important;
+
+      gap: 10px !important;
+
+      box-sizing: border-box !important;
+
+      white-space: nowrap !important;
+
+      overflow: hidden !important;
+
+      text-align: right !important;
+
+      line-height: 1 !important;
+
+      border-top: 1px solid rgba(128,128,128,.18);
+    }
+
+
+    .footer-credit-text {
+      flex: 0 0 auto !important;
+
+      display: inline-block !important;
+
+      margin: 0 !important;
+      padding: 0 !important;
+
+      white-space: nowrap !important;
+
+      font-size: 13px !important;
+
+      line-height: 1 !important;
+
+      font-weight: 400 !important;
+
+      letter-spacing: .1px !important;
+
+      opacity: .72 !important;
+
+      text-align: right !important;
+    }
+
+
+    .mrs-signature {
+      flex: 0 0 auto !important;
+
+      display: block !important;
+
+      width: 150px !important;
+
+      max-width: 150px !important;
+
+      height: 55px !important;
+
+      margin: 0 !important;
+
+      padding: 0 !important;
+
+      border: 0 !important;
+
+      outline: 0 !important;
+
+      object-fit: contain !important;
+
+      object-position: center !important;
+
+      transform: none !important;
+    }
+
+
+    /* DARK THEME */
+
+    .mrs-signature-dark {
+      display: block !important;
+    }
+
+    .mrs-signature-light {
+      display: none !important;
+    }
+
+
+    /* LIGHT THEME */
+
+    body.theme-light .mrs-signature-dark {
+      display: none !important;
+    }
+
+    body.theme-light .mrs-signature-light {
+      display: block !important;
+    }
+
+
+    /* =====================================================
+       BOTTOM MENU
+       НАСТОЯЩЕЕ FIXED-МЕНЮ
+       ===================================================== */
+
+    .bottom-menu {
+      position: fixed !important;
+
+      left: 0 !important;
+      right: 0 !important;
+
+      bottom: 0 !important;
+      top: auto !important;
+
+      width: 100% !important;
+
+      height: auto !important;
+
+      min-height: 0 !important;
+
+      margin: 0 !important;
+
+      box-sizing: border-box !important;
+
+      display: flex !important;
+
+      flex-direction: row !important;
+
+      flex-wrap: nowrap !important;
+
+      align-items: center !important;
+
+      justify-content: space-around !important;
+
+      gap: 8px !important;
+
+      padding:
+        10px
+        max(12px, env(safe-area-inset-right))
+        calc(10px + env(safe-area-inset-bottom))
+        max(12px, env(safe-area-inset-left)) !important;
+
+      z-index: 2147483647 !important;
+
+      visibility: visible !important;
+
+      opacity: 1 !important;
+
+      pointer-events: auto !important;
+
+      /*
+       * КРИТИЧЕСКИ ВАЖНО:
+       * отключаем старую плавающую анимацию.
+       */
+      transform: none !important;
+
+      animation: none !important;
+
+      transition: none !important;
+
+      will-change: auto !important;
+
+      isolation: isolate !important;
+
+      background:
+        rgba(20,20,20,.92) !important;
+
+      border-top:
+        1px solid rgba(255,255,255,.15) !important;
+
+      box-shadow:
+        0 -10px 40px rgba(0,0,0,.45) !important;
+
+      backdrop-filter: blur(20px);
+
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+
+    /* DARK THEME MENU */
+
+    body.theme-dark .bottom-menu {
+      background:
+        linear-gradient(
+          180deg,
+          rgba(30,30,30,.94),
+          rgba(10,10,10,.97)
+        ) !important;
+
+      border-top:
+        1px solid rgba(255,255,255,.15) !important;
+
+      box-shadow:
+        0 -10px 40px rgba(0,0,0,.55) !important;
+    }
+
+
+    /* LIGHT THEME MENU */
+
+    body.theme-light .bottom-menu {
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255,255,255,.96),
+          rgba(245,247,250,.98)
+        ) !important;
+
+      border-top:
+        1px solid rgba(0,0,0,.10) !important;
+
+      box-shadow:
+        0 -10px 30px rgba(0,0,0,.15) !important;
+    }
+
+
+    /* MENU LINKS */
+
+    .bottom-menu a {
+      flex: 1 1 0 !important;
+
+      min-width: 0 !important;
+
+      display: flex !important;
+
+      align-items: center !important;
+
+      justify-content: center !important;
+
+      box-sizing: border-box !important;
+
+      margin: 0 !important;
+
+      padding: 10px 12px !important;
+
+      white-space: nowrap !important;
+
+      text-align: center !important;
+
+      font-size: 15px !important;
+
+      line-height: 1.2 !important;
+
+      font-weight: 600 !important;
+
+      position: relative !important;
+
+      visibility: visible !important;
+
+      opacity: 1 !important;
+
+      pointer-events: auto !important;
+
+      transform: none !important;
+
+      animation: none !important;
+
+      transition: none !important;
+
+    }
+
+
+    /* DARK LINKS */
+
+    body.theme-dark .bottom-menu a {
+      color: #fff !important;
+
+      background:
+        rgba(255,255,255,.08) !important;
+
+      border:
+        1px solid rgba(255,255,255,.15) !important;
+    }
+
+
+    /* LIGHT LINKS */
+
+    body.theme-light .bottom-menu a {
+      color: #111318 !important;
+
+      background:
+        rgba(255,255,255,.92) !important;
+
+      border:
+        1px solid rgba(0,0,0,.08) !important;
+    }
+
+
+    /* ОТКЛЮЧАЕМ ЛЮБОЕ ДВИЖЕНИЕ ПРИ HOVER */
+
+    .bottom-menu a:hover {
+      transform: none !important;
+    }
+
+
+    /* =====================================================
+       MOBILE
+       ===================================================== */
+
+    @media (max-width: 680px) {
+
+      .footer-credit {
+        justify-content: flex-end !important;
+
+        gap: 7px !important;
+
+        padding-top: 12px !important;
+      }
+
+
+      .footer-credit-text {
+        font-size: 11px !important;
+      }
+
+
+      .mrs-signature {
+        width: 115px !important;
+
+        max-width: 115px !important;
+
+        height: 45px !important;
+      }
+
+
+      .bottom-menu {
+        padding:
+          9px
+          max(8px, env(safe-area-inset-right))
+          calc(9px + env(safe-area-inset-bottom))
+          max(8px, env(safe-area-inset-left)) !important;
+
+        gap: 5px !important;
+      }
+
+
+      .bottom-menu a {
+        padding:
+          9px 6px !important;
+
+        font-size: 13px !important;
+
+        border-radius: 10px !important;
+      }
+
+    }
+
+
+    /* =====================================================
+       VERY SMALL PHONES
+       ===================================================== */
+
+    @media (max-width: 400px) {
+
+      .footer-credit {
+        gap: 5px !important;
+      }
+
+
+      .footer-credit-text {
+        font-size: 10px !important;
+      }
+
+
+      .mrs-signature {
+        width: 100px !important;
+
+        max-width: 100px !important;
+
+        height: 40px !important;
+      }
+
+
+      .bottom-menu a {
+        padding:
+          8px 4px !important;
+
+        font-size: 12px !important;
+      }
+
+    }
+
+  </style>
+
+
   <!-- STRUCTURED DATA -->
   <script type="application/ld+json">
   {
@@ -176,9 +593,15 @@
 
 </head>
 
-<body id="top" class="theme-dark page-fade-in">
+
+<body
+  id="top"
+  class="theme-dark page-fade-in"
+>
+
 
   <!-- PRELOADER -->
+
   <div
     id="preloader"
     aria-hidden="true"
@@ -201,7 +624,9 @@
 
   <div class="container">
 
+
     <!-- HERO -->
+
     <header class="hero fade-in">
 
       <picture>
@@ -225,6 +650,7 @@
 
 
     <!-- TOP BUTTONS -->
+
     <div class="top-buttons fade-in">
 
       <button
@@ -261,6 +687,7 @@
 
 
     <!-- MAIN BUTTONS -->
+
     <div class="btn-row fade-in">
 
       <a
@@ -294,6 +721,7 @@
 
 
     <!-- GEO STATUS -->
+
     <div
       id="geoStatus"
       class="status-box fade-in"
@@ -303,6 +731,7 @@
 
 
     <!-- ABOUT -->
+
     <section
       class="section fade-in"
       id="about"
@@ -318,6 +747,7 @@
         понятная стоимость без скрытых платежей.
       </p>
 
+
       <a
         class="apple-glass-btn"
         href="/about.html"
@@ -329,6 +759,7 @@
 
 
     <!-- PRICES -->
+
     <section
       class="section fade-in"
       id="prices"
@@ -340,6 +771,7 @@
 
 
       <div class="services-list">
+
 
         <div class="service-card">
 
@@ -392,6 +824,7 @@
 
         </div>
 
+
       </div>
 
 
@@ -411,6 +844,7 @@
 
 
     <!-- REVIEWS -->
+
     <section
       class="section fade-in"
       id="reviews"
@@ -422,6 +856,7 @@
 
 
       <div class="services-list">
+
 
         <div class="service-card">
 
@@ -474,6 +909,7 @@
 
         </div>
 
+
       </div>
 
 
@@ -488,17 +924,20 @@
 
 
     <!-- SEO TEXT -->
+
     <section class="section fade-in">
 
       <h2>
         Круглосуточный эвакуатор в Краснодаре
       </h2>
 
+
       <p class="muted">
         Заказать эвакуатор в Краснодаре можно круглосуточно.
         Работаем с легковыми автомобилями, кроссоверами,
         минивэнами и малым коммерческим транспортом.
       </p>
+
 
       <p class="muted">
         Оказываем помощь при поломках, ДТП и необходимости
@@ -510,6 +949,7 @@
 
 
     <!-- SOCIAL -->
+
     <section class="section fade-in">
 
       <h2>
@@ -518,6 +958,7 @@
 
 
       <div class="social-row">
+
 
         <a
           class="social-glass"
@@ -562,17 +1003,20 @@
           VK
         </a>
 
+
       </div>
 
     </section>
 
 
     <!-- ADDRESS -->
+
     <section class="section fade-in">
 
       <h2>
         Контакты
       </h2>
+
 
       <p class="muted">
         Краснодар, ул. Дзержинского, 100
@@ -607,6 +1051,7 @@
 
 
     <!-- REQUEST -->
+
     <section
       class="section fade-in"
       id="request"
@@ -622,6 +1067,7 @@
         class="request-form"
         novalidate
       >
+
 
         <input
           id="name"
@@ -675,6 +1121,7 @@
           Оставить заявку
         </button>
 
+
       </form>
 
 
@@ -689,9 +1136,12 @@
 
 
     <!-- FOOTER -->
+
     <footer class="footer fade-in">
 
+
       <div class="footer-grid">
+
 
         <div>
 
@@ -743,10 +1193,17 @@
 
         </div>
 
+
       </div>
 
 
-      <!-- MRS DIGITAL SIGNATURE -->
+      <!-- =================================================
+           MRS DIGITAL SIGNATURE
+
+           СПРАВА:
+           Created & designed by MRS [подпись]
+           ================================================= -->
+
       <div
         class="footer-credit"
         aria-label="Created and designed by MRS"
@@ -758,6 +1215,7 @@
 
 
         <!-- DARK THEME -->
+
         <img
           src="/mrs-signature-white.png"
           alt="MRS"
@@ -770,6 +1228,7 @@
 
 
         <!-- LIGHT THEME -->
+
         <img
           src="/mrs-signature-black.png"
           alt=""
@@ -783,16 +1242,26 @@
 
       </div>
 
+
     </footer>
+
 
   </div>
 
 
-  <!-- BOTTOM MENU -->
+  <!-- =====================================================
+       BOTTOM MENU
+
+       БЕЗ fade-in!
+       Это важно — иначе старая анимация может снова
+       воздействовать на position:fixed через transform.
+       ===================================================== -->
+
   <nav
     class="bottom-menu"
     aria-label="Основная навигация"
   >
+
 
     <a
       href="/"
@@ -825,14 +1294,17 @@
       Наверх
     </a>
 
+
   </nav>
 
 
   <!-- SCRIPTS -->
+
   <script
     src="/app.js"
     defer
   ></script>
+
 
 </body>
 </html>
