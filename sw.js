@@ -1,26 +1,26 @@
 /* =========================================================
-   SERVICE WORKER
+   sw.js
    Эвакуатор Краснодар 24/7
 
    PWA / Android / Chrome / Edge / Яндекс Браузер / iOS
 
-   ВАЖНО:
-   - VK/Yandex ключи находятся в app.js.
-   - Здесь ключей и токенов НЕТ.
-   - POST / PUT / PATCH / DELETE НЕ кэшируются.
-   - VK / Yandex / аналитика НЕ кэшируются.
-   - HTML: NETWORK FIRST.
-   - CSS / JS / fonts: NETWORK FIRST → CACHE.
-   - Изображения: CACHE FIRST → NETWORK.
-   - Старые версии нашего кэша автоматически удаляются.
+   ЛОГИКА:
+   - POST / PUT / PATCH / DELETE не перехватываются
+   - VK / Yandex / аналитика не кэшируются
+   - HTML: NETWORK FIRST → CACHE → OFFLINE
+   - CSS / JS / fonts: NETWORK FIRST → CACHE
+   - Изображения: CACHE FIRST → NETWORK
+   - Остальные GET: NETWORK FIRST → CACHE
+   - Старые версии кэша удаляются
+   - Новый SW активируется сразу
    ========================================================= */
 
 
 /* =========================================================
-   CACHE VERSION
+   VERSION
    ========================================================= */
 
-const CACHE_NAME = "evacuator-v10";
+const CACHE_NAME = "evacuator-v11";
 
 const CACHE_PREFIX = "evacuator-";
 
@@ -59,19 +59,19 @@ const STATIC_ASSETS = [
 
 /* =========================================================
    ВНЕШНИЕ ДОМЕНЫ
-   НЕ КЭШИРУЕМ И НЕ ПЕРЕХВАТЫВАЕМ
+   НИКОГДА НЕ КЭШИРУЕМ
    ========================================================= */
 
 const BLOCK_CACHE_DOMAINS = [
-  "mc.yandex.ru",
+  "api.vk.com",
+
+  "geocode-maps.yandex.ru",
 
   "yandex.ru",
   "yandex.com",
   "yandex.net",
 
-  "geocode-maps.yandex.ru",
-
-  "api.vk.com",
+  "mc.yandex.ru",
 
   "googletagmanager.com",
   "google-analytics.com",
@@ -85,86 +85,65 @@ const BLOCK_CACHE_DOMAINS = [
    УТИЛИТЫ
    ========================================================= */
 
-function isBlockedExternalRequest(url) {
-
-  return BLOCK_CACHE_DOMAINS.some(
-    domain => {
-
-      return (
-        url.hostname === domain ||
-        url.hostname.endsWith("." + domain)
-      );
-
-    }
-  );
-
+function isGET(request) {
+  return request.method === "GET";
 }
 
 
 function isSameOrigin(url) {
-
   return (
     url.origin === self.location.origin
   );
-
 }
 
 
-function isGET(request) {
-
-  return request.method === "GET";
-
+function isBlockedExternalRequest(url) {
+  return BLOCK_CACHE_DOMAINS.some(
+    domain => (
+      url.hostname === domain ||
+      url.hostname.endsWith("." + domain)
+    )
+  );
 }
 
 
 function isNavigationRequest(request) {
-
   return (
     request.mode === "navigate" ||
     request.destination === "document"
   );
-
 }
 
 
 function isHTMLRequest(request) {
-
   const accept =
     request.headers.get("accept") || "";
 
   return (
-    accept.includes("text/html") ||
-    isNavigationRequest(request)
+    isNavigationRequest(request) ||
+    accept.includes("text/html")
   );
-
 }
 
 
 function isImageRequest(request) {
-
   try {
-
-    const pathname =
-      new URL(request.url).pathname;
+    const url =
+      new URL(request.url);
 
     return (
       request.destination === "image" ||
       /\.(png|jpe?g|webp|gif|svg|ico)$/i.test(
-        pathname
+        url.pathname
       )
     );
-
   } catch (error) {
-
     return false;
-
   }
-
 }
 
 
 function isStaticAssetRequest(request) {
-
   const destination =
     request.destination || "";
 
@@ -173,7 +152,41 @@ function isStaticAssetRequest(request) {
     "script",
     "font"
   ].includes(destination);
+}
 
+
+/* =========================================================
+   CACHE PUT
+   ========================================================= */
+
+async function putInCache(
+  request,
+  response
+) {
+  if (
+    !response ||
+    !response.ok
+  ) {
+    return;
+  }
+
+  try {
+    const cache =
+      await caches.open(
+        CACHE_NAME
+      );
+
+    await cache.put(
+      request,
+      response.clone()
+    );
+
+  } catch (error) {
+    console.warn(
+      "SW: cache.put error:",
+      error
+    );
+  }
 }
 
 
@@ -189,90 +202,75 @@ self.addEventListener(
 
       (async () => {
 
-        try {
+        const cache =
+          await caches.open(
+            CACHE_NAME
+          );
 
-          const cache =
-            await caches.open(
-              CACHE_NAME
-            );
+        /*
+         * Кэшируем ресурсы по одному.
+         *
+         * Один отсутствующий файл
+         * не должен ломать установку SW.
+         */
 
+        for (
+          const asset of STATIC_ASSETS
+        ) {
 
-          /*
-           * Кэшируем файлы по одному.
-           *
-           * Если один необязательный ресурс
-           * отсутствует на сервере — установка
-           * Service Worker всё равно продолжается.
-           */
+          try {
 
-          for (
-            const asset of STATIC_ASSETS
-          ) {
+            const request =
+              new Request(
+                asset,
+                {
+                  cache: "reload"
+                }
+              );
 
-            try {
+            const response =
+              await fetch(
+                request
+              );
 
-              const request =
-                new Request(
-                  asset,
-                  {
-                    cache: "reload"
-                  }
-                );
+            if (
+              response &&
+              response.ok
+            ) {
 
+              await cache.put(
+                request,
+                response.clone()
+              );
 
-              const response =
-                await fetch(
-                  request
-                );
-
-
-              if (
-                response &&
-                response.ok
-              ) {
-
-                await cache.put(
-                  request,
-                  response.clone()
-                );
-
-              } else {
-
-                console.warn(
-                  "SW: ресурс не загружен:",
-                  asset,
-                  response?.status
-                );
-
-              }
-
-            } catch (error) {
+            } else {
 
               console.warn(
-                "SW: не удалось закэшировать:",
+                "SW: не удалось загрузить:",
                 asset,
-                error
+                response?.status
               );
 
             }
 
+          } catch (error) {
+
+            console.warn(
+              "SW: ошибка кэширования:",
+              asset,
+              error
+            );
+
           }
 
-
-          /*
-           * Активируем новый SW сразу.
-           */
-
-          await self.skipWaiting();
-
-        } catch (error) {
-
-          console.error(
-            "SW install error:",
-            error
-          );
-
         }
+
+
+        /*
+         * Новый SW активируется сразу.
+         */
+
+        await self.skipWaiting();
 
       })()
 
@@ -301,16 +299,13 @@ self.addEventListener(
 
 
           /*
-           * Удаляем только наши старые кэши.
-           *
-           * ВАЖНО:
-           * не трогаем чужие Cache Storage.
+           * Удаляем только старые
+           * кэши нашего приложения.
            */
 
           await Promise.all(
 
             cacheNames
-
               .filter(
                 name =>
                   name.startsWith(
@@ -318,7 +313,6 @@ self.addEventListener(
                   ) &&
                   name !== CACHE_NAME
               )
-
               .map(
                 name =>
                   caches.delete(name)
@@ -328,22 +322,22 @@ self.addEventListener(
 
 
           /*
-           * Новый Service Worker
-           * сразу начинает контролировать
-           * открытые страницы.
+           * Новый SW сразу начинает
+           * контролировать страницы.
            */
 
           await self.clients.claim();
 
 
           /*
-           * Сообщаем открытым страницам,
-           * что SW обновился.
+           * Сообщаем открытым вкладкам
+           * об обновлении SW.
            */
 
           const clients =
             await self.clients.matchAll({
-              type: "window"
+              type: "window",
+              includeUncontrolled: true
             });
 
 
@@ -351,13 +345,21 @@ self.addEventListener(
             const client of clients
           ) {
 
-            client.postMessage({
+            try {
 
-              type: "SW_UPDATED",
+              client.postMessage({
+                type: "SW_UPDATED",
+                cache: CACHE_NAME
+              });
 
-              cache: CACHE_NAME
+            } catch (error) {
 
-            });
+              console.warn(
+                "SW: postMessage error:",
+                error
+              );
+
+            }
 
           }
 
@@ -396,15 +398,13 @@ self.addEventListener(
       !event.data ||
       !event.data.type
     ) {
-
       return;
-
     }
 
 
     /*
-     * Позволяет app.js попросить
-     * Service Worker активироваться.
+     * Позволяет app.js
+     * активировать ожидающий SW.
      */
 
     if (
@@ -433,20 +433,24 @@ self.addEventListener(
 
 
     /* =====================================================
-       ТОЛЬКО GET
+       НЕ GET
        ===================================================== */
 
     /*
      * POST / PUT / PATCH / DELETE
-     * вообще не перехватываем.
+     * вообще не трогаем.
+     *
+     * Это особенно важно для:
+     * - VK
+     * - форм
+     * - API
+     * - будущих серверных запросов
      */
 
     if (
       !isGET(request)
     ) {
-
       return;
-
     }
 
 
@@ -475,16 +479,18 @@ self.addEventListener(
        ===================================================== */
 
     /*
-     * VK / Yandex / аналитика
-     * полностью оставляем браузеру.
+     * Браузер сам выполняет запрос.
+     *
+     * SW:
+     * - не кэширует
+     * - не изменяет
+     * - не подменяет
      */
 
     if (
       isBlockedExternalRequest(url)
     ) {
-
       return;
-
     }
 
 
@@ -492,17 +498,19 @@ self.addEventListener(
        ЧУЖИЕ ДОМЕНЫ
        ===================================================== */
 
+    /*
+     * Не вмешиваемся во внешние ресурсы.
+     */
+
     if (
       !isSameOrigin(url)
     ) {
-
       return;
-
     }
 
 
     /* =====================================================
-       HTML / NAVIGATION
+       HTML
        NETWORK FIRST
        ===================================================== */
 
@@ -517,8 +525,8 @@ self.addEventListener(
           try {
 
             /*
-             * Всегда пытаемся получить
-             * свежий HTML из сети.
+             * Сначала всегда пытаемся
+             * получить свежий HTML.
              */
 
             const response =
@@ -531,7 +539,7 @@ self.addEventListener(
 
 
             /*
-             * Кэшируем только нормальный
+             * Кэшируем только
              * успешный ответ.
              */
 
@@ -540,27 +548,10 @@ self.addEventListener(
               response.ok
             ) {
 
-              try {
-
-                const cache =
-                  await caches.open(
-                    CACHE_NAME
-                  );
-
-
-                await cache.put(
-                  request,
-                  response.clone()
-                );
-
-              } catch (cacheError) {
-
-                console.warn(
-                  "SW: HTML cache error:",
-                  cacheError
-                );
-
-              }
+              await putInCache(
+                request,
+                response
+              );
 
             }
 
@@ -584,7 +575,6 @@ self.addEventListener(
                 request
               );
 
-
             if (
               cachedPage
             ) {
@@ -602,7 +592,6 @@ self.addEventListener(
               await caches.match(
                 "/index.html"
               );
-
 
             if (
               cachedIndex
@@ -622,7 +611,6 @@ self.addEventListener(
                 OFFLINE_URL
               );
 
-
             if (
               offline
             ) {
@@ -639,45 +627,44 @@ self.addEventListener(
             return new Response(
 
               `<!doctype html>
-
 <html lang="ru">
-
 <head>
-
 <meta charset="utf-8">
-
 <meta
   name="viewport"
   content="width=device-width,initial-scale=1"
 >
-
 <title>Нет подключения</title>
-
+<style>
+body{
+  margin:0;
+  padding:40px 20px;
+  font-family:Arial,sans-serif;
+  text-align:center;
+}
+h1{
+  margin-bottom:15px;
+}
+p{
+  opacity:.7;
+}
+</style>
 </head>
-
 <body>
-
 <h1>Нет подключения к интернету</h1>
-
 <p>
 Проверьте соединение и попробуйте снова.
 </p>
-
 </body>
-
 </html>`,
 
               {
-
                 status: 503,
 
                 headers: {
-
                   "Content-Type":
                     "text/html; charset=utf-8"
-
                 }
-
               }
 
             );
@@ -689,7 +676,6 @@ self.addEventListener(
       );
 
       return;
-
     }
 
 
@@ -713,14 +699,14 @@ self.addEventListener(
 
 
           /*
-           * Сначала локальный кэш.
+           * Сначала ищем изображение
+           * в локальном кэше.
            */
 
           const cached =
             await cache.match(
               request
             );
-
 
           if (
             cached
@@ -732,7 +718,7 @@ self.addEventListener(
 
 
           /*
-           * Затем сеть.
+           * Если нет — сеть.
            */
 
           try {
@@ -767,9 +753,7 @@ self.addEventListener(
 
               }
 
-
               return response;
-
             }
 
 
@@ -778,10 +762,9 @@ self.addEventListener(
              */
 
             const fallback =
-              await caches.match(
+              await cache.match(
                 "/preload.png"
               );
-
 
             return (
               fallback ||
@@ -797,7 +780,7 @@ self.addEventListener(
 
 
             const fallback =
-              await caches.match(
+              await cache.match(
                 "/preload.png"
               );
 
@@ -825,7 +808,6 @@ self.addEventListener(
       );
 
       return;
-
     }
 
 
@@ -845,10 +827,8 @@ self.addEventListener(
           try {
 
             /*
-             * Сначала сеть.
-             *
-             * Это важно для app.js и style.css:
-             * пользователь получает свежую версию.
+             * Сначала свежая версия
+             * с сервера.
              */
 
             const response =
@@ -865,27 +845,10 @@ self.addEventListener(
               response.ok
             ) {
 
-              try {
-
-                const cache =
-                  await caches.open(
-                    CACHE_NAME
-                  );
-
-
-                await cache.put(
-                  request,
-                  response.clone()
-                );
-
-              } catch (cacheError) {
-
-                console.warn(
-                  "SW: static cache error:",
-                  cacheError
-                );
-
-              }
+              await putInCache(
+                request,
+                response
+              );
 
             }
 
@@ -901,8 +864,8 @@ self.addEventListener(
 
 
             /*
-             * Интернет недоступен —
-             * берём последнюю сохранённую версию.
+             * Нет сети —
+             * используем последнюю версию.
              */
 
             const cached =
@@ -923,16 +886,12 @@ self.addEventListener(
             return new Response(
               "",
               {
-
                 status: 503,
 
                 headers: {
-
                   "Content-Type":
                     "text/plain; charset=utf-8"
-
                 }
-
               }
             );
 
@@ -943,7 +902,6 @@ self.addEventListener(
       );
 
       return;
-
     }
 
 
@@ -965,8 +923,8 @@ self.addEventListener(
 
 
           /*
-           * Кэшируем только свои
-           * нормальные ответы.
+           * Кэшируем только
+           * обычные ответы нашего сайта.
            */
 
           if (
@@ -975,27 +933,10 @@ self.addEventListener(
             response.type === "basic"
           ) {
 
-            try {
-
-              const cache =
-                await caches.open(
-                  CACHE_NAME
-                );
-
-
-              await cache.put(
-                request,
-                response.clone()
-              );
-
-            } catch (cacheError) {
-
-              console.warn(
-                "SW: generic cache error:",
-                cacheError
-              );
-
-            }
+            await putInCache(
+              request,
+              response
+            );
 
           }
 
@@ -1030,16 +971,12 @@ self.addEventListener(
             "Нет подключения к интернету",
 
             {
-
               status: 503,
 
               headers: {
-
                 "Content-Type":
                   "text/plain; charset=utf-8"
-
               }
-
             }
 
           );
@@ -1055,7 +992,7 @@ self.addEventListener(
 
 
 /* =========================================================
-   ОТЛАДКА
+   DEBUG
    ========================================================= */
 
 console.log(
