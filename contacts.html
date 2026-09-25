@@ -690,6 +690,59 @@
   </nav>
 
 
+  <!-- IOS INSTALL MODAL -->
+
+  <div
+    id="iosModal"
+    class="modal"
+    style="display:none;"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="iosModalTitle"
+  >
+
+    <div class="modal-content">
+
+      <button
+        type="button"
+        class="modal-close"
+        data-modal-close="iosModal"
+        aria-label="Закрыть"
+      >
+        ×
+      </button>
+
+      <h2 id="iosModalTitle">
+        Установка на iPhone
+      </h2>
+
+      <p>
+        Откройте меню
+        <strong>«Поделиться»</strong>
+        в Safari.
+      </p>
+
+      <p>
+        Затем выберите
+        <strong>«На экран Домой»</strong>
+        и подтвердите установку.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- TOAST -->
+
+  <div
+    id="toast"
+    role="status"
+    aria-live="polite"
+    aria-atomic="true"
+  ></div>
+
+
   <script
     src="/app.js"
     defer
