@@ -1,28 +1,22 @@
 /* =========================================================
-   sw.js
+   SERVICE WORKER
    Эвакуатор Краснодар 24/7
 
-   PWA / Android / Chrome / Edge / Яндекс Браузер / iOS
+   PWA / Android / Chrome / Edge / Яндекс Браузер
 
-   ЛОГИКА:
-   - POST / PUT / PATCH / DELETE не перехватываются
-   - VK / Yandex / аналитика не кэшируются
-   - HTML: NETWORK FIRST → CACHE → OFFLINE
-   - CSS / JS / fonts: NETWORK FIRST → CACHE
-   - Изображения: CACHE FIRST → NETWORK
-   - Остальные GET: NETWORK FIRST → CACHE
-   - Старые версии кэша удаляются
-   - Новый SW активируется сразу
+   ВАЖНО:
+   - VK/Yandex ключи находятся в app.js и здесь НЕ нужны.
+   - Внешние API-запросы не кэшируем.
+   - HTML всегда стараемся получить из сети.
+   - Статические файлы можно отдавать из cache.
    ========================================================= */
 
 
 /* =========================================================
-   VERSION
+   CACHE VERSION
    ========================================================= */
 
-const CACHE_NAME = "evacuator-v11";
-
-const CACHE_PREFIX = "evacuator-";
+const CACHE_NAME = "evacuator-v9";
 
 const OFFLINE_URL = "/offline.html";
 
@@ -42,8 +36,6 @@ const STATIC_ASSETS = [
   "/contacts.html",
   "/reviews.html",
 
-  "/offline.html",
-
   "/style.css",
   "/app.js",
 
@@ -53,25 +45,26 @@ const STATIC_ASSETS = [
   "/preload.png",
 
   "/banner-top.webp",
-  "/banner-top.png"
+  "/banner-top.png",
+
+  OFFLINE_URL
 ];
 
 
 /* =========================================================
    ВНЕШНИЕ ДОМЕНЫ
-   НИКОГДА НЕ КЭШИРУЕМ
+   НЕ КЭШИРУЕМ
    ========================================================= */
 
 const BLOCK_CACHE_DOMAINS = [
-  "api.vk.com",
-
-  "geocode-maps.yandex.ru",
-
+  "mc.yandex.ru",
   "yandex.ru",
   "yandex.com",
   "yandex.net",
 
-  "mc.yandex.ru",
+  "geocode-maps.yandex.ru",
+
+  "api.vk.com",
 
   "googletagmanager.com",
   "google-analytics.com",
@@ -85,25 +78,23 @@ const BLOCK_CACHE_DOMAINS = [
    УТИЛИТЫ
    ========================================================= */
 
-function isGET(request) {
-  return request.method === "GET";
+function isBlockedExternalRequest(url) {
+  return BLOCK_CACHE_DOMAINS.some(domain => {
+    return (
+      url.hostname === domain ||
+      url.hostname.endsWith("." + domain)
+    );
+  });
 }
 
 
 function isSameOrigin(url) {
-  return (
-    url.origin === self.location.origin
-  );
+  return url.origin === self.location.origin;
 }
 
 
-function isBlockedExternalRequest(url) {
-  return BLOCK_CACHE_DOMAINS.some(
-    domain => (
-      url.hostname === domain ||
-      url.hostname.endsWith("." + domain)
-    )
-  );
+function isGET(request) {
+  return request.method === "GET";
 }
 
 
@@ -120,26 +111,19 @@ function isHTMLRequest(request) {
     request.headers.get("accept") || "";
 
   return (
-    isNavigationRequest(request) ||
-    accept.includes("text/html")
+    accept.includes("text/html") ||
+    isNavigationRequest(request)
   );
 }
 
 
 function isImageRequest(request) {
-  try {
-    const url =
-      new URL(request.url);
-
-    return (
-      request.destination === "image" ||
-      /\.(png|jpe?g|webp|gif|svg|ico)$/i.test(
-        url.pathname
-      )
-    );
-  } catch (error) {
-    return false;
-  }
+  return (
+    request.destination === "image" ||
+    /\.(png|jpe?g|webp|gif|svg|ico)$/i.test(
+      new URL(request.url).pathname
+    )
+  );
 }
 
 
@@ -155,38 +139,13 @@ function isStaticAssetRequest(request) {
 }
 
 
-/* =========================================================
-   CACHE PUT
-   ========================================================= */
-
-async function putInCache(
-  request,
-  response
-) {
-  if (
-    !response ||
-    !response.ok
-  ) {
-    return;
-  }
-
-  try {
-    const cache =
-      await caches.open(
-        CACHE_NAME
-      );
-
-    await cache.put(
-      request,
-      response.clone()
-    );
-
-  } catch (error) {
-    console.warn(
-      "SW: cache.put error:",
-      error
-    );
-  }
+function cacheKey(request) {
+  /*
+   * Для GET используем сам Request.
+   * Это безопаснее и сохраняет корректные
+   * параметры запроса.
+   */
+  return request;
 }
 
 
@@ -199,81 +158,65 @@ self.addEventListener(
   event => {
 
     event.waitUntil(
-
       (async () => {
 
-        const cache =
-          await caches.open(
-            CACHE_NAME
-          );
+        try {
 
-        /*
-         * Кэшируем ресурсы по одному.
-         *
-         * Один отсутствующий файл
-         * не должен ломать установку SW.
-         */
+          const cache =
+            await caches.open(
+              CACHE_NAME
+            );
 
-        for (
-          const asset of STATIC_ASSETS
-        ) {
 
-          try {
+          /*
+           * Кэшируем каждый ресурс отдельно.
+           *
+           * Если одного файла нет —
+           * установка SW всё равно продолжается.
+           */
+          for (
+            const asset of STATIC_ASSETS
+          ) {
 
-            const request =
-              new Request(
-                asset,
-                {
-                  cache: "reload"
-                }
+            try {
+
+              await cache.add(
+                new Request(
+                  asset,
+                  {
+                    cache: "reload"
+                  }
+                )
               );
 
-            const response =
-              await fetch(
-                request
-              );
-
-            if (
-              response &&
-              response.ok
-            ) {
-
-              await cache.put(
-                request,
-                response.clone()
-              );
-
-            } else {
+            } catch (error) {
 
               console.warn(
-                "SW: не удалось загрузить:",
+                "SW: не удалось закэшировать:",
                 asset,
-                response?.status
+                error
               );
 
             }
 
-          } catch (error) {
-
-            console.warn(
-              "SW: ошибка кэширования:",
-              asset,
-              error
-            );
-
           }
+
+
+          /*
+           * Новый SW становится готовым сразу.
+           */
+          await self.skipWaiting();
+
+        } catch (error) {
+
+          console.error(
+            "SW install error:",
+            error
+          );
 
         }
 
-
-        /*
-         * Новый SW активируется сразу.
-         */
-
-        await self.skipWaiting();
-
       })()
-
     );
 
   }
@@ -289,7 +232,6 @@ self.addEventListener(
   event => {
 
     event.waitUntil(
-
       (async () => {
 
         try {
@@ -299,45 +241,35 @@ self.addEventListener(
 
 
           /*
-           * Удаляем только старые
-           * кэши нашего приложения.
+           * Удаляем ВСЕ старые версии.
            */
-
           await Promise.all(
-
             cacheNames
               .filter(
                 name =>
-                  name.startsWith(
-                    CACHE_PREFIX
-                  ) &&
                   name !== CACHE_NAME
               )
               .map(
                 name =>
                   caches.delete(name)
               )
-
           );
 
 
           /*
-           * Новый SW сразу начинает
-           * контролировать страницы.
+           * Новый SW начинает
+           * контролировать страницы сразу.
            */
-
           await self.clients.claim();
 
 
           /*
-           * Сообщаем открытым вкладкам
-           * об обновлении SW.
+           * Сообщаем открытым страницам,
+           * что SW обновился.
            */
-
           const clients =
             await self.clients.matchAll({
-              type: "window",
-              includeUncontrolled: true
+              type: "window"
             });
 
 
@@ -345,29 +277,12 @@ self.addEventListener(
             const client of clients
           ) {
 
-            try {
-
-              client.postMessage({
-                type: "SW_UPDATED",
-                cache: CACHE_NAME
-              });
-
-            } catch (error) {
-
-              console.warn(
-                "SW: postMessage error:",
-                error
-              );
-
-            }
+            client.postMessage({
+              type: "SW_UPDATED",
+              cache: CACHE_NAME
+            });
 
           }
-
-
-          console.log(
-            "SW activated:",
-            CACHE_NAME
-          );
 
         } catch (error) {
 
@@ -379,7 +294,6 @@ self.addEventListener(
         }
 
       })()
-
     );
 
   }
@@ -403,10 +317,9 @@ self.addEventListener(
 
 
     /*
-     * Позволяет app.js
-     * активировать ожидающий SW.
+     * Позволяет app.js принудительно
+     * активировать новый Service Worker.
      */
-
     if (
       event.data.type ===
       "SKIP_WAITING"
@@ -432,31 +345,18 @@ self.addEventListener(
       event.request;
 
 
-    /* =====================================================
-       НЕ GET
-       ===================================================== */
-
     /*
-     * POST / PUT / PATCH / DELETE
-     * вообще не трогаем.
+     * Service Worker работает
+     * только с GET.
      *
-     * Это особенно важно для:
-     * - VK
-     * - форм
-     * - API
-     * - будущих серверных запросов
+     * POST-запросы формы/VK/API
+     * вообще не должны попадать
+     * в Cache Storage.
      */
-
-    if (
-      !isGET(request)
-    ) {
+    if (!isGET(request)) {
       return;
     }
 
-
-    /* =====================================================
-       URL
-       ===================================================== */
 
     let url;
 
@@ -474,43 +374,38 @@ self.addEventListener(
     }
 
 
-    /* =====================================================
-       ВНЕШНИЕ API
-       ===================================================== */
-
     /*
-     * Браузер сам выполняет запрос.
+     * Внешние запросы не перехватываем.
      *
-     * SW:
-     * - не кэширует
-     * - не изменяет
-     * - не подменяет
+     * Особенно важно для:
+     * VK API
+     * Yandex Geocoder
+     * Метрики
+     * Google Analytics
      */
-
     if (
       isBlockedExternalRequest(url)
     ) {
+
       return;
+
     }
 
 
-    /* =====================================================
-       ЧУЖИЕ ДОМЕНЫ
-       ===================================================== */
-
     /*
-     * Не вмешиваемся во внешние ресурсы.
+     * Чужие домены вообще не трогаем.
      */
-
     if (
       !isSameOrigin(url)
     ) {
+
       return;
+
     }
 
 
     /* =====================================================
-       HTML
+       HTML / NAVIGATION
        NETWORK FIRST
        ===================================================== */
 
@@ -519,15 +414,9 @@ self.addEventListener(
     ) {
 
       event.respondWith(
-
         (async () => {
 
           try {
-
-            /*
-             * Сначала всегда пытаемся
-             * получить свежий HTML.
-             */
 
             const response =
               await fetch(
@@ -539,19 +428,34 @@ self.addEventListener(
 
 
             /*
-             * Кэшируем только
-             * успешный ответ.
+             * Только нормальные ответы
+             * сохраняем в cache.
              */
-
             if (
               response &&
               response.ok
             ) {
 
-              await putInCache(
-                request,
-                response
-              );
+              try {
+
+                const cache =
+                  await caches.open(
+                    CACHE_NAME
+                  );
+
+                await cache.put(
+                  cacheKey(request),
+                  response.clone()
+                );
+
+              } catch (cacheError) {
+
+                console.warn(
+                  "SW: HTML cache error:",
+                  cacheError
+                );
+
+              }
 
             }
 
@@ -567,13 +471,13 @@ self.addEventListener(
 
 
             /*
-             * 1. Точная страница.
+             * Сначала ищем именно эту страницу.
              */
-
             const cachedPage =
               await caches.match(
                 request
               );
+
 
             if (
               cachedPage
@@ -585,13 +489,13 @@ self.addEventListener(
 
 
             /*
-             * 2. index.html.
+             * Затем index.html.
              */
-
             const cachedIndex =
               await caches.match(
                 "/index.html"
               );
+
 
             if (
               cachedIndex
@@ -603,13 +507,13 @@ self.addEventListener(
 
 
             /*
-             * 3. offline.html.
+             * И только потом offline.html.
              */
-
             const offline =
               await caches.match(
                 OFFLINE_URL
               );
+
 
             if (
               offline
@@ -621,58 +525,38 @@ self.addEventListener(
 
 
             /*
-             * 4. Крайний fallback.
+             * Крайний случай.
              */
-
             return new Response(
-
-              `<!doctype html>
-<html lang="ru">
-<head>
-<meta charset="utf-8">
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1"
->
-<title>Нет подключения</title>
-<style>
-body{
-  margin:0;
-  padding:40px 20px;
-  font-family:Arial,sans-serif;
-  text-align:center;
-}
-h1{
-  margin-bottom:15px;
-}
-p{
-  opacity:.7;
-}
-</style>
-</head>
-<body>
-<h1>Нет подключения к интернету</h1>
-<p>
-Проверьте соединение и попробуйте снова.
-</p>
-</body>
-</html>`,
-
+              `
+                <!doctype html>
+                <html lang="ru">
+                <head>
+                  <meta charset="utf-8">
+                  <meta name="viewport"
+                        content="width=device-width,initial-scale=1">
+                  <title>Нет подключения</title>
+                </head>
+                <body>
+                  <h1>Нет подключения к интернету</h1>
+                  <p>
+                    Проверьте соединение и попробуйте снова.
+                  </p>
+                </body>
+                </html>
+              `,
               {
                 status: 503,
-
                 headers: {
                   "Content-Type":
                     "text/html; charset=utf-8"
                 }
               }
-
             );
 
           }
 
         })()
-
       );
 
       return;
@@ -689,7 +573,6 @@ p{
     ) {
 
       event.respondWith(
-
         (async () => {
 
           const cache =
@@ -698,15 +581,11 @@ p{
             );
 
 
-          /*
-           * Сначала ищем изображение
-           * в локальном кэше.
-           */
-
           const cached =
             await cache.match(
               request
             );
+
 
           if (
             cached
@@ -716,10 +595,6 @@ p{
 
           }
 
-
-          /*
-           * Если нет — сеть.
-           */
 
           try {
 
@@ -733,7 +608,8 @@ p{
               response &&
               (
                 response.ok ||
-                response.type === "opaque"
+                response.type ===
+                  "opaque"
               )
             ) {
 
@@ -754,17 +630,15 @@ p{
               }
 
               return response;
+
             }
 
 
-            /*
-             * Запасная картинка.
-             */
-
             const fallback =
-              await cache.match(
+              await caches.match(
                 "/preload.png"
               );
+
 
             return (
               fallback ||
@@ -773,14 +647,8 @@ p{
 
           } catch (error) {
 
-            console.warn(
-              "SW: image network error:",
-              error
-            );
-
-
             const fallback =
-              await cache.match(
+              await caches.match(
                 "/preload.png"
               );
 
@@ -804,7 +672,6 @@ p{
           }
 
         })()
-
       );
 
       return;
@@ -813,30 +680,44 @@ p{
 
     /* =====================================================
        CSS / JS / FONTS
-       NETWORK FIRST → CACHE
+       CACHE FIRST
        ===================================================== */
 
     if (
-      isStaticAssetRequest(request)
+      isStaticAssetRequest(
+        request
+      )
     ) {
 
       event.respondWith(
-
         (async () => {
+
+          const cache =
+            await caches.open(
+              CACHE_NAME
+            );
+
+
+          const cached =
+            await cache.match(
+              request
+            );
+
+
+          if (
+            cached
+          ) {
+
+            return cached;
+
+          }
+
 
           try {
 
-            /*
-             * Сначала свежая версия
-             * с сервера.
-             */
-
             const response =
               await fetch(
-                request,
-                {
-                  cache: "no-store"
-                }
+                request
               );
 
 
@@ -845,60 +726,50 @@ p{
               response.ok
             ) {
 
-              await putInCache(
-                request,
-                response
-              );
+              try {
+
+                await cache.put(
+                  request,
+                  response.clone()
+                );
+
+              } catch (cacheError) {
+
+                console.warn(
+                  "SW: static cache error:",
+                  cacheError
+                );
+
+              }
 
             }
 
 
             return response;
 
-          } catch (networkError) {
+          } catch (error) {
 
-            console.warn(
-              "SW: static network error:",
-              networkError
+            console.error(
+              "SW: static asset error:",
+              error
             );
 
 
             /*
-             * Нет сети —
-             * используем последнюю версию.
+             * Для JS/CSS лучше вернуть
+             * ошибку сети, чем подставлять
+             * неправильный HTML.
              */
-
-            const cached =
-              await caches.match(
-                request
-              );
-
-
-            if (
-              cached
-            ) {
-
-              return cached;
-
-            }
-
-
             return new Response(
               "",
               {
-                status: 503,
-
-                headers: {
-                  "Content-Type":
-                    "text/plain; charset=utf-8"
-                }
+                status: 503
               }
             );
 
           }
 
         })()
-
       );
 
       return;
@@ -911,7 +782,6 @@ p{
        ===================================================== */
 
     event.respondWith(
-
       (async () => {
 
         try {
@@ -924,19 +794,35 @@ p{
 
           /*
            * Кэшируем только
-           * обычные ответы нашего сайта.
+           * собственные нормальные ответы.
            */
-
           if (
             response &&
             response.ok &&
-            response.type === "basic"
+            response.type ===
+              "basic"
           ) {
 
-            await putInCache(
-              request,
-              response
-            );
+            try {
+
+              const cache =
+                await caches.open(
+                  CACHE_NAME
+                );
+
+              await cache.put(
+                request,
+                response.clone()
+              );
+
+            } catch (cacheError) {
+
+              console.warn(
+                "SW: generic cache error:",
+                cacheError
+              );
+
+            }
 
           }
 
@@ -944,12 +830,6 @@ p{
           return response;
 
         } catch (networkError) {
-
-          console.warn(
-            "SW: generic network error:",
-            networkError
-          );
-
 
           const cached =
             await caches.match(
@@ -966,25 +846,25 @@ p{
           }
 
 
+          /*
+           * Для неизвестного запроса
+           * offline.html не всегда подходит,
+           * поэтому возвращаем 503.
+           */
           return new Response(
-
             "Нет подключения к интернету",
-
             {
               status: 503,
-
               headers: {
                 "Content-Type":
                   "text/plain; charset=utf-8"
               }
             }
-
           );
 
         }
 
       })()
-
     );
 
   }
@@ -992,7 +872,7 @@ p{
 
 
 /* =========================================================
-   DEBUG
+   ОТЛАДКА
    ========================================================= */
 
 console.log(
