@@ -16,7 +16,7 @@
 
   <meta
     name="description"
-    content="Эвакуатор Краснодар 24/7 — круглосуточная эвакуация автомобилей в Краснодаре и Краснодарском крае. Подача от 15–25 минут, аккуратная погрузка и согласованная стоимость."
+    content="Эвакуатор Краснодар 24/7 — круглосуточная эвакуация автомобилей в Краснодаре и Краснодарском крае. Ориентировочная подача от 15–25 минут, аккуратная погрузка и согласованная стоимость."
   >
 
   <meta
@@ -71,7 +71,7 @@
 
   <meta
     property="og:description"
-    content="Круглосуточная эвакуация автомобилей в Краснодаре и Краснодарском крае. Подача от 15–25 минут, аккуратная погрузка и согласованная стоимость."
+    content="Круглосуточная эвакуация автомобилей в Краснодаре и Краснодарском крае. Ориентировочная подача от 15–25 минут, аккуратная погрузка и согласованная стоимость."
   >
 
   <meta
@@ -344,6 +344,7 @@
         Установить приложение
       </button>
 
+
       <button
         id="iosInstall"
         class="apple-glass-btn install-btn"
@@ -353,6 +354,7 @@
       >
         Установить на iPhone
       </button>
+
 
       <button
         id="themeToggle"
@@ -369,11 +371,17 @@
     <main>
 
 
-      <section class="section fade-in">
+      <!-- ABOUT -->
 
-        <h1>
+      <section
+        class="section fade-in"
+        aria-labelledby="about-title"
+      >
+
+        <h1 id="about-title">
           О компании
         </h1>
+
 
         <p>
           <strong>Эвакуатор Краснодар 24/7</strong> —
@@ -381,12 +389,14 @@
           в Краснодаре и Краснодарском крае.
         </p>
 
+
         <p class="muted">
           Работаем без выходных и праздников.
           Помогаем перевезти автомобиль после поломки,
           ДТП или в ситуации, когда самостоятельное движение
           автомобиля невозможно.
         </p>
+
 
         <p class="muted">
           Ориентировочное время подачи — от 15–25 минут
@@ -397,13 +407,20 @@
       </section>
 
 
-      <section class="section fade-in">
+      <!-- ADVANTAGES -->
 
-        <h2>
+      <section
+        class="section fade-in"
+        aria-labelledby="advantages-title"
+      >
+
+        <h2 id="advantages-title">
           Наши преимущества
         </h2>
 
+
         <div class="services-list">
+
 
           <div class="service-card">
 
@@ -427,7 +444,8 @@
 
             <p>
               Ориентировочное время подачи от 15–25 минут
-              в зависимости от ситуации.
+              в зависимости от района, дорожной ситуации
+              и текущей загрузки.
             </p>
 
           </div>
@@ -460,16 +478,23 @@
 
           </div>
 
+
         </div>
 
       </section>
 
 
-      <section class="section fade-in">
+      <!-- SERVICE AREA -->
 
-        <h2>
+      <section
+        class="section fade-in"
+        aria-labelledby="area-title"
+      >
+
+        <h2 id="area-title">
           Работаем в Краснодаре и Краснодарском крае
         </h2>
+
 
         <p class="muted">
           Выполняем эвакуацию легковых автомобилей,
@@ -478,11 +503,13 @@
           и за пределами города.
         </p>
 
+
         <p class="muted">
           Если автомобиль неисправен или после ДТП
           не может продолжать движение, свяжитесь с нами
           по телефону или оставьте заявку через сайт.
         </p>
+
 
         <div class="btn-row">
 
@@ -493,6 +520,7 @@
           >
             Позвонить
           </a>
+
 
           <a
             class="apple-glass-btn"
@@ -507,13 +535,20 @@
       </section>
 
 
-      <section class="section fade-in">
+      <!-- INFORMATION -->
 
-        <h2>
+      <section
+        class="section fade-in"
+        aria-labelledby="information-title"
+      >
+
+        <h2 id="information-title">
           Полезная информация
         </h2>
 
+
         <div class="services-list">
+
 
           <div class="service-card">
 
@@ -526,9 +561,11 @@
               на эвакуацию автомобилей.
             </p>
 
+
             <a
               class="apple-glass-btn"
               href="/prices.html"
+              aria-label="Посмотреть цены на эвакуатор"
             >
               Смотреть цены
             </a>
@@ -546,25 +583,34 @@
               Телефон, адрес и доступные способы связи.
             </p>
 
+
             <a
               class="apple-glass-btn"
               href="/contacts.html"
+              aria-label="Перейти к контактам"
             >
               Контакты
             </a>
 
           </div>
 
+
         </div>
 
       </section>
 
 
-      <section class="section fade-in">
+      <!-- CONTACT INFORMATION -->
 
-        <h2>
+      <section
+        class="section fade-in"
+        aria-labelledby="contact-title"
+      >
+
+        <h2 id="contact-title">
           Контактная информация
         </h2>
+
 
         <p>
 
@@ -572,11 +618,15 @@
             Телефон:
           </strong>
 
-          <a href="tel:+79888717018">
+          <a
+            href="tel:+79888717018"
+            aria-label="Позвонить по номеру +7 988 871 70 18"
+          >
             +7 (988) 871-70-18
           </a>
 
         </p>
+
 
         <p>
 
@@ -587,6 +637,7 @@
           Краснодар, ул. Дзержинского, 100
 
         </p>
+
 
         <p>
 
@@ -600,6 +651,49 @@
 
       </section>
 
+
+      <!-- CTA -->
+
+      <section
+        class="section fade-in"
+        aria-labelledby="cta-title"
+      >
+
+        <h2 id="cta-title">
+          Нужен эвакуатор?
+        </h2>
+
+
+        <p class="muted">
+          Позвоните или оставьте заявку через сайт.
+          Работаем круглосуточно.
+        </p>
+
+
+        <div class="btn-row">
+
+          <a
+            class="apple-glass-btn"
+            href="tel:+79888717018"
+            aria-label="Позвонить в службу эвакуации"
+          >
+            Позвонить
+          </a>
+
+
+          <a
+            class="apple-glass-btn"
+            href="/request.html"
+            aria-label="Оставить заявку на эвакуатор"
+          >
+            Оставить заявку
+          </a>
+
+        </div>
+
+      </section>
+
+
     </main>
 
 
@@ -608,6 +702,7 @@
     <footer class="footer fade-in">
 
       <div class="footer-grid">
+
 
         <div>
 
@@ -634,7 +729,10 @@
 
           <p>
 
-            <a href="tel:+79888717018">
+            <a
+              href="tel:+79888717018"
+              aria-label="Позвонить по номеру +7 988 871 70 18"
+            >
               +7 (988) 871-70-18
             </a>
 
@@ -649,35 +747,49 @@
             Страницы
           </h3>
 
+
           <p>
+
             <a href="/">
               Главная
             </a>
+
           </p>
 
+
           <p>
+
             <a href="/prices.html">
               Цены
             </a>
+
           </p>
 
+
           <p>
+
             <a href="/contacts.html">
               Контакты
             </a>
+
           </p>
 
+
           <p>
+
             <a href="/reviews.html">
               Отзывы
             </a>
+
           </p>
 
         </div>
 
+
       </div>
 
     </footer>
+
 
   </div>
 
@@ -696,6 +808,7 @@
       Главная
     </a>
 
+
     <a
       href="/prices.html"
       aria-label="Цены"
@@ -703,12 +816,14 @@
       Цены
     </a>
 
+
     <a
       href="/request.html"
       aria-label="Заявка"
     >
       Заявка
     </a>
+
 
     <a
       href="#top"
@@ -720,10 +835,13 @@
   </nav>
 
 
+  <!-- SCRIPTS -->
+
   <script
     src="/app.js"
     defer
   ></script>
+
 
 </body>
 
