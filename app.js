@@ -2,12 +2,10 @@
    app.js
    Эвакуатор Краснодар 24/7
 
-   ВАЖНО:
-   - VK_ADMIN_ID, VK_TOKEN и YANDEX_API_KEY НЕ изменены.
-   - Логика прелоадера защищена от зависания.
-   - Ошибка одного модуля не ломает остальные.
+   VK_ADMIN_ID, VK_TOKEN и YANDEX_API_KEY НЕ ИЗМЕНЕНЫ.
    ========================================================= */
 
+"use strict";
 
 /* =========================================================
    КОНФИГ VK
@@ -16,11 +14,6 @@
 const VK_ADMIN_ID = 200004082404;
 
 const VK_TOKEN = "vk1.a.9dwswawH0x7rHsySyBHSlgoSYRDWZYlQOFYxjzJdw1w0mnne3dCgLvVLxgmqUVUO1y3Oh38PKeBzWpryi6lugUqaGoFUlKk8R96DfmbB1mTSb1c9dITbynZRzM7ort5KTV54fzYsrFETPtw4QH4sCFdZEZZZo8YZT4bjnkm18RAWOKWfdq94HD_jFhy9bJc-M2Z0oxrUD6PoToUTngq2Nn7SdlwK0zzGW_1ecE7nYc";
-
-
-/* =========================================================
-   ЯНДЕКС ГЕОКОДЕР
-   ========================================================= */
 
 const YANDEX_API_KEY = "fc0f9182-0eee-4e83-bed3-8e561c88c4d5";
 
@@ -31,7 +24,6 @@ const YANDEX_API_KEY = "fc0f9182-0eee-4e83-bed3-8e561c88c4d5";
 
 let requestLocked = false;
 let locationLocked = false;
-
 let deferredPrompt = null;
 
 let toastTimer = null;
@@ -44,11 +36,11 @@ let preloaderHidden = false;
    БЕЗОПАСНЫЙ ВЫЗОВ
    ========================================================= */
 
-function safeCall(fn, fallback = null) {
+function safeCall(fn, fallback) {
   try {
     return fn();
   } catch (error) {
-    console.error("app.js:", error);
+    console.error("app.js error:", error);
     return fallback;
   }
 }
@@ -56,47 +48,62 @@ function safeCall(fn, fallback = null) {
 
 /* =========================================================
    PRELOADER
-   ГЛАВНОЕ ИСПРАВЛЕНИЕ
    ========================================================= */
 
 function hidePreloader() {
+  const preloader = document.getElementById("preloader");
+
+  if (!preloader) {
+    preloaderHidden = true;
+    return;
+  }
+
   if (preloaderHidden) {
     return;
   }
 
   preloaderHidden = true;
 
-  const preloader =
-    document.getElementById("preloader");
+  try {
+    preloader.classList.add("hidden");
 
-  if (!preloader) {
-    return;
-  }
+    /*
+     * Принудительно убираем заставку.
+     * Это не зависит от CSS-анимации.
+     */
+    preloader.style.opacity = "0";
+    preloader.style.visibility = "hidden";
+    preloader.style.pointerEvents = "none";
 
-  preloader.classList.add("hidden");
+    /*
+     * Через небольшой интервал полностью скрываем.
+     */
+    setTimeout(function () {
+      try {
+        preloader.style.display = "none";
+        preloader.setAttribute("aria-hidden", "true");
+      } catch (error) {
+        console.error("Preloader final hide error:", error);
+      }
+    }, 500);
 
-  /*
-   * Резервное отключение самого элемента.
-   * Если CSS/анимация не сработали,
-   * сайт всё равно не останется под заставкой.
-   */
-  setTimeout(() => {
+  } catch (error) {
+    console.error("Preloader hide error:", error);
+
     try {
-      preloader.style.pointerEvents = "none";
-      preloader.style.opacity = "0";
-      preloader.setAttribute("aria-hidden", "true");
-    } catch (error) {
-      console.error("Ошибка скрытия preloader:", error);
+      preloader.style.display = "none";
+    } catch (ignore) {
+      console.error(ignore);
     }
-  }, 700);
+  }
 }
 
-
 /*
- * Ставим аварийный таймер СРАЗУ,
- * а не в конце большого DOMContentLoaded-блока.
+ * Аварийное снятие заставки.
  */
-setTimeout(hidePreloader, 5000);
+setTimeout(hidePreloader, 1500);
+setTimeout(hidePreloader, 4000);
+setTimeout(hidePreloader, 8000);
 
 
 /* =========================================================
@@ -104,9 +111,7 @@ setTimeout(hidePreloader, 5000);
    ========================================================= */
 
 function isIOS() {
-  return /iPhone|iPad|iPod/i.test(
-    navigator.userAgent
-  );
+  return /iPhone|iPad|iPod/i.test(navigator.userAgent);
 }
 
 
@@ -120,13 +125,15 @@ function isSafari() {
 }
 
 
-function vibrate(ms = 30) {
+function vibrate(ms) {
+  const duration = typeof ms === "number" ? ms : 30;
+
   try {
     if (
       "vibrate" in navigator &&
       typeof navigator.vibrate === "function"
     ) {
-      navigator.vibrate(ms);
+      navigator.vibrate(duration);
     }
   } catch (error) {
     console.warn("Vibration error:", error);
@@ -135,8 +142,7 @@ function vibrate(ms = 30) {
 
 
 function showToast(message) {
-  const toast =
-    document.getElementById("toast");
+  const toast = document.getElementById("toast");
 
   if (!toast) {
     console.log(message);
@@ -144,12 +150,11 @@ function showToast(message) {
   }
 
   toast.textContent = String(message);
-
   toast.classList.add("show");
 
   clearTimeout(toastTimer);
 
-  toastTimer = setTimeout(() => {
+  toastTimer = setTimeout(function () {
     toast.classList.remove("show");
   }, 3000);
 }
@@ -160,53 +165,40 @@ function showToast(message) {
    ========================================================= */
 
 async function sendToVK(message) {
-  const url =
-    "https://api.vk.com/method/messages.send";
+  const url = "https://api.vk.com/method/messages.send";
 
-  const params =
-    new URLSearchParams({
-      peer_id: String(VK_ADMIN_ID),
+  const params = new URLSearchParams();
 
-      random_id: String(
-        Math.floor(
-          Math.random() * 2147483647
-        )
-      ),
+  params.set("peer_id", String(VK_ADMIN_ID));
 
-      message: String(message),
+  params.set(
+    "random_id",
+    String(Math.floor(Math.random() * 2147483647))
+  );
 
-      access_token: VK_TOKEN,
+  params.set("message", String(message));
+  params.set("access_token", VK_TOKEN);
+  params.set("v", "5.199");
 
-      v: "5.199"
-    });
-
-  const response =
-    await fetch(
-      `${url}?${params.toString()}`,
-      {
-        method: "GET",
-        credentials: "omit"
-      }
-    );
+  const response = await fetch(
+    url + "?" + params.toString(),
+    {
+      method: "GET",
+      credentials: "omit"
+    }
+  );
 
   if (!response.ok) {
-    throw new Error(
-      `VK HTTP ${response.status}`
-    );
+    throw new Error("VK HTTP " + response.status);
   }
 
-  const data =
-    await response.json();
+  const data = await response.json();
 
   if (data && data.error) {
-    console.error(
-      "VK API Error:",
-      data.error
-    );
+    console.error("VK API Error:", data.error);
 
     throw new Error(
-      data.error.error_msg ||
-      "VK API error"
+      data.error.error_msg || "VK API error"
     );
   }
 
@@ -219,118 +211,186 @@ async function sendToVK(message) {
    ========================================================= */
 
 async function getFullAddress(lat, lon) {
-  const url =
-    "https://geocode-maps.yandex.ru/1.x/";
+  const url = "https://geocode-maps.yandex.ru/v1/";
 
-  const params =
-    new URLSearchParams({
-      apikey: YANDEX_API_KEY,
+  const params = new URLSearchParams();
 
-      geocode:
-        `${lon},${lat}`,
+  params.set("apikey", YANDEX_API_KEY);
+  params.set("geocode", String(lon) + "," + String(lat));
+  params.set("format", "json");
+  params.set("lang", "ru_RU");
+  params.set("results", "1");
 
-      format: "json",
-
-      lang: "ru_RU",
-
-      results: "1"
-    });
-
-  const response =
-    await fetch(
-      `${url}?${params.toString()}`,
-      {
-        method: "GET",
-        credentials: "omit"
-      }
-    );
+  const response = await fetch(
+    url + "?" + params.toString(),
+    {
+      method: "GET",
+      credentials: "omit"
+    }
+  );
 
   if (!response.ok) {
     throw new Error(
-      `Ошибка Яндекс Геокодера: HTTP ${response.status}`
+      "Ошибка Яндекс Геокодера: HTTP " +
+      response.status
     );
   }
 
-  const data =
-    await response.json();
+  const data = await response.json();
 
   const members =
-    data
-      ?.response
-      ?.GeoObjectCollection
-      ?.featureMember;
+    data &&
+    data.response &&
+    data.response.GeoObjectCollection &&
+    data.response.GeoObjectCollection.featureMember;
 
-  if (
-    !members ||
-    !members.length
-  ) {
-    throw new Error(
-      "Адрес не найден"
-    );
+  if (!Array.isArray(members) || !members.length) {
+    throw new Error("Адрес не найден");
   }
 
   const geoObject =
-    members[0]?.GeoObject;
+    members[0] &&
+    members[0].GeoObject;
 
   const meta =
-    geoObject
-      ?.metaDataProperty
-      ?.GeocoderMetaData;
+    geoObject &&
+    geoObject.metaDataProperty &&
+    geoObject.metaDataProperty.GeocoderMetaData;
 
-  const address =
-    meta?.AddressDetails;
+  if (!meta) {
+    throw new Error("Данные адреса не найдены");
+  }
 
-  const text =
-    meta?.text || "";
+  const fullAddress =
+    meta.text ||
+    (
+      meta.Address &&
+      meta.Address.formatted
+    ) ||
+    "";
 
   let city = "";
   let district = "";
   let street = "";
   let house = "";
 
-  try {
-    const country =
-      address?.Country;
+  /*
+   * Новый формат API Яндекса.
+   */
+  const components =
+    meta.Address &&
+    Array.isArray(meta.Address.Components)
+      ? meta.Address.Components
+      : [];
 
-    const administrativeArea =
-      country?.AdministrativeArea;
+  components.forEach(function (component) {
+    if (!component) {
+      return;
+    }
 
-    const locality =
-      administrativeArea?.Locality;
+    const kind = component.kind;
+    const name = component.name || "";
 
-    city =
-      locality?.LocalityName || "";
+    if (
+      kind === "locality" &&
+      !city
+    ) {
+      city = name;
+    }
 
-    district =
-      locality
-        ?.DependentLocality
-        ?.DependentLocalityName || "";
+    if (
+      kind === "district" &&
+      !district
+    ) {
+      district = name;
+    }
 
-    const thoroughfare =
-      locality?.Thoroughfare;
+    if (
+      kind === "street" &&
+      !street
+    ) {
+      street = name;
+    }
 
-    street =
-      thoroughfare
-        ?.ThoroughfareName || "";
+    if (
+      kind === "house" &&
+      !house
+    ) {
+      house = name;
+    }
+  });
 
-    house =
-      thoroughfare
-        ?.Premise
-        ?.PremiseNumber || "";
+  /*
+   * Запасной вариант старого AddressDetails.
+   */
+  if (!city || !street || !house) {
+    try {
+      const address =
+        meta.AddressDetails;
 
-  } catch (error) {
-    console.warn(
-      "Не удалось разобрать AddressDetails:",
-      error
-    );
+      const country =
+        address &&
+        address.Country;
+
+      const administrativeArea =
+        country &&
+        country.AdministrativeArea;
+
+      const locality =
+        administrativeArea &&
+        administrativeArea.Locality;
+
+      if (!city) {
+        city =
+          locality &&
+          locality.LocalityName
+            ? locality.LocalityName
+            : "";
+      }
+
+      if (!district) {
+        district =
+          locality &&
+          locality.DependentLocality &&
+          locality.DependentLocality.DependentLocalityName
+            ? locality.DependentLocality.DependentLocalityName
+            : "";
+      }
+
+      const thoroughfare =
+        locality &&
+        locality.Thoroughfare;
+
+      if (!street) {
+        street =
+          thoroughfare &&
+          thoroughfare.ThoroughfareName
+            ? thoroughfare.ThoroughfareName
+            : "";
+      }
+
+      if (!house) {
+        house =
+          thoroughfare &&
+          thoroughfare.Premise &&
+          thoroughfare.Premise.PremiseNumber
+            ? thoroughfare.Premise.PremiseNumber
+            : "";
+      }
+    } catch (error) {
+      console.warn(
+        "Не удалось разобрать старый формат адреса:",
+        error
+      );
+    }
   }
 
   return {
-    city,
-    district,
-    street,
-    house,
-    fullAddress: text
+    city: city,
+    district: district,
+    street: street,
+    house: house,
+    fullAddress: fullAddress
   };
 }
 
@@ -347,27 +407,21 @@ async function sendRequest(data) {
   requestLocked = true;
 
   const button =
-    document.getElementById(
-      "btn-request"
-    );
+    document.getElementById("btn-request");
 
   if (button) {
     button.disabled = true;
-    button.setAttribute(
-      "aria-busy",
-      "true"
-    );
+    button.setAttribute("aria-busy", "true");
   }
 
   try {
     const message =
-`Новая заявка с сайта:
-
-Имя: ${data.name || "Не указано"}
-Телефон: ${data.phone || "Не указан"}
-Автомобиль: ${data.car || "Не указан"}
-Адрес: ${data.address || "Не указан"}
-Комментарий: ${data.comment || "Не указан"}`;
+      "Новая заявка с сайта:\n\n" +
+      "Имя: " + (data.name || "Не указано") + "\n" +
+      "Телефон: " + (data.phone || "Не указан") + "\n" +
+      "Автомобиль: " + (data.car || "Не указан") + "\n" +
+      "Адрес: " + (data.address || "Не указан") + "\n" +
+      "Комментарий: " + (data.comment || "Не указан");
 
     await sendToVK(message);
 
@@ -376,19 +430,14 @@ async function sendRequest(data) {
     );
 
     const form =
-      document.getElementById(
-        "requestForm"
-      );
+      document.getElementById("requestForm");
 
     if (form) {
       form.reset();
     }
 
   } catch (error) {
-    console.error(
-      "Request Error:",
-      error
-    );
+    console.error("Request Error:", error);
 
     showToast(
       "Не удалось отправить заявку"
@@ -397,13 +446,10 @@ async function sendRequest(data) {
   } finally {
     if (button) {
       button.disabled = false;
-
-      button.removeAttribute(
-        "aria-busy"
-      );
+      button.removeAttribute("aria-busy");
     }
 
-    setTimeout(() => {
+    setTimeout(function () {
       requestLocked = false;
     }, 2000);
   }
@@ -416,31 +462,21 @@ async function sendRequest(data) {
 
 function setGeoStatus(text) {
   const geoStatus =
-    document.getElementById(
-      "geoStatus"
-    );
+    document.getElementById("geoStatus");
 
   if (!geoStatus) {
     return;
   }
 
-  geoStatus.textContent =
-    String(text);
+  geoStatus.textContent = String(text);
 
-  geoStatus.classList.add(
-    "status-show"
-  );
+  geoStatus.classList.add("status-show");
 
-  clearTimeout(
-    geoStatusTimer
-  );
+  clearTimeout(geoStatusTimer);
 
-  geoStatusTimer =
-    setTimeout(() => {
-      geoStatus.classList.remove(
-        "status-show"
-      );
-    }, 3000);
+  geoStatusTimer = setTimeout(function () {
+    geoStatus.classList.remove("status-show");
+  }, 3000);
 }
 
 
@@ -479,17 +515,13 @@ async function sendLocation() {
 
   navigator.geolocation.getCurrentPosition(
 
-    async position => {
+    async function (position) {
       try {
         const lat =
-          Number(
-            position.coords.latitude
-          );
+          Number(position.coords.latitude);
 
         const lon =
-          Number(
-            position.coords.longitude
-          );
+          Number(position.coords.longitude);
 
         if (
           !Number.isFinite(lat) ||
@@ -509,15 +541,10 @@ async function sendLocation() {
         };
 
         /*
-         * Если Яндекс временно недоступен,
-         * координаты всё равно отправляем.
+         * Геокодер не должен блокировать отправку координат.
          */
         try {
-          addr =
-            await getFullAddress(
-              lat,
-              lon
-            );
+          addr = await getFullAddress(lat, lon);
         } catch (geocodeError) {
           console.warn(
             "Геокодирование не удалось:",
@@ -526,40 +553,59 @@ async function sendLocation() {
         }
 
         const yandex =
-          `https://yandex.ru/maps/?pt=${encodeURIComponent(`${lon},${lat}`)}&z=16&l=map`;
+          "https://yandex.ru/maps/?pt=" +
+          encodeURIComponent(
+            String(lon) + "," + String(lat)
+          ) +
+          "&z=16&l=map";
+
+        const addressParts = [
+          addr.city,
+          addr.district,
+          addr.street,
+          addr.house
+        ].filter(Boolean);
 
         const addressLine =
           addr.fullAddress ||
-          [
-            addr.city,
-            addr.district,
-            addr.street,
-            addr.house
-          ]
-            .filter(Boolean)
-            .join(", ") ||
+          addressParts.join(", ") ||
           "Адрес не определён";
 
         const message =
-`Геолокация клиента:
+          "Геолокация клиента:\n\n" +
 
-Город: ${addr.city || "Не определён"}
-Район: ${addr.district || "Не определён"}
-Улица: ${addr.street || "Не определена"}
-Дом: ${addr.house || "Не определён"}
+          "Город: " +
+          (addr.city || "Не определён") +
+          "\n" +
 
-Полный адрес:
-${addressLine}
+          "Район: " +
+          (addr.district || "Не определён") +
+          "\n" +
 
-Широта: ${lat}
-Долгота: ${lon}
+          "Улица: " +
+          (addr.street || "Не определена") +
+          "\n" +
 
-Открыть на карте:
-${yandex}`;
+          "Дом: " +
+          (addr.house || "Не определён") +
+          "\n\n" +
 
-        await sendToVK(
-          message
-        );
+          "Полный адрес:\n" +
+          addressLine +
+          "\n\n" +
+
+          "Широта: " +
+          String(lat) +
+          "\n" +
+
+          "Долгота: " +
+          String(lon) +
+          "\n\n" +
+
+          "Открыть на карте:\n" +
+          yandex;
+
+        await sendToVK(message);
 
         vibrate(40);
 
@@ -582,54 +628,56 @@ ${yandex}`;
         );
 
       } finally {
-        setTimeout(() => {
+        setTimeout(function () {
           locationLocked = false;
         }, 2000);
       }
     },
 
-    error => {
+    function (error) {
       console.error(
         "Geo Error:",
         error
       );
 
-      switch (error.code) {
+      if (
+        error &&
+        error.code === error.PERMISSION_DENIED
+      ) {
+        showToast(
+          "Разрешите доступ к геолокации"
+        );
 
-        case error.PERMISSION_DENIED:
-          showToast(
-            "Разрешите доступ к геолокации"
-          );
-          break;
+      } else if (
+        error &&
+        error.code === error.POSITION_UNAVAILABLE
+      ) {
+        showToast(
+          "Не удалось определить местоположение"
+        );
 
-        case error.POSITION_UNAVAILABLE:
-          showToast(
-            "Не удалось определить местоположение"
-          );
-          break;
+      } else if (
+        error &&
+        error.code === error.TIMEOUT
+      ) {
+        showToast(
+          "Истекло время ожидания геолокации"
+        );
 
-        case error.TIMEOUT:
-          showToast(
-            "Истекло время ожидания геолокации"
-          );
-          break;
-
-        default:
-          showToast(
-            "Не удалось получить геолокацию"
-          );
+      } else {
+        showToast(
+          "Не удалось получить геолокацию"
+        );
       }
 
-      setTimeout(() => {
+      setTimeout(function () {
         locationLocked = false;
       }, 1000);
     },
 
     {
       enableHighAccuracy: true,
-
       timeout: 15000,
-
       maximumAge: 30000
     }
   );
@@ -641,16 +689,12 @@ ${yandex}`;
    ========================================================= */
 
 function getInstallButton() {
-  return document.getElementById(
-    "installBtn"
-  );
+  return document.getElementById("installBtn");
 }
 
 
 function getIosInstallButton() {
-  return document.getElementById(
-    "iosInstall"
-  );
+  return document.getElementById("iosInstall");
 }
 
 
@@ -662,13 +706,11 @@ function hideInstallButtons() {
     getIosInstallButton();
 
   if (installBtn) {
-    installBtn.style.display =
-      "none";
+    installBtn.style.display = "none";
   }
 
   if (iosInstallBtn) {
-    iosInstallBtn.style.display =
-      "none";
+    iosInstallBtn.style.display = "none";
   }
 }
 
@@ -695,12 +737,8 @@ function showAndroidInstallButton() {
     installBtn &&
     !isInStandaloneMode()
   ) {
-    installBtn.style.display =
-      "block";
-
-    installBtn.classList.add(
-      "popIn"
-    );
+    installBtn.style.display = "block";
+    installBtn.classList.add("popIn");
   }
 }
 
@@ -714,8 +752,7 @@ function showIosInstallButton() {
     isIOS() &&
     !isInStandaloneMode()
   ) {
-    iosInstallBtn.style.display =
-      "block";
+    iosInstallBtn.style.display = "block";
   }
 }
 
@@ -726,23 +763,17 @@ function showIosInstallButton() {
 
 window.addEventListener(
   "beforeinstallprompt",
-  event => {
+  function (event) {
     try {
       event.preventDefault();
 
       deferredPrompt = event;
 
-      /*
-       * DOM может быть ещё не готов.
-       */
       if (
-        document.readyState ===
-        "loading"
+        document.readyState !== "loading"
       ) {
-        return;
+        showAndroidInstallButton();
       }
-
-      showAndroidInstallButton();
 
     } catch (error) {
       console.error(
@@ -760,7 +791,7 @@ window.addEventListener(
 
 window.addEventListener(
   "appinstalled",
-  () => {
+  function () {
     deferredPrompt = null;
 
     hideInstallButtons();
@@ -778,17 +809,13 @@ window.addEventListener(
 
 function initTheme() {
   const themeBtn =
-    document.getElementById(
-      "themeToggle"
-    );
+    document.getElementById("themeToggle");
 
   let savedTheme = null;
 
   try {
     savedTheme =
-      localStorage.getItem(
-        "theme"
-      );
+      localStorage.getItem("theme");
   } catch (error) {
     console.warn(
       "localStorage недоступен:",
@@ -797,22 +824,11 @@ function initTheme() {
   }
 
   if (savedTheme === "light") {
-    document.body.classList.remove(
-      "theme-dark"
-    );
-
-    document.body.classList.add(
-      "theme-light"
-    );
-
+    document.body.classList.remove("theme-dark");
+    document.body.classList.add("theme-light");
   } else {
-    document.body.classList.remove(
-      "theme-light"
-    );
-
-    document.body.classList.add(
-      "theme-dark"
-    );
+    document.body.classList.remove("theme-light");
+    document.body.classList.add("theme-dark");
   }
 
   if (!themeBtn) {
@@ -821,7 +837,7 @@ function initTheme() {
 
   themeBtn.addEventListener(
     "click",
-    () => {
+    function () {
       const isLight =
         document.body.classList.contains(
           "theme-light"
@@ -878,27 +894,19 @@ function initTheme() {
 
 /* =========================================================
    GEO BUTTON
-   Поддерживаются ОБА ID:
-   #btn-location и старый #btnLocation
    ========================================================= */
 
 function initGeoButtons() {
   const buttons = [];
 
   const currentButton =
-    document.getElementById(
-      "btn-location"
-    );
+    document.getElementById("btn-location");
 
   const legacyButton =
-    document.getElementById(
-      "btnLocation"
-    );
+    document.getElementById("btnLocation");
 
   const englishButton =
-    document.getElementById(
-      "geoSend"
-    );
+    document.getElementById("geoSend");
 
   if (currentButton) {
     buttons.push(currentButton);
@@ -913,24 +921,18 @@ function initGeoButtons() {
 
   if (
     englishButton &&
-    !buttons.includes(
-      englishButton
-    )
+    !buttons.includes(englishButton)
   ) {
-    buttons.push(
-      englishButton
-    );
+    buttons.push(englishButton);
   }
 
-  buttons.forEach(button => {
+  buttons.forEach(function (button) {
     button.addEventListener(
       "click",
-      () => {
-        button.classList.add(
-          "btn-bounce"
-        );
+      function () {
+        button.classList.add("btn-bounce");
 
-        setTimeout(() => {
+        setTimeout(function () {
           button.classList.remove(
             "btn-bounce"
           );
@@ -955,22 +957,17 @@ function initPWA() {
     getIosInstallButton();
 
   const iosModal =
-    document.getElementById(
-      "iosModal"
-    );
+    document.getElementById("iosModal");
 
-  /*
-   * Android / Chromium
-   */
   if (installBtn) {
     installBtn.addEventListener(
       "click",
-      async () => {
+      async function () {
         installBtn.classList.add(
           "btn-bounce"
         );
 
-        setTimeout(() => {
+        setTimeout(function () {
           installBtn.classList.remove(
             "btn-bounce"
           );
@@ -992,15 +989,13 @@ function initPWA() {
 
           if (
             choice &&
-            choice.outcome ===
-            "accepted"
+            choice.outcome === "accepted"
           ) {
             showToast(
               "Приложение устанавливается"
             );
 
-            installBtn.style.display =
-              "none";
+            installBtn.style.display = "none";
           } else {
             showToast(
               "Установка отменена"
@@ -1024,9 +1019,6 @@ function initPWA() {
     );
   }
 
-  /*
-   * iOS
-   */
   if (
     iosInstallBtn &&
     iosModal
@@ -1037,22 +1029,17 @@ function initPWA() {
     ) {
       showIosInstallButton();
     } else {
-      iosInstallBtn.style.display =
-        "none";
+      iosInstallBtn.style.display = "none";
     }
 
     iosInstallBtn.addEventListener(
       "click",
-      () => {
-        iosModal.style.display =
-          "flex";
+      function () {
+        iosModal.style.display = "flex";
       }
     );
   }
 
-  /*
-   * Если prompt появился раньше DOMContentLoaded.
-   */
   if (
     deferredPrompt &&
     !isInStandaloneMode()
@@ -1060,15 +1047,12 @@ function initPWA() {
     showAndroidInstallButton();
   }
 
-  /*
-   * iOS Safari.
-   */
   if (
     isIOS() &&
     isSafari() &&
     !isInStandaloneMode()
   ) {
-    setTimeout(() => {
+    setTimeout(function () {
       showToast(
         "Чтобы установить: Поделиться → На экран Домой"
       );
@@ -1083,58 +1067,45 @@ function initPWA() {
 
 function initAnimations() {
   const fadeElems =
-    document.querySelectorAll(
-      ".fade-in"
-    );
+    document.querySelectorAll(".fade-in");
 
   if (!fadeElems.length) {
     return;
   }
 
   if (
-    "IntersectionObserver" in
-    window
+    "IntersectionObserver" in window
   ) {
     const observer =
       new IntersectionObserver(
-        entries => {
-          entries.forEach(
-            entry => {
-              if (
-                entry.isIntersecting
-              ) {
-                entry.target.classList.add(
-                  "visible"
-                );
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (
+              entry.isIntersecting
+            ) {
+              entry.target.classList.add(
+                "visible"
+              );
 
-                observer.unobserve(
-                  entry.target
-                );
-              }
+              observer.unobserve(
+                entry.target
+              );
             }
-          );
+          });
         },
         {
           threshold: 0.1
         }
       );
 
-    fadeElems.forEach(
-      element => {
-        observer.observe(
-          element
-        );
-      }
-    );
+    fadeElems.forEach(function (element) {
+      observer.observe(element);
+    });
 
   } else {
-    fadeElems.forEach(
-      element => {
-        element.classList.add(
-          "visible"
-        );
-      }
-    );
+    fadeElems.forEach(function (element) {
+      element.classList.add("visible");
+    });
   }
 }
 
@@ -1145,13 +1116,11 @@ function initAnimations() {
 
 function initPhoneLinks() {
   document
-    .querySelectorAll(
-      'a[href^="tel:"]'
-    )
-    .forEach(link => {
+    .querySelectorAll('a[href^="tel:"]')
+    .forEach(function (link) {
       link.addEventListener(
         "click",
-        () => {
+        function () {
           vibrate(30);
         }
       );
@@ -1175,7 +1144,7 @@ function initRequestForm() {
 
   requestForm.addEventListener(
     "submit",
-    async event => {
+    async function (event) {
       event.preventDefault();
 
       if (
@@ -1190,35 +1159,28 @@ function initRequestForm() {
       }
 
       const formData =
-        new FormData(
-          requestForm
-        );
+        new FormData(requestForm);
 
       const data = {
-        name:
-          String(
-            formData.get("name") || ""
-          ).trim(),
+        name: String(
+          formData.get("name") || ""
+        ).trim(),
 
-        phone:
-          String(
-            formData.get("phone") || ""
-          ).trim(),
+        phone: String(
+          formData.get("phone") || ""
+        ).trim(),
 
-        car:
-          String(
-            formData.get("car") || ""
-          ).trim(),
+        car: String(
+          formData.get("car") || ""
+        ).trim(),
 
-        address:
-          String(
-            formData.get("address") || ""
-          ).trim(),
+        address: String(
+          formData.get("address") || ""
+        ).trim(),
 
-        comment:
-          String(
-            formData.get("comment") || ""
-          ).trim()
+        comment: String(
+          formData.get("comment") || ""
+        ).trim()
       };
 
       if (!data.phone) {
@@ -1235,9 +1197,7 @@ function initRequestForm() {
         return;
       }
 
-      await sendRequest(
-        data
-      );
+      await sendRequest(data);
     }
   );
 }
@@ -1249,30 +1209,18 @@ function initRequestForm() {
 
 function formatRussianPhone(value) {
   let digits =
-    String(value || "")
-      .replace(/\D/g, "");
+    String(value || "").replace(/\D/g, "");
 
   if (!digits) {
     return "";
   }
 
-  /*
-   * 8XXXXXXXXXX -> 7XXXXXXXXXX
-   */
-  if (
-    digits.startsWith("8")
-  ) {
+  if (digits.startsWith("8")) {
     digits =
-      "7" +
-      digits.substring(1);
+      "7" + digits.substring(1);
   }
 
-  /*
-   * Если пользователь ввёл 7...
-   */
-  if (
-    digits.startsWith("7")
-  ) {
+  if (digits.startsWith("7")) {
     digits =
       digits.substring(0, 11);
 
@@ -1281,10 +1229,7 @@ function formatRussianPhone(value) {
     if (digits.length > 1) {
       result +=
         " (" +
-        digits.substring(
-          1,
-          4
-        );
+        digits.substring(1, 4);
     }
 
     if (digits.length >= 4) {
@@ -1293,10 +1238,7 @@ function formatRussianPhone(value) {
 
     if (digits.length > 4) {
       result +=
-        digits.substring(
-          4,
-          7
-        );
+        digits.substring(4, 7);
     }
 
     if (digits.length >= 7) {
@@ -1305,10 +1247,7 @@ function formatRussianPhone(value) {
 
     if (digits.length > 7) {
       result +=
-        digits.substring(
-          7,
-          9
-        );
+        digits.substring(7, 9);
     }
 
     if (digits.length >= 9) {
@@ -1317,19 +1256,13 @@ function formatRussianPhone(value) {
 
     if (digits.length > 9) {
       result +=
-        digits.substring(
-          9,
-          11
-        );
+        digits.substring(9, 11);
     }
 
     return result;
   }
 
-  return digits.substring(
-    0,
-    15
-  );
+  return digits.substring(0, 15);
 }
 
 
@@ -1339,19 +1272,17 @@ function initPhoneMask() {
       'input[type="tel"]'
     );
 
-  phoneInputs.forEach(
-    input => {
-      input.addEventListener(
-        "input",
-        () => {
-          input.value =
-            formatRussianPhone(
-              input.value
-            );
-        }
-      );
-    }
-  );
+  phoneInputs.forEach(function (input) {
+    input.addEventListener(
+      "input",
+      function () {
+        input.value =
+          formatRussianPhone(
+            input.value
+          );
+      }
+    );
+  });
 }
 
 
@@ -1365,26 +1296,21 @@ function closeModal(modalId) {
   }
 
   const modal =
-    document.getElementById(
-      modalId
-    );
+    document.getElementById(modalId);
 
   if (modal) {
-    modal.style.display =
-      "none";
+    modal.style.display = "none";
   }
 }
 
 
 function initModals() {
   document
-    .querySelectorAll(
-      "[data-modal-close]"
-    )
-    .forEach(button => {
+    .querySelectorAll("[data-modal-close]")
+    .forEach(function (button) {
       button.addEventListener(
         "click",
-        () => {
+        function () {
           closeModal(
             button.dataset.modalClose
           );
@@ -1392,44 +1318,32 @@ function initModals() {
       );
     });
 
-
   document
-    .querySelectorAll(
-      ".modal"
-    )
-    .forEach(modal => {
+    .querySelectorAll(".modal")
+    .forEach(function (modal) {
       modal.addEventListener(
         "click",
-        event => {
+        function (event) {
           if (
-            event.target ===
-            modal
+            event.target === modal
           ) {
-            modal.style.display =
-              "none";
+            modal.style.display = "none";
           }
         }
       );
     });
 
-
   document.addEventListener(
     "keydown",
-    event => {
-      if (
-        event.key !==
-        "Escape"
-      ) {
+    function (event) {
+      if (event.key !== "Escape") {
         return;
       }
 
       document
-        .querySelectorAll(
-          ".modal"
-        )
-        .forEach(modal => {
-          modal.style.display =
-            "none";
+        .querySelectorAll(".modal")
+        .forEach(function (modal) {
+          modal.style.display = "none";
         });
     }
   );
@@ -1445,10 +1359,8 @@ function initYears() {
     new Date().getFullYear();
 
   document
-    .querySelectorAll(
-      "[data-year]"
-    )
-    .forEach(element => {
+    .querySelectorAll("[data-year]")
+    .forEach(function (element) {
       element.textContent =
         String(year);
     });
@@ -1469,58 +1381,55 @@ function initLazyImages() {
     return;
   }
 
+  /*
+   * Не оставляем изображения навсегда
+   * в состоянии placeholder.
+   */
   if (
-    "IntersectionObserver" in
-    window
+    "IntersectionObserver" in window
   ) {
     const imageObserver =
       new IntersectionObserver(
-        entries => {
-          entries.forEach(
-            entry => {
-              if (
-                !entry.isIntersecting
-              ) {
-                return;
-              }
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (
+              !entry.isIntersecting
+            ) {
+              return;
+            }
 
-              const img =
-                entry.target;
+            const img =
+              entry.target;
 
-              const src =
-                img.dataset.src;
+            const src =
+              img.dataset.src;
 
-              if (src) {
-                img.src = src;
-
-                img.removeAttribute(
-                  "data-src"
-                );
-              }
-
-              imageObserver.unobserve(
-                img
+            if (src) {
+              img.src = src;
+              img.removeAttribute(
+                "data-src"
               );
             }
-          );
+
+            imageObserver.unobserve(img);
+          });
         },
         {
-          rootMargin:
-            "200px 0px"
+          rootMargin: "300px 0px"
         }
       );
 
-    images.forEach(
-      img => {
-        imageObserver.observe(
-          img
-        );
-      }
-    );
+    images.forEach(function (img) {
+      imageObserver.observe(img);
+    });
 
-  } else {
-    images.forEach(
-      img => {
+    /*
+     * Дополнительная страховка:
+     * через 5 секунд загружаем всё,
+     * что осталось lazy.
+     */
+    setTimeout(function () {
+      images.forEach(function (img) {
         const src =
           img.dataset.src;
 
@@ -1531,9 +1440,52 @@ function initLazyImages() {
             "data-src"
           );
         }
+      });
+    }, 5000);
+
+  } else {
+    images.forEach(function (img) {
+      const src =
+        img.dataset.src;
+
+      if (src) {
+        img.src = src;
+
+        img.removeAttribute(
+          "data-src"
+        );
       }
-    );
+    });
   }
+}
+
+
+/* =========================================================
+   INIT APP
+   ========================================================= */
+
+function initApp() {
+  /*
+   * ВАЖНО:
+   * заставка убирается ПЕРВОЙ.
+   */
+  hidePreloader();
+
+  safeCall(initTheme);
+  safeCall(initGeoButtons);
+  safeCall(initPWA);
+  safeCall(initAnimations);
+  safeCall(initPhoneLinks);
+  safeCall(initRequestForm);
+  safeCall(initPhoneMask);
+  safeCall(initModals);
+  safeCall(initYears);
+  safeCall(initLazyImages);
+
+  /*
+   * Повторно убираем заставку.
+   */
+  hidePreloader();
 }
 
 
@@ -1541,76 +1493,8 @@ function initLazyImages() {
    DOM READY
    ========================================================= */
 
-function initApp() {
-  /*
-   * Убираем заставку в самом начале.
-   * Ниже могут быть любые ошибки —
-   * они уже не должны блокировать сайт.
-   */
-  hidePreloader();
-
-
-  /*
-   * Каждый модуль запускается отдельно.
-   * Ошибка одного модуля не останавливает остальные.
-   */
-
-  safeCall(
-    initTheme
-  );
-
-  safeCall(
-    initGeoButtons
-  );
-
-  safeCall(
-    initPWA
-  );
-
-  safeCall(
-    initAnimations
-  );
-
-  safeCall(
-    initPhoneLinks
-  );
-
-  safeCall(
-    initRequestForm
-  );
-
-  safeCall(
-    initPhoneMask
-  );
-
-  safeCall(
-    initModals
-  );
-
-  safeCall(
-    initYears
-  );
-
-  safeCall(
-    initLazyImages
-  );
-
-
-  /*
-   * Ещё одна попытка убрать заставку
-   * после инициализации интерфейса.
-   */
-  hidePreloader();
-}
-
-
-/* =========================================================
-   DOMContentLoaded
-   ========================================================= */
-
 if (
-  document.readyState ===
-  "loading"
+  document.readyState === "loading"
 ) {
   document.addEventListener(
     "DOMContentLoaded",
@@ -1630,7 +1514,7 @@ if (
 
 window.addEventListener(
   "load",
-  () => {
+  function () {
     hidePreloader();
   },
   {
@@ -1640,52 +1524,74 @@ window.addEventListener(
 
 
 /* =========================================================
-   ДОПОЛНИТЕЛЬНЫЙ АВАРИЙНЫЙ FALLBACK
-   ========================================================= */
-
-setTimeout(() => {
-  hidePreloader();
-}, 8000);
-
-
-/* =========================================================
    SERVICE WORKER
    ========================================================= */
 
 if (
-  "serviceWorker" in
-  navigator
+  "serviceWorker" in navigator
 ) {
   window.addEventListener(
     "load",
-    () => {
+    function () {
       navigator.serviceWorker
-        .register(
-          "/sw.js"
-        )
-        .then(
-          registration => {
-            console.log(
-              "SW зарегистрирован:",
-              registration.scope
-            );
-          }
-        )
-        .catch(
-          error => {
-            /*
-             * Ошибка Service Worker
-             * НЕ должна ломать сайт.
-             */
-            console.error(
-              "SW ошибка:",
-              error
-            );
-          }
-        );
+        .register("/sw.js")
+        .then(function (registration) {
+          console.log(
+            "SW зарегистрирован:",
+            registration.scope
+          );
+        })
+        .catch(function (error) {
+          /*
+           * SW не имеет права ломать app.js.
+           */
+          console.error(
+            "SW ошибка:",
+            error
+          );
+        });
     },
     {
       once: true
     }
   );
 }
+
+
+/* =========================================================
+   ГЛОБАЛЬНАЯ СТРАХОВКА
+   ========================================================= */
+
+window.addEventListener(
+  "error",
+  function (event) {
+    console.error(
+      "Global JS error:",
+      event.error || event.message
+    );
+
+    /*
+     * Даже при ошибке другого скрипта
+     * заставка должна исчезнуть.
+     */
+    hidePreloader();
+  }
+);
+
+
+window.addEventListener(
+  "unhandledrejection",
+  function (event) {
+    console.error(
+      "Unhandled promise rejection:",
+      event.reason
+    );
+
+    hidePreloader();
+  }
+);
+
+
+/* =========================================================
+   КОНЕЦ app.js
+   ========================================================= */
