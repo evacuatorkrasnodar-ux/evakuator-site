@@ -8,12 +8,17 @@
    - YANDEX_API_KEY
 
    ИСПРАВЛЕНО:
-   - PWA Android / Chrome / Edge / Яндекс
+   - Установка PWA на ПК
+   - Chrome / Edge / Яндекс на ПК
+   - Android Chrome / Edge / Яндекс
    - Safari iPhone / iPad
-   - beforeinstallprompt
-   - позднее появление install prompt
-   - повторная установка
-   - актуальный Yandex Geocoder API v1
+   - beforeinstallprompt до и после DOMContentLoaded
+   - повторное появление install prompt
+   - appinstalled
+   - display-mode standalone
+   - геолокация
+   - Яндекс Геокодер API v1
+   - VK отправка
    - безопасная инициализация модулей
    - прелоадер
    ========================================================= */
@@ -44,6 +49,8 @@ let locationLocked = false;
 
 let deferredPrompt = null;
 let installPromptConsumed = false;
+let pwaInitialized = false;
+let pwaInstallInProgress = false;
 
 let toastTimer = null;
 let geoStatusTimer = null;
@@ -74,13 +81,14 @@ function hidePreloader() {
     return;
   }
 
-  preloaderHidden = true;
-
   const preloader = document.getElementById("preloader");
 
   if (!preloader) {
+    preloaderHidden = true;
     return;
   }
+
+  preloaderHidden = true;
 
   preloader.classList.add("hidden");
 
@@ -240,15 +248,6 @@ async function sendToVK(message) {
    ========================================================= */
 
 async function getFullAddress(lat, lon) {
-  /*
-   * Актуальный endpoint Yandex Geocoder API v1.
-   *
-   * Координаты передаются:
-   * longitude,latitude
-   *
-   * Это соответствует документации Яндекса.
-   */
-
   const url = "https://geocode-maps.yandex.ru/v1/";
 
   const params = new URLSearchParams({
@@ -295,6 +294,10 @@ async function getFullAddress(lat, lon) {
       ?.metaDataProperty
       ?.GeocoderMetaData;
 
+  if (!meta) {
+    throw new Error("Данные адреса отсутствуют");
+  }
+
   const address = meta?.AddressDetails;
 
   const text =
@@ -307,9 +310,10 @@ async function getFullAddress(lat, lon) {
   let street = "";
   let house = "";
 
-  /*
-   * Старый формат AddressDetails.
-   */
+
+  /* -------------------------------------------------------
+     Старый формат AddressDetails
+     ------------------------------------------------------- */
 
   try {
     const country = address?.Country;
@@ -346,10 +350,10 @@ async function getFullAddress(lat, lon) {
     );
   }
 
-  /*
-   * Дополнительный разбор нового Address.Components.
-   * Используется как fallback.
-   */
+
+  /* -------------------------------------------------------
+     Новый Address.Components — fallback
+     ------------------------------------------------------- */
 
   if (
     !city ||
@@ -364,7 +368,10 @@ async function getFullAddress(lat, lon) {
         const kind = component?.kind;
         const name = component?.name || "";
 
-        if (kind === "locality" && !city) {
+        if (
+          kind === "locality" &&
+          !city
+        ) {
           city = name;
         }
 
@@ -389,6 +396,7 @@ async function getFullAddress(lat, lon) {
           house = name;
         }
       });
+
     } catch (error) {
       console.warn(
         "Не удалось разобрать Address.Components:",
@@ -396,6 +404,7 @@ async function getFullAddress(lat, lon) {
       );
     }
   }
+
 
   return {
     city,
@@ -565,11 +574,8 @@ async function sendLocation() {
           fullAddress: ""
         };
 
-        /*
-         * Даже если геокодирование
-         * временно не работает,
-         * координаты всё равно отправляются.
-         */
+
+        /* Геокодирование */
 
         try {
           addr =
@@ -577,6 +583,7 @@ async function sendLocation() {
               lat,
               lon
             );
+
         } catch (geocodeError) {
           console.warn(
             "Геокодирование не удалось:",
@@ -584,10 +591,16 @@ async function sendLocation() {
           );
         }
 
+
+        /* Карта */
+
         const yandex =
           `https://yandex.ru/maps/?pt=${encodeURIComponent(
             `${lon},${lat}`
           )}&z=16&l=map`;
+
+
+        /* Адрес */
 
         const addressLine =
           addr.fullAddress ||
@@ -600,6 +613,9 @@ async function sendLocation() {
             .filter(Boolean)
             .join(", ") ||
           "Адрес не определён";
+
+
+        /* Сообщение */
 
         const message =
 `Геолокация клиента:
@@ -617,6 +633,7 @@ ${addressLine}
 
 Открыть на карте:
 ${yandex}`;
+
 
         await sendToVK(message);
 
@@ -698,16 +715,12 @@ ${yandex}`;
    ========================================================= */
 
 function getInstallButton() {
-  return document.getElementById(
-    "installBtn"
-  );
+  return document.getElementById("installBtn");
 }
 
 
 function getIosInstallButton() {
-  return document.getElementById(
-    "iosInstall"
-  );
+  return document.getElementById("iosInstall");
 }
 
 
@@ -720,6 +733,7 @@ function hideInstallButtons() {
 
   if (installBtn) {
     installBtn.style.display = "none";
+
     installBtn.setAttribute(
       "aria-hidden",
       "true"
@@ -728,6 +742,7 @@ function hideInstallButtons() {
 
   if (iosInstallBtn) {
     iosInstallBtn.style.display = "none";
+
     iosInstallBtn.setAttribute(
       "aria-hidden",
       "true"
@@ -771,6 +786,10 @@ function showIosInstallButton() {
     iosInstallBtn.removeAttribute(
       "aria-hidden"
     );
+
+    iosInstallBtn.classList.add(
+      "popIn"
+    );
   }
 }
 
@@ -803,71 +822,313 @@ function showBrowserInstallHelp() {
 
 
 /* =========================================================
-   BEFORE INSTALL PROMPT
+   PWA — BEFORE INSTALL PROMPT
    ========================================================= */
+
+/*
+ * ВАЖНО:
+ *
+ * Этот обработчик находится ВНЕ initPWA().
+ *
+ * Поэтому он начинает слушать событие сразу,
+ * ещё до DOMContentLoaded.
+ *
+ * Это важно для ПК Chrome / Edge / Яндекс,
+ * потому что beforeinstallprompt может прийти
+ * раньше, чем инициализируется интерфейс.
+ */
 
 window.addEventListener(
   "beforeinstallprompt",
   event => {
+
+    console.log(
+      "PWA: beforeinstallprompt получен"
+    );
+
     try {
       /*
-       * Браузер предлагает PWA.
-       * Не показываем стандартное окно сразу.
-       * Сохраняем событие для нашей кнопки.
+       * Не показываем системное окно автоматически.
        */
 
       event.preventDefault();
 
-      deferredPrompt = event;
-      installPromptConsumed = false;
-
-      /*
-       * Если DOM уже готов,
-       * сразу показываем кнопку.
-       */
-
-      if (
-        document.readyState !== "loading" &&
-        !isStandalone()
-      ) {
-        showAndroidInstallButton();
-      }
-
-      console.log(
-        "PWA: beforeinstallprompt получен"
-      );
-
     } catch (error) {
-      console.error(
-        "beforeinstallprompt error:",
+      console.warn(
+        "PWA: preventDefault error:",
         error
       );
+    }
+
+
+    /*
+     * Сохраняем событие.
+     */
+
+    deferredPrompt = event;
+
+    installPromptConsumed = false;
+
+    pwaInstallInProgress = false;
+
+
+    /*
+     * Если DOM уже готов —
+     * сразу показываем кнопку.
+     */
+
+    if (
+      document.readyState !== "loading" &&
+      !isStandalone()
+    ) {
+      showAndroidInstallButton();
     }
   }
 );
 
 
 /* =========================================================
-   APP INSTALLED
+   PWA — APP INSTALLED
    ========================================================= */
 
 window.addEventListener(
   "appinstalled",
   () => {
+
+    console.log(
+      "PWA: приложение установлено"
+    );
+
     deferredPrompt = null;
+
     installPromptConsumed = true;
+
+    pwaInstallInProgress = false;
 
     hideInstallButtons();
 
     showToast(
       "Приложение установлено"
     );
-
-    console.log(
-      "PWA: приложение установлено"
-    );
   }
 );
+
+
+/* =========================================================
+   PWA — ПРОВЕРКА ГОТОВОГО PROMPT
+   ========================================================= */
+
+function refreshPWAInstallButton() {
+
+  if (isStandalone()) {
+    hideInstallButtons();
+    return;
+  }
+
+  /*
+   * iPhone / iPad
+   */
+
+  if (isIOS()) {
+    showIosInstallButton();
+    return;
+  }
+
+  /*
+   * ПК / Android
+   *
+   * Если настоящий prompt уже есть —
+   * показываем кнопку установки.
+   */
+
+  if (deferredPrompt) {
+    showAndroidInstallButton();
+    return;
+  }
+
+  /*
+   * Если prompt ещё не пришёл,
+   * кнопку тоже оставляем видимой.
+   *
+   * При нажатии будет показана инструкция
+   * браузера.
+   */
+
+  showAndroidInstallButton();
+}
+
+
+/* =========================================================
+   PWA — УСТАНОВКА
+   ========================================================= */
+
+async function installPWA() {
+
+  if (pwaInstallInProgress) {
+    return;
+  }
+
+  if (isStandalone()) {
+    hideInstallButtons();
+    return;
+  }
+
+  /*
+   * iOS
+   */
+
+  if (isIOS()) {
+    showBrowserInstallHelp();
+    return;
+  }
+
+
+  /*
+   * Нет настоящего системного prompt.
+   */
+
+  if (
+    !deferredPrompt ||
+    installPromptConsumed
+  ) {
+
+    showBrowserInstallHelp();
+
+    /*
+     * Не прячем кнопку.
+     *
+     * Браузер может прислать
+     * beforeinstallprompt позже.
+     */
+
+    return;
+  }
+
+
+  pwaInstallInProgress = true;
+
+
+  const promptEvent =
+    deferredPrompt;
+
+
+  try {
+
+    /*
+     * После передачи prompt браузеру
+     * старое событие больше не используем.
+     */
+
+    deferredPrompt = null;
+
+    installPromptConsumed = true;
+
+
+    /*
+     * Показываем системное окно установки.
+     */
+
+    await promptEvent.prompt();
+
+
+    /*
+     * Ждём выбор пользователя.
+     */
+
+    const choice =
+      await promptEvent.userChoice;
+
+
+    if (
+      choice &&
+      choice.outcome === "accepted"
+    ) {
+
+      showToast(
+        "Приложение устанавливается"
+      );
+
+      const installBtn =
+        getInstallButton();
+
+      if (installBtn) {
+        installBtn.style.display = "none";
+
+        installBtn.setAttribute(
+          "aria-hidden",
+          "true"
+        );
+      }
+
+    } else {
+
+      /*
+       * Пользователь отменил.
+       *
+       * Не считаем это ошибкой.
+       */
+
+      showToast(
+        "Установка отменена"
+      );
+
+      /*
+       * Важно:
+       * не делаем кнопку permanently disabled.
+       */
+
+      const installBtn =
+        getInstallButton();
+
+      if (
+        installBtn &&
+        !isStandalone()
+      ) {
+        installBtn.style.display = "flex";
+
+        installBtn.removeAttribute(
+          "aria-hidden"
+        );
+      }
+    }
+
+  } catch (error) {
+
+    console.error(
+      "PWA install error:",
+      error
+    );
+
+    /*
+     * Если браузер не дал системный prompt,
+     * показываем понятную инструкцию.
+     */
+
+    showBrowserInstallHelp();
+
+    /*
+     * Кнопка остаётся доступной.
+     */
+
+    const installBtn =
+      getInstallButton();
+
+    if (
+      installBtn &&
+      !isStandalone()
+    ) {
+      installBtn.style.display = "flex";
+
+      installBtn.removeAttribute(
+        "aria-hidden"
+      );
+    }
+
+  } finally {
+
+    pwaInstallInProgress = false;
+  }
+}
 
 
 /* =========================================================
@@ -875,36 +1136,66 @@ window.addEventListener(
    ========================================================= */
 
 function initDisplayModeListener() {
+
   try {
-    const mediaQuery =
-      window.matchMedia(
-        "(display-mode: standalone)"
-      );
+
+    const queries = [
+      "(display-mode: standalone)",
+      "(display-mode: fullscreen)",
+      "(display-mode: minimal-ui)"
+    ];
+
 
     const update = () => {
+
       if (isStandalone()) {
+
         hideInstallButtons();
+
+      } else {
+
+        /*
+         * Если пользователь вышел из PWA
+         * обратно в браузер —
+         * снова проверяем кнопку.
+         */
+
+        refreshPWAInstallButton();
       }
     };
 
-    update();
 
-    if (
-      typeof mediaQuery.addEventListener ===
-      "function"
-    ) {
-      mediaQuery.addEventListener(
-        "change",
-        update
-      );
-    } else if (
-      typeof mediaQuery.addListener ===
-      "function"
-    ) {
-      mediaQuery.addListener(update);
-    }
+    queries.forEach(query => {
+
+      const mediaQuery =
+        window.matchMedia(query);
+
+
+      update();
+
+
+      if (
+        typeof mediaQuery.addEventListener ===
+        "function"
+      ) {
+
+        mediaQuery.addEventListener(
+          "change",
+          update
+        );
+
+      } else if (
+        typeof mediaQuery.addListener ===
+        "function"
+      ) {
+
+        mediaQuery.addListener(update);
+      }
+
+    });
 
   } catch (error) {
+
     console.warn(
       "Display mode listener error:",
       error
@@ -914,10 +1205,235 @@ function initDisplayModeListener() {
 
 
 /* =========================================================
+   PWA UI
+   ========================================================= */
+
+function initPWA() {
+
+  if (pwaInitialized) {
+    refreshPWAInstallButton();
+    return;
+  }
+
+  pwaInitialized = true;
+
+
+  const installBtn =
+    getInstallButton();
+
+  const iosInstallBtn =
+    getIosInstallButton();
+
+  const iosModal =
+    document.getElementById("iosModal");
+
+
+  /*
+   * Уже установлено.
+   */
+
+  if (isStandalone()) {
+
+    hideInstallButtons();
+
+    return;
+  }
+
+
+  /* -------------------------------------------------------
+     ОСНОВНАЯ КНОПКА INSTALL
+     ------------------------------------------------------- */
+
+  if (installBtn) {
+
+    /*
+     * Сначала показываем кнопку,
+     * если сайт ещё не установлен.
+     *
+     * На ПК это важно:
+     * beforeinstallprompt может прийти позже.
+     */
+
+    if (!isIOS()) {
+      showAndroidInstallButton();
+    }
+
+
+    /*
+     * Защита от повторного навешивания.
+     */
+
+    if (
+      installBtn.dataset.pwaBound !== "true"
+    ) {
+
+      installBtn.dataset.pwaBound = "true";
+
+
+      installBtn.addEventListener(
+        "click",
+        async event => {
+
+          event.preventDefault();
+
+          event.stopPropagation();
+
+          installBtn.classList.add(
+            "btn-bounce"
+          );
+
+          setTimeout(() => {
+
+            installBtn.classList.remove(
+              "btn-bounce"
+            );
+
+          }, 250);
+
+          vibrate(20);
+
+          await installPWA();
+        }
+      );
+    }
+  }
+
+
+  /* -------------------------------------------------------
+     iOS INSTALL BUTTON
+     ------------------------------------------------------- */
+
+  if (iosInstallBtn) {
+
+    if (
+      isIOS() &&
+      !isStandalone()
+    ) {
+
+      showIosInstallButton();
+
+    } else {
+
+      iosInstallBtn.style.display =
+        "none";
+
+      iosInstallBtn.setAttribute(
+        "aria-hidden",
+        "true"
+      );
+    }
+
+
+    if (
+      iosInstallBtn.dataset.pwaBound !==
+      "true"
+    ) {
+
+      iosInstallBtn.dataset.pwaBound = "true";
+
+
+      iosInstallBtn.addEventListener(
+        "click",
+        event => {
+
+          event.preventDefault();
+
+          event.stopPropagation();
+
+          vibrate(20);
+
+
+          /*
+           * Если модального окна нет,
+           * просто показываем инструкцию.
+           */
+
+          if (!iosModal) {
+
+            showBrowserInstallHelp();
+
+            return;
+          }
+
+
+          iosModal.style.display =
+            "flex";
+
+          iosModal.setAttribute(
+            "aria-hidden",
+            "false"
+          );
+        }
+      );
+    }
+  }
+
+
+  /*
+   * Если prompt уже был получен
+   * до DOMContentLoaded.
+   */
+
+  refreshPWAInstallButton();
+
+
+  /*
+   * Safari iPhone / iPad.
+   */
+
+  if (
+    isIOS() &&
+    isSafari() &&
+    !isStandalone()
+  ) {
+
+    showIosInstallButton();
+
+
+    /*
+     * Подсказку показываем один раз
+     * после небольшой задержки.
+     */
+
+    if (
+      !sessionStorage.getItem(
+        "iosInstallHintShown"
+      )
+    ) {
+
+      setTimeout(() => {
+
+        if (!isStandalone()) {
+
+          showToast(
+            "Safari: Поделиться → На экран Домой"
+          );
+
+          try {
+            sessionStorage.setItem(
+              "iosInstallHintShown",
+              "1"
+            );
+          } catch (error) {
+            console.warn(
+              "sessionStorage недоступен:",
+              error
+            );
+          }
+        }
+
+      }, 2500);
+    }
+  }
+}
+
+
+/* =========================================================
    THEME
    ========================================================= */
 
 function initTheme() {
+
   const themeBtn =
     document.getElementById(
       "themeToggle"
@@ -926,18 +1442,23 @@ function initTheme() {
   let savedTheme = null;
 
   try {
+
     savedTheme =
       localStorage.getItem(
         "theme"
       );
+
   } catch (error) {
+
     console.warn(
       "localStorage недоступен:",
       error
     );
   }
 
+
   if (savedTheme === "light") {
+
     document.body.classList.remove(
       "theme-dark"
     );
@@ -947,6 +1468,7 @@ function initTheme() {
     );
 
   } else {
+
     document.body.classList.remove(
       "theme-light"
     );
@@ -956,9 +1478,20 @@ function initTheme() {
     );
   }
 
+
   if (!themeBtn) {
     return;
   }
+
+
+  if (
+    themeBtn.dataset.themeBound === "true"
+  ) {
+    return;
+  }
+
+  themeBtn.dataset.themeBound = "true";
+
 
   themeBtn.addEventListener(
     "click",
@@ -968,6 +1501,7 @@ function initTheme() {
         document.body.classList.contains(
           "theme-light"
         );
+
 
       if (isLight) {
 
@@ -980,11 +1514,14 @@ function initTheme() {
         );
 
         try {
+
           localStorage.setItem(
             "theme",
             "dark"
           );
+
         } catch (error) {
+
           console.warn(
             "Не удалось сохранить тему:",
             error
@@ -1002,11 +1539,14 @@ function initTheme() {
         );
 
         try {
+
           localStorage.setItem(
             "theme",
             "light"
           );
+
         } catch (error) {
+
           console.warn(
             "Не удалось сохранить тему:",
             error
@@ -1025,37 +1565,40 @@ function initTheme() {
    ========================================================= */
 
 function initGeoButtons() {
+
   const buttons = [];
+
 
   const currentButton =
     document.getElementById(
       "btn-location"
     );
 
+
   const legacyButton =
     document.getElementById(
       "btnLocation"
     );
+
 
   const englishButton =
     document.getElementById(
       "geoSend"
     );
 
+
   if (currentButton) {
-    buttons.push(
-      currentButton
-    );
+    buttons.push(currentButton);
   }
+
 
   if (
     legacyButton &&
     legacyButton !== currentButton
   ) {
-    buttons.push(
-      legacyButton
-    );
+    buttons.push(legacyButton);
   }
+
 
   if (
     englishButton &&
@@ -1063,12 +1606,20 @@ function initGeoButtons() {
       englishButton
     )
   ) {
-    buttons.push(
-      englishButton
-    );
+    buttons.push(englishButton);
   }
 
+
   buttons.forEach(button => {
+
+    if (
+      button.dataset.geoBound === "true"
+    ) {
+      return;
+    }
+
+    button.dataset.geoBound = "true";
+
 
     button.addEventListener(
       "click",
@@ -1079,9 +1630,11 @@ function initGeoButtons() {
         );
 
         setTimeout(() => {
+
           button.classList.remove(
             "btn-bounce"
           );
+
         }, 250);
 
         sendLocation();
@@ -1093,294 +1646,21 @@ function initGeoButtons() {
 
 
 /* =========================================================
-   PWA UI
-   ========================================================= */
-
-function initPWA() {
-  const installBtn =
-    getInstallButton();
-
-  const iosInstallBtn =
-    getIosInstallButton();
-
-  const iosModal =
-    document.getElementById(
-      "iosModal"
-    );
-
-
-  /*
-   * Если приложение уже установлено —
-   * кнопки установки не нужны.
-   */
-
-  if (isStandalone()) {
-    hideInstallButtons();
-    return;
-  }
-
-
-  /*
-   * Android / Chrome / Edge / Яндекс
-   */
-
-  if (installBtn) {
-
-    /*
-     * По умолчанию скрываем кнопку.
-     * Она появится:
-     *
-     * 1. после beforeinstallprompt;
-     * 2. либо останется доступной для
-     *    показа инструкции браузера.
-     */
-
-    if (
-      deferredPrompt
-    ) {
-      showAndroidInstallButton();
-    } else if (
-      !isIOS()
-    ) {
-      /*
-       * Показываем кнопку даже если
-       * beforeinstallprompt ещё не пришёл.
-       *
-       * При нажатии покажем инструкцию.
-       */
-
-      showAndroidInstallButton();
-    }
-
-
-    installBtn.addEventListener(
-      "click",
-      async () => {
-
-        installBtn.classList.add(
-          "btn-bounce"
-        );
-
-        setTimeout(() => {
-          installBtn.classList.remove(
-            "btn-bounce"
-          );
-        }, 250);
-
-        vibrate(20);
-
-
-        /*
-         * Уже установлено.
-         */
-
-        if (isStandalone()) {
-          hideInstallButtons();
-          return;
-        }
-
-
-        /*
-         * Есть настоящий браузерный prompt.
-         */
-
-        if (
-          deferredPrompt &&
-          !installPromptConsumed
-        ) {
-
-          const promptEvent =
-            deferredPrompt;
-
-          /*
-           * Одно событие beforeinstallprompt
-           * нельзя использовать бесконечно.
-           */
-
-          deferredPrompt = null;
-          installPromptConsumed = true;
-
-          try {
-
-            await promptEvent.prompt();
-
-            const choice =
-              await promptEvent.userChoice;
-
-            if (
-              choice &&
-              choice.outcome === "accepted"
-            ) {
-
-              showToast(
-                "Приложение устанавливается"
-              );
-
-              installBtn.style.display =
-                "none";
-
-            } else {
-
-              /*
-               * Пользователь отказался.
-               * Позже браузер может снова
-               * прислать beforeinstallprompt.
-               */
-
-              showToast(
-                "Установка отменена"
-              );
-            }
-
-          } catch (error) {
-
-            console.error(
-              "PWA install error:",
-              error
-            );
-
-            /*
-             * В некоторых браузерах prompt
-             * может быть недоступен.
-             * Вместо сломанной кнопки
-             * показываем инструкцию.
-             */
-
-            showBrowserInstallHelp();
-          }
-
-          return;
-        }
-
-
-        /*
-         * beforeinstallprompt ещё не появился
-         * или уже был использован.
-         */
-
-        showBrowserInstallHelp();
-      }
-    );
-  }
-
-
-  /*
-   * iOS
-   */
-
-  if (
-    iosInstallBtn &&
-    iosModal
-  ) {
-
-    if (
-      isIOS() &&
-      !isStandalone()
-    ) {
-
-      showIosInstallButton();
-
-    } else {
-
-      iosInstallBtn.style.display =
-        "none";
-    }
-
-
-    iosInstallBtn.addEventListener(
-      "click",
-      () => {
-
-        vibrate(20);
-
-        iosModal.style.display =
-          "flex";
-
-        iosModal.setAttribute(
-          "aria-hidden",
-          "false"
-        );
-      }
-    );
-  }
-
-
-  /*
-   * Если beforeinstallprompt пришёл
-   * до DOMContentLoaded.
-   */
-
-  if (
-    deferredPrompt &&
-    !isStandalone()
-  ) {
-    showAndroidInstallButton();
-  }
-
-
-  /*
-   * Safari.
-   */
-
-  if (
-    isIOS() &&
-    isSafari() &&
-    !isStandalone()
-  ) {
-
-    showIosInstallButton();
-
-    /*
-     * Не надо постоянно показывать Toast.
-     * Только один раз через небольшую задержку.
-     */
-
-    setTimeout(() => {
-
-      if (
-        !isStandalone()
-      ) {
-
-        showToast(
-          "Safari: Поделиться → На экран Домой"
-        );
-      }
-
-    }, 2500);
-  }
-
-
-  /*
-   * Android / Chromium,
-   * если prompt ещё не пришёл.
-   */
-
-  if (
-    !isIOS() &&
-    !deferredPrompt &&
-    !isStandalone()
-  ) {
-
-    console.log(
-      "PWA: beforeinstallprompt пока не доступен"
-    );
-  }
-}
-
-
-/* =========================================================
    ANIMATIONS
    ========================================================= */
 
 function initAnimations() {
+
   const fadeElems =
     document.querySelectorAll(
       ".fade-in"
     );
 
+
   if (!fadeElems.length) {
     return;
   }
+
 
   if (
     "IntersectionObserver" in
@@ -1416,11 +1696,14 @@ function initAnimations() {
         }
       );
 
+
     fadeElems.forEach(
       element => {
+
         observer.observe(
           element
         );
+
       }
     );
 
@@ -1428,9 +1711,11 @@ function initAnimations() {
 
     fadeElems.forEach(
       element => {
+
         element.classList.add(
           "visible"
         );
+
       }
     );
   }
@@ -1442,16 +1727,28 @@ function initAnimations() {
    ========================================================= */
 
 function initPhoneLinks() {
+
   document
     .querySelectorAll(
       'a[href^="tel:"]'
     )
     .forEach(link => {
 
+      if (
+        link.dataset.phoneBound === "true"
+      ) {
+        return;
+      }
+
+      link.dataset.phoneBound = "true";
+
+
       link.addEventListener(
         "click",
         () => {
+
           vibrate(30);
+
         }
       );
 
@@ -1464,20 +1761,33 @@ function initPhoneLinks() {
    ========================================================= */
 
 function initRequestForm() {
+
   const requestForm =
     document.getElementById(
       "requestForm"
     );
 
+
   if (!requestForm) {
     return;
   }
+
+
+  if (
+    requestForm.dataset.formBound === "true"
+  ) {
+    return;
+  }
+
+  requestForm.dataset.formBound = "true";
+
 
   requestForm.addEventListener(
     "submit",
     async event => {
 
       event.preventDefault();
+
 
       if (
         typeof requestForm.reportValidity ===
@@ -1491,10 +1801,12 @@ function initRequestForm() {
         }
       }
 
+
       const formData =
         new FormData(
           requestForm
         );
+
 
       const data = {
 
@@ -1524,6 +1836,7 @@ function initRequestForm() {
           ).trim()
       };
 
+
       if (!data.phone) {
 
         showToast(
@@ -1533,6 +1846,7 @@ function initRequestForm() {
         return;
       }
 
+
       if (!data.address) {
 
         showToast(
@@ -1541,6 +1855,7 @@ function initRequestForm() {
 
         return;
       }
+
 
       await sendRequest(
         data
@@ -1555,13 +1870,16 @@ function initRequestForm() {
    ========================================================= */
 
 function formatRussianPhone(value) {
+
   let digits =
     String(value || "")
       .replace(/\D/g, "");
 
+
   if (!digits) {
     return "";
   }
+
 
   /*
    * 8XXXXXXXXXX -> 7XXXXXXXXXX
@@ -1570,13 +1888,15 @@ function formatRussianPhone(value) {
   if (
     digits.startsWith("8")
   ) {
+
     digits =
       "7" +
       digits.substring(1);
   }
 
+
   /*
-   * Если пользователь ввёл 7...
+   * Российский номер
    */
 
   if (
@@ -1584,11 +1904,17 @@ function formatRussianPhone(value) {
   ) {
 
     digits =
-      digits.substring(0, 11);
+      digits.substring(
+        0,
+        11
+      );
+
 
     let result = "+7";
 
+
     if (digits.length > 1) {
+
       result +=
         " (" +
         digits.substring(
@@ -1597,11 +1923,15 @@ function formatRussianPhone(value) {
         );
     }
 
+
     if (digits.length >= 4) {
+
       result += ") ";
     }
 
+
     if (digits.length > 4) {
+
       result +=
         digits.substring(
           4,
@@ -1609,11 +1939,15 @@ function formatRussianPhone(value) {
         );
     }
 
+
     if (digits.length >= 7) {
+
       result += "-";
     }
 
+
     if (digits.length > 7) {
+
       result +=
         digits.substring(
           7,
@@ -1621,11 +1955,15 @@ function formatRussianPhone(value) {
         );
     }
 
+
     if (digits.length >= 9) {
+
       result += "-";
     }
 
+
     if (digits.length > 9) {
+
       result +=
         digits.substring(
           9,
@@ -1633,8 +1971,10 @@ function formatRussianPhone(value) {
         );
     }
 
+
     return result;
   }
+
 
   return digits.substring(
     0,
@@ -1644,13 +1984,25 @@ function formatRussianPhone(value) {
 
 
 function initPhoneMask() {
+
   const phoneInputs =
     document.querySelectorAll(
       'input[type="tel"]'
     );
 
+
   phoneInputs.forEach(
     input => {
+
+      if (
+        input.dataset.phoneMaskBound ===
+        "true"
+      ) {
+        return;
+      }
+
+      input.dataset.phoneMaskBound = "true";
+
 
       input.addEventListener(
         "input",
@@ -1660,6 +2012,7 @@ function initPhoneMask() {
             formatRussianPhone(
               input.value
             );
+
         }
       );
 
@@ -1673,14 +2026,17 @@ function initPhoneMask() {
    ========================================================= */
 
 function closeModal(modalId) {
+
   if (!modalId) {
     return;
   }
+
 
   const modal =
     document.getElementById(
       modalId
     );
+
 
   if (modal) {
 
@@ -1703,6 +2059,15 @@ function initModals() {
     )
     .forEach(button => {
 
+      if (
+        button.dataset.modalBound === "true"
+      ) {
+        return;
+      }
+
+      button.dataset.modalBound = "true";
+
+
       button.addEventListener(
         "click",
         () => {
@@ -1722,6 +2087,15 @@ function initModals() {
       ".modal"
     )
     .forEach(modal => {
+
+      if (
+        modal.dataset.modalBound === "true"
+      ) {
+        return;
+      }
+
+      modal.dataset.modalBound = "true";
+
 
       modal.addEventListener(
         "click",
@@ -1746,34 +2120,45 @@ function initModals() {
     });
 
 
-  document.addEventListener(
-    "keydown",
-    event => {
+  if (
+    document.body.dataset.modalKeyboardBound !==
+    "true"
+  ) {
 
-      if (
-        event.key !== "Escape"
-      ) {
-        return;
+    document.body.dataset.modalKeyboardBound =
+      "true";
+
+
+    document.addEventListener(
+      "keydown",
+      event => {
+
+        if (
+          event.key !== "Escape"
+        ) {
+          return;
+        }
+
+
+        document
+          .querySelectorAll(
+            ".modal"
+          )
+          .forEach(modal => {
+
+            modal.style.display =
+              "none";
+
+            modal.setAttribute(
+              "aria-hidden",
+              "true"
+            );
+
+          });
+
       }
-
-      document
-        .querySelectorAll(
-          ".modal"
-        )
-        .forEach(modal => {
-
-          modal.style.display =
-            "none";
-
-          modal.setAttribute(
-            "aria-hidden",
-            "true"
-          );
-
-        });
-
-    }
-  );
+    );
+  }
 }
 
 
@@ -1782,8 +2167,10 @@ function initModals() {
    ========================================================= */
 
 function initYears() {
+
   const year =
     new Date().getFullYear();
+
 
   document
     .querySelectorAll(
@@ -1803,14 +2190,17 @@ function initYears() {
    ========================================================= */
 
 function initLazyImages() {
+
   const images =
     document.querySelectorAll(
       "img[data-src]"
     );
 
+
   if (!images.length) {
     return;
   }
+
 
   if (
     "IntersectionObserver" in
@@ -1830,11 +2220,14 @@ function initLazyImages() {
                 return;
               }
 
+
               const img =
                 entry.target;
 
+
               const src =
                 img.dataset.src;
+
 
               if (src) {
 
@@ -1844,6 +2237,7 @@ function initLazyImages() {
                   "data-src"
                 );
               }
+
 
               imageObserver.unobserve(
                 img
@@ -1859,11 +2253,14 @@ function initLazyImages() {
         }
       );
 
+
     images.forEach(
       img => {
+
         imageObserver.observe(
           img
         );
+
       }
     );
 
@@ -1874,6 +2271,7 @@ function initLazyImages() {
 
         const src =
           img.dataset.src;
+
 
         if (src) {
 
@@ -1931,6 +2329,17 @@ function initApp() {
 
 
   /*
+   * Повторно проверяем PWA.
+   *
+   * Это особенно важно, если
+   * beforeinstallprompt пришёл
+   * до DOMContentLoaded.
+   */
+
+  safeCall(refreshPWAInstallButton);
+
+
+  /*
    * Повторно убираем заставку.
    */
 
@@ -1943,8 +2352,7 @@ function initApp() {
    ========================================================= */
 
 if (
-  document.readyState ===
-  "loading"
+  document.readyState === "loading"
 ) {
 
   document.addEventListener(
@@ -1968,7 +2376,18 @@ if (
 window.addEventListener(
   "load",
   () => {
+
     hidePreloader();
+
+    /*
+     * Иногда beforeinstallprompt приходит
+     * уже после полной загрузки страницы.
+     *
+     * Поэтому ещё раз проверяем кнопку.
+     */
+
+    refreshPWAInstallButton();
+
   },
   {
     once: true
@@ -1991,8 +2410,7 @@ setTimeout(
    ========================================================= */
 
 if (
-  "serviceWorker" in
-  navigator
+  "serviceWorker" in navigator
 ) {
 
   window.addEventListener(
@@ -2020,7 +2438,8 @@ if (
           error => {
 
             /*
-             * SW не должен ломать сайт.
+             * Service Worker не должен
+             * ломать основной сайт.
              */
 
             console.error(
