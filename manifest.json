@@ -1,56 +1,54 @@
 {
-  "id": "evacuator-krd-online",
-  "lang": "ru",
+  "id": "/",
   "name": "Эвакуатор Краснодар 24/7",
   "short_name": "Эвакуатор",
+  "description": "Круглосуточный эвакуатор в Краснодаре. Подача от 15–25 минут. Аккуратная погрузка, честные цены.",
+  "lang": "ru-RU",
+  "dir": "ltr",
+
   "start_url": "/",
   "scope": "/",
+
   "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone"
+  ],
+
   "orientation": "portrait",
+
   "background_color": "#050608",
   "theme_color": "#050608",
-  "description": "Круглосуточный эвакуатор в Краснодаре. Подача от 15–25 минут. Аккуратная погрузка, честные цены.",
-  "categories": ["transportation", "service", "utilities"],
+
+  "categories": [
+    "transportation",
+    "utilities",
+    "business"
+  ],
+
+  "prefer_related_applications": false,
+
   "icons": [
     {
-      "src": "/preload.png",
+      "src": "/icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/preload.png",
-      "sizes": "256x256",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/preload.png",
-      "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/preload.png",
+      "src": "/icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/preload.png",
+      "src": "/icons/icon-512-maskable.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     }
   ],
-  "screenshots": [
-    {
-      "src": "/preload.png",
-      "sizes": "1080x1920",
-      "type": "image/png",
-      "form_factor": "narrow"
-    }
-  ],
+
   "shortcuts": [
     {
       "name": "Позвонить эвакуатору",
@@ -58,7 +56,7 @@
       "url": "/call.html",
       "icons": [
         {
-          "src": "/preload.png",
+          "src": "/icons/icon-192.png",
           "sizes": "192x192",
           "type": "image/png"
         }
@@ -70,7 +68,7 @@
       "url": "/request.html",
       "icons": [
         {
-          "src": "/preload.png",
+          "src": "/icons/icon-192.png",
           "sizes": "192x192",
           "type": "image/png"
         }
@@ -82,12 +80,11 @@
       "url": "/prices.html",
       "icons": [
         {
-          "src": "/preload.png",
+          "src": "/icons/icon-192.png",
           "sizes": "192x192",
           "type": "image/png"
         }
       ]
     }
-  ],
-  "prefer_related_applications": false
+  ]
 }
