@@ -2,13 +2,17 @@
    SERVICE WORKER
    Эвакуатор Краснодар 24/7
 
-   PWA / Android / Chrome / Edge / Яндекс Браузер
+   PWA / Android / Chrome / Edge / Яндекс Браузер / iOS
 
    ВАЖНО:
-   - VK/Yandex ключи находятся в app.js и здесь НЕ нужны.
-   - Внешние API-запросы не кэшируем.
-   - HTML всегда стараемся получить из сети.
-   - Статические файлы можно отдавать из cache.
+   - VK/Yandex ключи находятся в app.js.
+   - Здесь ключей и токенов НЕТ.
+   - POST-запросы НЕ кэшируются.
+   - VK / Yandex / аналитика НЕ кэшируются.
+   - HTML: NETWORK FIRST.
+   - CSS / JS / fonts: NETWORK FIRST с cache fallback.
+   - Изображения: CACHE FIRST с network fallback.
+   - Старая версия кэша автоматически удаляется.
    ========================================================= */
 
 
@@ -16,7 +20,18 @@
    CACHE VERSION
    ========================================================= */
 
-const CACHE_NAME = "evacuator-v9";
+/*
+ * Было:
+ *
+ * evacuator-v9
+ *
+ * Теперь v10.
+ *
+ * Это важно, потому что браузер мог продолжать
+ * отдавать старый app.js из старого кэша.
+ */
+
+const CACHE_NAME = "evacuator-v10";
 
 const OFFLINE_URL = "/offline.html";
 
@@ -118,12 +133,20 @@ function isHTMLRequest(request) {
 
 
 function isImageRequest(request) {
-  return (
-    request.destination === "image" ||
-    /\.(png|jpe?g|webp|gif|svg|ico)$/i.test(
-      new URL(request.url).pathname
-    )
-  );
+  try {
+    const pathname =
+      new URL(request.url).pathname;
+
+    return (
+      request.destination === "image" ||
+      /\.(png|jpe?g|webp|gif|svg|ico)$/i.test(
+        pathname
+      )
+    );
+
+  } catch (error) {
+    return false;
+  }
 }
 
 
@@ -136,16 +159,6 @@ function isStaticAssetRequest(request) {
     "script",
     "font"
   ].includes(destination);
-}
-
-
-function cacheKey(request) {
-  /*
-   * Для GET используем сам Request.
-   * Это безопаснее и сохраняет корректные
-   * параметры запроса.
-   */
-  return request;
 }
 
 
@@ -169,25 +182,51 @@ self.addEventListener(
 
 
           /*
-           * Кэшируем каждый ресурс отдельно.
+           * Кэшируем файлы по одному.
            *
-           * Если одного файла нет —
-           * установка SW всё равно продолжается.
+           * Если какого-то необязательного файла
+           * нет на сервере, установка SW не падает.
            */
+
           for (
             const asset of STATIC_ASSETS
           ) {
 
             try {
 
-              await cache.add(
+              const request =
                 new Request(
                   asset,
                   {
                     cache: "reload"
                   }
-                )
-              );
+                );
+
+              const response =
+                await fetch(
+                  request
+                );
+
+
+              if (
+                response &&
+                response.ok
+              ) {
+
+                await cache.put(
+                  request,
+                  response.clone()
+                );
+
+              } else {
+
+                console.warn(
+                  "SW: ресурс не загружен:",
+                  asset,
+                  response?.status
+                );
+
+              }
 
             } catch (error) {
 
@@ -203,8 +242,10 @@ self.addEventListener(
 
 
           /*
-           * Новый SW становится готовым сразу.
+           * Новый Service Worker
+           * активируется сразу.
            */
+
           await self.skipWaiting();
 
         } catch (error) {
@@ -241,8 +282,11 @@ self.addEventListener(
 
 
           /*
-           * Удаляем ВСЕ старые версии.
+           * Удаляем старые версии кэша.
+           *
+           * Оставляем только v10.
            */
+
           await Promise.all(
             cacheNames
               .filter(
@@ -257,16 +301,18 @@ self.addEventListener(
 
 
           /*
-           * Новый SW начинает
-           * контролировать страницы сразу.
+           * Новый SW сразу начинает
+           * контролировать страницы.
            */
+
           await self.clients.claim();
 
 
           /*
-           * Сообщаем открытым страницам,
-           * что SW обновился.
+           * Сообщаем открытым вкладкам,
+           * что Service Worker обновился.
            */
+
           const clients =
             await self.clients.matchAll({
               type: "window"
@@ -283,6 +329,12 @@ self.addEventListener(
             });
 
           }
+
+
+          console.log(
+            "SW activated:",
+            CACHE_NAME
+          );
 
         } catch (error) {
 
@@ -317,9 +369,10 @@ self.addEventListener(
 
 
     /*
-     * Позволяет app.js принудительно
-     * активировать новый Service Worker.
+     * Позволяет странице попросить
+     * Service Worker активироваться.
      */
+
     if (
       event.data.type ===
       "SKIP_WAITING"
@@ -345,18 +398,26 @@ self.addEventListener(
       event.request;
 
 
+    /* =====================================================
+       ТОЛЬКО GET
+       ===================================================== */
+
     /*
-     * Service Worker работает
-     * только с GET.
+     * POST / PUT / PATCH / DELETE
+     * вообще не перехватываем.
      *
-     * POST-запросы формы/VK/API
-     * вообще не должны попадать
-     * в Cache Storage.
+     * Поэтому отправка формы и запросы API
+     * не попадают в Cache Storage.
      */
+
     if (!isGET(request)) {
       return;
     }
 
+
+    /* =====================================================
+       URL
+       ===================================================== */
 
     let url;
 
@@ -374,15 +435,15 @@ self.addEventListener(
     }
 
 
+    /* =====================================================
+       ВНЕШНИЕ API
+       ===================================================== */
+
     /*
-     * Внешние запросы не перехватываем.
-     *
-     * Особенно важно для:
-     * VK API
-     * Yandex Geocoder
-     * Метрики
-     * Google Analytics
+     * VK / Yandex / analytics и прочие
+     * внешние запросы не трогаем.
      */
+
     if (
       isBlockedExternalRequest(url)
     ) {
@@ -392,9 +453,10 @@ self.addEventListener(
     }
 
 
-    /*
-     * Чужие домены вообще не трогаем.
-     */
+    /* =====================================================
+       ЧУЖИЕ ДОМЕНЫ
+       ===================================================== */
+
     if (
       !isSameOrigin(url)
     ) {
@@ -418,6 +480,11 @@ self.addEventListener(
 
           try {
 
+            /*
+             * Всегда сначала пытаемся
+             * получить актуальный HTML.
+             */
+
             const response =
               await fetch(
                 request,
@@ -428,9 +495,10 @@ self.addEventListener(
 
 
             /*
-             * Только нормальные ответы
-             * сохраняем в cache.
+             * Сохраняем только нормальный
+             * ответ сервера.
              */
+
             if (
               response &&
               response.ok
@@ -444,7 +512,7 @@ self.addEventListener(
                   );
 
                 await cache.put(
-                  cacheKey(request),
+                  request,
                   response.clone()
                 );
 
@@ -470,9 +538,10 @@ self.addEventListener(
             );
 
 
-            /*
-             * Сначала ищем именно эту страницу.
-             */
+            /* ---------------------------------------------
+               1. Точная страница из кэша
+               --------------------------------------------- */
+
             const cachedPage =
               await caches.match(
                 request
@@ -488,9 +557,10 @@ self.addEventListener(
             }
 
 
-            /*
-             * Затем index.html.
-             */
+            /* ---------------------------------------------
+               2. index.html
+               --------------------------------------------- */
+
             const cachedIndex =
               await caches.match(
                 "/index.html"
@@ -506,9 +576,10 @@ self.addEventListener(
             }
 
 
-            /*
-             * И только потом offline.html.
-             */
+            /* ---------------------------------------------
+               3. offline.html
+               --------------------------------------------- */
+
             const offline =
               await caches.match(
                 OFFLINE_URL
@@ -524,29 +595,37 @@ self.addEventListener(
             }
 
 
-            /*
-             * Крайний случай.
-             */
+            /* ---------------------------------------------
+               4. Крайний fallback
+               --------------------------------------------- */
+
             return new Response(
               `
-                <!doctype html>
-                <html lang="ru">
-                <head>
-                  <meta charset="utf-8">
-                  <meta name="viewport"
-                        content="width=device-width,initial-scale=1">
-                  <title>Нет подключения</title>
-                </head>
-                <body>
-                  <h1>Нет подключения к интернету</h1>
-                  <p>
-                    Проверьте соединение и попробуйте снова.
-                  </p>
-                </body>
-                </html>
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  >
+  <title>Нет подключения</title>
+</head>
+
+<body>
+
+  <h1>Нет подключения к интернету</h1>
+
+  <p>
+    Проверьте соединение и попробуйте снова.
+  </p>
+
+</body>
+</html>
               `,
               {
                 status: 503,
+
                 headers: {
                   "Content-Type":
                     "text/html; charset=utf-8"
@@ -581,6 +660,11 @@ self.addEventListener(
             );
 
 
+          /*
+           * Сначала ищем изображение
+           * в локальном кэше.
+           */
+
           const cached =
             await cache.match(
               request
@@ -595,6 +679,10 @@ self.addEventListener(
 
           }
 
+
+          /*
+           * Если нет — сеть.
+           */
 
           try {
 
@@ -634,18 +722,34 @@ self.addEventListener(
             }
 
 
+            /*
+             * Запасная картинка.
+             */
+
             const fallback =
               await caches.match(
                 "/preload.png"
               );
 
 
-            return (
-              fallback ||
-              response
-            );
+            if (
+              fallback
+            ) {
+
+              return fallback;
+
+            }
+
+
+            return response;
 
           } catch (error) {
+
+            console.warn(
+              "SW: image network error:",
+              error
+            );
+
 
             const fallback =
               await caches.match(
@@ -680,7 +784,7 @@ self.addEventListener(
 
     /* =====================================================
        CSS / JS / FONTS
-       CACHE FIRST
+       NETWORK FIRST
        ===================================================== */
 
     if (
@@ -692,32 +796,24 @@ self.addEventListener(
       event.respondWith(
         (async () => {
 
-          const cache =
-            await caches.open(
-              CACHE_NAME
-            );
-
-
-          const cached =
-            await cache.match(
-              request
-            );
-
-
-          if (
-            cached
-          ) {
-
-            return cached;
-
-          }
-
-
           try {
+
+            /*
+             * ВАЖНО:
+             *
+             * Сначала сеть.
+             *
+             * Это исправляет ситуацию,
+             * когда старый app.js остаётся
+             * в CACHE FIRST.
+             */
 
             const response =
               await fetch(
-                request
+                request,
+                {
+                  cache: "no-store"
+                }
               );
 
 
@@ -727,6 +823,11 @@ self.addEventListener(
             ) {
 
               try {
+
+                const cache =
+                  await caches.open(
+                    CACHE_NAME
+                  );
 
                 await cache.put(
                   request,
@@ -747,23 +848,48 @@ self.addEventListener(
 
             return response;
 
-          } catch (error) {
+          } catch (networkError) {
 
-            console.error(
-              "SW: static asset error:",
-              error
+            console.warn(
+              "SW: static network error:",
+              networkError
             );
 
 
             /*
-             * Для JS/CSS лучше вернуть
-             * ошибку сети, чем подставлять
-             * неправильный HTML.
+             * Если сеть недоступна,
+             * используем старый кэш.
              */
+
+            const cached =
+              await caches.match(
+                request
+              );
+
+
+            if (
+              cached
+            ) {
+
+              return cached;
+
+            }
+
+
+            /*
+             * Если ничего нет —
+             * отдаём 503.
+             */
+
             return new Response(
               "",
               {
-                status: 503
+                status: 503,
+
+                headers: {
+                  "Content-Type":
+                    "text/plain; charset=utf-8"
+                }
               }
             );
 
@@ -793,9 +919,10 @@ self.addEventListener(
 
 
           /*
-           * Кэшируем только
-           * собственные нормальные ответы.
+           * Сохраняем только свои
+           * нормальные ответы.
            */
+
           if (
             response &&
             response.ok &&
@@ -831,6 +958,12 @@ self.addEventListener(
 
         } catch (networkError) {
 
+          console.warn(
+            "SW: generic network error:",
+            networkError
+          );
+
+
           const cached =
             await caches.match(
               request
@@ -846,15 +979,11 @@ self.addEventListener(
           }
 
 
-          /*
-           * Для неизвестного запроса
-           * offline.html не всегда подходит,
-           * поэтому возвращаем 503.
-           */
           return new Response(
             "Нет подключения к интернету",
             {
               status: 503,
+
               headers: {
                 "Content-Type":
                   "text/plain; charset=utf-8"
