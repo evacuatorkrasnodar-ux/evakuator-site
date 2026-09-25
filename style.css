@@ -82,7 +82,10 @@ body.theme-light {
 }
 
 @keyframes fadeIn {
-  to { opacity:1; transform:translateY(0); }
+  to {
+    opacity:1;
+    transform:translateY(0);
+  }
 }
 
 /* TOP BUTTONS */
@@ -92,7 +95,11 @@ body.theme-light {
   align-items:stretch;
   gap:14px;
   width:100%;
-  margin-bottom:24px;
+
+  /* ИСПРАВЛЕНО:
+     раньше было 24px,
+     теперь верхние кнопки ближе к "Позвонить" */
+  margin-bottom:10px;
 }
 
 .install-btn,
@@ -131,7 +138,11 @@ body.theme-light {
   position:absolute;
   inset:0;
   border-radius:inherit;
-  background:linear-gradient(180deg, rgba(255,255,255,.25), rgba(255,255,255,.05));
+  background:linear-gradient(
+    180deg,
+    rgba(255,255,255,.25),
+    rgba(255,255,255,.05)
+  );
   opacity:.25;
   pointer-events:none;
 }
@@ -139,15 +150,27 @@ body.theme-light {
 body.theme-dark .apple-glass-btn {
   color:var(--text-dark);
   background:
-    linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.04)),
-    linear-gradient(180deg, rgba(20,20,20,.85), rgba(10,10,10,.92));
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.12),
+      rgba(255,255,255,.04)
+    ),
+    linear-gradient(
+      180deg,
+      rgba(20,20,20,.85),
+      rgba(10,10,10,.92)
+    );
   border:1px solid rgba(255,255,255,.22);
 }
 
 body.theme-light .apple-glass-btn {
   color:var(--text-light);
   background:
-    linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,255,255,.92));
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.98),
+      rgba(255,255,255,.92)
+    );
   border:1px solid rgba(0,0,0,.12);
 }
 
@@ -199,14 +222,22 @@ body.theme-light .muted {
 
 body.theme-dark .section {
   background:
-    linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04)),
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.10),
+      rgba(255,255,255,.04)
+    ),
     rgba(10,10,10,.85);
   border:1px solid rgba(255,255,255,.12);
 }
 
 body.theme-light .section {
   background:
-    linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,255,255,.92));
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.98),
+      rgba(255,255,255,.92)
+    );
   border:1px solid rgba(0,0,0,.06);
 }
 
@@ -238,7 +269,11 @@ body.theme-light .section {
 body.theme-dark .social-glass {
   color:var(--text-dark);
   background:
-    linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.04)),
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.12),
+      rgba(255,255,255,.04)
+    ),
     rgba(10,10,10,.85);
   border:1px solid rgba(255,255,255,.22);
 }
@@ -246,7 +281,11 @@ body.theme-dark .social-glass {
 body.theme-light .social-glass {
   color:var(--text-light);
   background:
-    linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,255,255,.92));
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.98),
+      rgba(255,255,255,.92)
+    );
   border:1px solid rgba(0,0,0,.12);
 }
 
@@ -264,7 +303,9 @@ body.theme-light .social-glass {
   padding:18px;
   border-radius:16px;
   box-shadow:var(--shadow-soft);
-  transition:transform .25s cubic-bezier(.25,.46,.45,.94), box-shadow .25s ease;
+  transition:
+    transform .25s cubic-bezier(.25,.46,.45,.94),
+    box-shadow .25s ease;
   will-change:transform;
 }
 
@@ -275,7 +316,11 @@ body.theme-light .social-glass {
 
 body.theme-dark .service-card {
   background:
-    linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)),
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.08),
+      rgba(255,255,255,.03)
+    ),
     rgba(10,10,10,.75);
   border:1px solid rgba(255,255,255,.12);
   color:var(--text-dark);
@@ -283,7 +328,11 @@ body.theme-dark .service-card {
 
 body.theme-light .service-card {
   background:
-    linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,255,255,.92));
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.98),
+      rgba(255,255,255,.92)
+    );
   border:1px solid rgba(0,0,0,.06);
   color:var(--text-light);
 }
@@ -339,7 +388,11 @@ body.theme-light .adv-item {
 body.theme-dark .request-form input,
 body.theme-dark .request-form textarea {
   background:
-    linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)),
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.08),
+      rgba(255,255,255,.03)
+    ),
     rgba(10,10,10,.75);
   border:1px solid rgba(255,255,255,.12);
   color:var(--text-dark);
@@ -348,7 +401,11 @@ body.theme-dark .request-form textarea {
 body.theme-light .request-form input,
 body.theme-light .request-form textarea {
   background:
-    linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,255,255,.92));
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.98),
+      rgba(255,255,255,.92)
+    );
   border:1px solid rgba(0,0,0,.06);
   color:var(--text-light);
 }
@@ -373,7 +430,9 @@ body.theme-light .request-form textarea::placeholder {
   font-size:14px;
   opacity:0;
   transform:translateY(10px);
-  transition:opacity .45s ease, transform .45s ease;
+  transition:
+    opacity .45s ease,
+    transform .45s ease;
 }
 
 .status-show {
@@ -398,14 +457,22 @@ body.theme-light .status-box {
 
 body.theme-dark .footer {
   background:
-    linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.04)),
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.12),
+      rgba(255,255,255,.04)
+    ),
     rgba(10,10,10,.85);
   border:1px solid rgba(255,255,255,.22);
 }
 
 body.theme-light .footer {
   background:
-    linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,255,255,.92));
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.98),
+      rgba(255,255,255,.92)
+    );
   border:1px solid rgba(0,0,0,.12);
 }
 
@@ -494,6 +561,7 @@ body.theme-light .bottom-menu a {
 }
 
 @media (max-width:680px) {
+
   .services-list {
     grid-template-columns:1fr;
   }
@@ -514,6 +582,11 @@ body.theme-light .bottom-menu a {
   .top-buttons {
     grid-template-columns:1fr;
     gap:12px;
+
+    /* ИСПРАВЛЕНО:
+       сохраняем маленькое расстояние
+       до кнопки "Позвонить" */
+    margin-bottom:10px;
   }
 
   .bottom-menu {
@@ -528,21 +601,23 @@ body.theme-light .bottom-menu a {
 }
 
 .btn-bounce {
-  animation:btnBounce 0.25s cubic-bezier(.25,1.25,.45,.94);
+  animation:btnBounce .25s cubic-bezier(.25,1.25,.45,.94);
 }
 
 @keyframes btnBounce {
+
   0% {
     transform:scale(1);
   }
 
   50% {
-    transform:scale(0.92);
+    transform:scale(.92);
   }
 
   100% {
     transform:scale(1);
   }
+
 }
 
 #geoStatus {
@@ -550,6 +625,7 @@ body.theme-light .bottom-menu a {
 }
 
 @keyframes pulse {
+
   0% {
     opacity:.6;
   }
@@ -561,6 +637,7 @@ body.theme-light .bottom-menu a {
   100% {
     opacity:.6;
   }
+
 }
 
 /* PRELOADER */
@@ -598,6 +675,7 @@ body.theme-light .bottom-menu a {
 }
 
 @keyframes preloaderFade {
+
   0% {
     opacity:.6;
     transform:scale(.96);
@@ -607,9 +685,11 @@ body.theme-light .bottom-menu a {
     opacity:1;
     transform:scale(1);
   }
+
 }
 
 @keyframes preloaderText {
+
   0% {
     opacity:.6;
   }
@@ -617,4 +697,5 @@ body.theme-light .bottom-menu a {
   100% {
     opacity:1;
   }
+
 }
