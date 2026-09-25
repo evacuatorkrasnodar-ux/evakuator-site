@@ -12,7 +12,7 @@
 
   <meta
     name="description"
-    content="Цены на эвакуатор в Краснодаре. Легковой автомобиль — 2 000 ₽, кроссовер — 2 200 ₽, минивэн — 2 500 ₽, малый грузовой — 3 000 ₽. За город — 80 ₽/км."
+    content="Цены на эвакуатор в Краснодаре: легковой автомобиль — 2 000 ₽, кроссовер или внедорожник — 2 200 ₽, минивэн — 2 500 ₽, малый грузовой автомобиль — 3 000 ₽. Выезд за пределы города — 80 ₽/км."
   >
 
   <meta
@@ -30,7 +30,6 @@
     href="https://evakuator-krd.online/prices.html"
   >
 
-  <!-- Hreflang -->
   <link
     rel="alternate"
     hreflang="ru"
@@ -44,6 +43,7 @@
   >
 
   <!-- Open Graph -->
+
   <meta
     property="og:type"
     content="website"
@@ -66,7 +66,7 @@
 
   <meta
     property="og:description"
-    content="Актуальные цены на эвакуацию автомобилей в Краснодаре и за городом. Легковые авто от 2 000 ₽, выезд за город — 80 ₽/км."
+    content="Стоимость эвакуации автомобилей в Краснодаре и Краснодарском крае. Легковые автомобили от 2 000 ₽, выезд за пределы города — 80 ₽/км."
   >
 
   <meta
@@ -100,6 +100,7 @@
   >
 
   <!-- Twitter -->
+
   <meta
     name="twitter:card"
     content="summary_large_image"
@@ -126,6 +127,7 @@
   >
 
   <!-- PWA -->
+
   <link
     rel="manifest"
     href="/manifest.json"
@@ -157,6 +159,7 @@
   >
 
   <!-- Styles -->
+
   <link
     rel="stylesheet"
     href="/style.css"
@@ -169,32 +172,18 @@
   >
 
   <!-- Schema.org -->
+
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@graph": [
 
       {
-        "@type": "WebPage",
-        "@id": "https://evakuator-krd.online/prices.html#webpage",
-        "url": "https://evakuator-krd.online/prices.html",
-        "name": "Цены на эвакуатор в Краснодаре",
-        "description": "Цены на эвакуацию автомобилей в Краснодаре и Краснодарском крае.",
-        "inLanguage": "ru",
-        "isPartOf": {
-          "@id": "https://evakuator-krd.online/#website"
-        },
-        "mainEntity": {
-          "@id": "https://evakuator-krd.online/prices.html#prices"
-        }
-      },
-
-      {
         "@type": "WebSite",
         "@id": "https://evakuator-krd.online/#website",
         "url": "https://evakuator-krd.online/",
         "name": "Эвакуатор Краснодар 24/7",
-        "inLanguage": "ru"
+        "inLanguage": "ru-RU"
       },
 
       {
@@ -203,10 +192,9 @@
         "name": "Эвакуатор Краснодар 24/7",
         "url": "https://evakuator-krd.online/",
         "telephone": "+79888717018",
-        "image": [
-          "https://evakuator-krd.online/banner-top.png"
-        ],
+        "image": "https://evakuator-krd.online/banner-top.png",
         "priceRange": "₽₽",
+
         "address": {
           "@type": "PostalAddress",
           "streetAddress": "ул. Дзержинского, 100",
@@ -214,10 +202,12 @@
           "addressRegion": "Краснодарский край",
           "addressCountry": "RU"
         },
+
         "areaServed": {
           "@type": "AdministrativeArea",
           "name": "Краснодарский край"
         },
+
         "openingHoursSpecification": {
           "@type": "OpeningHoursSpecification",
           "dayOfWeek": [
@@ -235,24 +225,65 @@
       },
 
       {
-        "@type": "ItemList",
-        "@id": "https://evakuator-krd.online/prices.html#prices",
+        "@type": "WebPage",
+        "@id": "https://evakuator-krd.online/prices.html#webpage",
+        "url": "https://evakuator-krd.online/prices.html",
         "name": "Цены на эвакуатор в Краснодаре",
+        "description": "Цены на эвакуацию автомобилей в Краснодаре и Краснодарском крае.",
+        "inLanguage": "ru-RU",
+        "isPartOf": {
+          "@id": "https://evakuator-krd.online/#website"
+        },
+        "about": {
+          "@id": "https://evakuator-krd.online/#business"
+        }
+      },
+
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://evakuator-krd.online/prices.html#breadcrumbs",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Главная",
+            "item": "https://evakuator-krd.online/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Цены",
+            "item": "https://evakuator-krd.online/prices.html"
+          }
+        ]
+      },
+
+      {
+        "@type": "ItemList",
+        "@id": "https://evakuator-krd.online/prices.html#price-list",
+        "name": "Цены на эвакуацию автомобилей",
+        "numberOfItems": 5,
+
         "itemListElement": [
 
           {
             "@type": "ListItem",
             "position": 1,
-            "name": "Эвакуация легкового автомобиля",
             "item": {
-              "@type": "Offer",
+              "@type": "Service",
               "name": "Эвакуация легкового автомобиля",
-              "price": "2000",
-              "priceCurrency": "RUB",
-              "availability": "https://schema.org/InStock",
-              "url": "https://evakuator-krd.online/prices.html",
-              "seller": {
+              "provider": {
                 "@id": "https://evakuator-krd.online/#business"
+              },
+              "areaServed": {
+                "@type": "City",
+                "name": "Краснодар"
+              },
+              "offers": {
+                "@type": "Offer",
+                "price": "2000",
+                "priceCurrency": "RUB",
+                "url": "https://evakuator-krd.online/prices.html"
               }
             }
           },
@@ -260,16 +291,21 @@
           {
             "@type": "ListItem",
             "position": 2,
-            "name": "Эвакуация кроссовера или внедорожника",
             "item": {
-              "@type": "Offer",
+              "@type": "Service",
               "name": "Эвакуация кроссовера или внедорожника",
-              "price": "2200",
-              "priceCurrency": "RUB",
-              "availability": "https://schema.org/InStock",
-              "url": "https://evakuator-krd.online/prices.html",
-              "seller": {
+              "provider": {
                 "@id": "https://evakuator-krd.online/#business"
+              },
+              "areaServed": {
+                "@type": "City",
+                "name": "Краснодар"
+              },
+              "offers": {
+                "@type": "Offer",
+                "price": "2200",
+                "priceCurrency": "RUB",
+                "url": "https://evakuator-krd.online/prices.html"
               }
             }
           },
@@ -277,16 +313,21 @@
           {
             "@type": "ListItem",
             "position": 3,
-            "name": "Эвакуация минивэна",
             "item": {
-              "@type": "Offer",
+              "@type": "Service",
               "name": "Эвакуация минивэна",
-              "price": "2500",
-              "priceCurrency": "RUB",
-              "availability": "https://schema.org/InStock",
-              "url": "https://evakuator-krd.online/prices.html",
-              "seller": {
+              "provider": {
                 "@id": "https://evakuator-krd.online/#business"
+              },
+              "areaServed": {
+                "@type": "City",
+                "name": "Краснодар"
+              },
+              "offers": {
+                "@type": "Offer",
+                "price": "2500",
+                "priceCurrency": "RUB",
+                "url": "https://evakuator-krd.online/prices.html"
               }
             }
           },
@@ -294,16 +335,21 @@
           {
             "@type": "ListItem",
             "position": 4,
-            "name": "Эвакуация малого грузового автомобиля",
             "item": {
-              "@type": "Offer",
+              "@type": "Service",
               "name": "Эвакуация малого грузового автомобиля",
-              "price": "3000",
-              "priceCurrency": "RUB",
-              "availability": "https://schema.org/InStock",
-              "url": "https://evakuator-krd.online/prices.html",
-              "seller": {
+              "provider": {
                 "@id": "https://evakuator-krd.online/#business"
+              },
+              "areaServed": {
+                "@type": "City",
+                "name": "Краснодар"
+              },
+              "offers": {
+                "@type": "Offer",
+                "price": "3000",
+                "priceCurrency": "RUB",
+                "url": "https://evakuator-krd.online/prices.html"
               }
             }
           },
@@ -311,20 +357,25 @@
           {
             "@type": "ListItem",
             "position": 5,
-            "name": "Выезд за пределы Краснодара",
             "item": {
-              "@type": "Offer",
+              "@type": "Service",
               "name": "Выезд за пределы Краснодара",
-              "url": "https://evakuator-krd.online/prices.html",
-              "priceSpecification": {
-                "@type": "UnitPriceSpecification",
-                "price": "80",
-                "priceCurrency": "RUB",
-                "unitCode": "KMT"
-              },
-              "availability": "https://schema.org/InStock",
-              "seller": {
+              "provider": {
                 "@id": "https://evakuator-krd.online/#business"
+              },
+              "areaServed": {
+                "@type": "AdministrativeArea",
+                "name": "Краснодарский край"
+              },
+              "offers": {
+                "@type": "Offer",
+                "priceSpecification": {
+                  "@type": "UnitPriceSpecification",
+                  "price": "80",
+                  "priceCurrency": "RUB",
+                  "unitCode": "KMT"
+                },
+                "url": "https://evakuator-krd.online/prices.html"
               }
             }
           }
@@ -346,6 +397,8 @@
       src="/preload.png"
       alt="Эвакуатор Краснодар 24/7"
       class="preloader-img"
+      width="140"
+      height="140"
     >
 
     <div class="preloader-title">
@@ -446,10 +499,10 @@
 
       <section class="section fade-in">
 
-        <h2>За город</h2>
+        <h2>Выезд за пределы Краснодара</h2>
 
         <p class="muted">
-          Работаем по всему Краснодарскому краю.
+          Работаем в Краснодаре и по Краснодарскому краю.
         </p>
 
         <div class="service-card">
@@ -471,12 +524,12 @@
         <div class="services-list">
 
           <div class="service-card">
-            <h3>Легковые авто</h3>
+            <h3>Легковые автомобили</h3>
             <p>До 3,5 т</p>
           </div>
 
           <div class="service-card">
-            <h3>Кроссоверы</h3>
+            <h3>Кроссоверы и внедорожники</h3>
             <p>Платформа + лебёдка</p>
           </div>
 
@@ -496,7 +549,7 @@
           </div>
 
           <div class="service-card">
-            <h3>Премиальные авто</h3>
+            <h3>Премиальные автомобили</h3>
             <p>Низкие и дорогие машины</p>
           </div>
 
@@ -518,7 +571,7 @@
           <a
             class="apple-glass-btn"
             href="tel:+79888717018"
-            aria-label="Позвонить"
+            aria-label="Позвонить в Эвакуатор Краснодар 24/7"
           >
             Позвонить
           </a>
@@ -526,7 +579,7 @@
           <a
             class="apple-glass-btn"
             href="/request.html"
-            aria-label="Оставить заявку"
+            aria-label="Оставить заявку на эвакуатор"
           >
             Оставить заявку
           </a>
@@ -612,7 +665,7 @@
       Главная
     </a>
 
-    <a href="/prices.html">
+    <a href="/prices.html" aria-current="page">
       Цены
     </a>
 
@@ -626,7 +679,10 @@
 
   </nav>
 
-  <script src="/app.js" defer></script>
+  <script
+    src="/app.js"
+    defer
+  ></script>
 
 </body>
 </html>
