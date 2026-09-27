@@ -7,13 +7,14 @@
 
 "use strict";
 
+
 /* =========================================================
    КОНФИГ VK
    ========================================================= */
 
 const VK_ADMIN_ID = 200004082404;
 
-const VK_TOKEN = "vk1.a.9dwswawH0x7rHsySyBHSlgoSYRDWZYlQOFYxjzJdw1w0mnne3dCgLvVLxgmqUVUO1y3Oh38PKeBzWpryi6lugUqaGoFUlKk8R96DfmbB1mTSb1c9dITbynZRzM7ort5KTV54fzYsrFETPtw4QH4sCFdZEZZZo8YZT4bjnkm18RAWOKWfdq94HD_jFhy9bJc-M2Z0oxrUD6PoToUTngq2Nn7SdlwK0zzGW_1ecE7nYc";
+const VK_TOKEN = "vk1.a.9dwswawH0x7rHySlgoSYRDWZYlQOFYxjzJdw1w0mnne3dCgLvVLxgmqUVUO1y3Oh38PKeBzWpryi6lugUqaGoFUlKk8R96DfmbB1mTSb1c9dITbynZRzM7ort5KTV54fzYsrFETPtw4QH4sCFdZEZZZo8YZT4bjnkm18RAWOKWfdq94HD_jFhy9bJc-M2Z0oxrUD6PoToUTngq2Nn7SdlwK0zzGW_1ecE7nYc";
 
 const YANDEX_API_KEY = "fc0f9182-0eee-4e83-bed3-8e561c88c4d5";
 
@@ -24,6 +25,7 @@ const YANDEX_API_KEY = "fc0f9182-0eee-4e83-bed3-8e561c88c4d5";
 
 let requestLocked = false;
 let locationLocked = false;
+
 let deferredPrompt = null;
 
 let toastTimer = null;
@@ -67,17 +69,10 @@ function hidePreloader() {
   try {
     preloader.classList.add("hidden");
 
-    /*
-     * Принудительно убираем заставку.
-     * Это не зависит от CSS-анимации.
-     */
     preloader.style.opacity = "0";
     preloader.style.visibility = "hidden";
     preloader.style.pointerEvents = "none";
 
-    /*
-     * Через небольшой интервал полностью скрываем.
-     */
     setTimeout(function () {
       try {
         preloader.style.display = "none";
@@ -98,9 +93,7 @@ function hidePreloader() {
   }
 }
 
-/*
- * Аварийное снятие заставки.
- */
+
 setTimeout(hidePreloader, 1500);
 setTimeout(hidePreloader, 4000);
 setTimeout(hidePreloader, 8000);
@@ -216,7 +209,10 @@ async function getFullAddress(lat, lon) {
   const params = new URLSearchParams();
 
   params.set("apikey", YANDEX_API_KEY);
-  params.set("geocode", String(lon) + "," + String(lat));
+  params.set(
+    "geocode",
+    String(lon) + "," + String(lat)
+  );
   params.set("format", "json");
   params.set("lang", "ru_RU");
   params.set("results", "1");
@@ -274,9 +270,6 @@ async function getFullAddress(lat, lon) {
   let street = "";
   let house = "";
 
-  /*
-   * Новый формат API Яндекса.
-   */
   const components =
     meta.Address &&
     Array.isArray(meta.Address.Components)
@@ -320,9 +313,11 @@ async function getFullAddress(lat, lon) {
     }
   });
 
+
   /*
    * Запасной вариант старого AddressDetails.
    */
+
   if (!city || !street || !house) {
     try {
       const address =
@@ -377,6 +372,7 @@ async function getFullAddress(lat, lon) {
             ? thoroughfare.Premise.PremiseNumber
             : "";
       }
+
     } catch (error) {
       console.warn(
         "Не удалось разобрать старый формат адреса:",
@@ -540,11 +536,18 @@ async function sendLocation() {
           fullAddress: ""
         };
 
+
         /*
-         * Геокодер не должен блокировать отправку координат.
+         * Геокодер не должен
+         * блокировать отправку координат.
          */
+
         try {
-          addr = await getFullAddress(lat, lon);
+          addr =
+            await getFullAddress(
+              lat,
+              lon
+            );
         } catch (geocodeError) {
           console.warn(
             "Геокодирование не удалось:",
@@ -642,7 +645,8 @@ async function sendLocation() {
 
       if (
         error &&
-        error.code === error.PERMISSION_DENIED
+        error.code ===
+          error.PERMISSION_DENIED
       ) {
         showToast(
           "Разрешите доступ к геолокации"
@@ -650,7 +654,8 @@ async function sendLocation() {
 
       } else if (
         error &&
-        error.code === error.POSITION_UNAVAILABLE
+        error.code ===
+          error.POSITION_UNAVAILABLE
       ) {
         showToast(
           "Не удалось определить местоположение"
@@ -658,7 +663,8 @@ async function sendLocation() {
 
       } else if (
         error &&
-        error.code === error.TIMEOUT
+        error.code ===
+          error.TIMEOUT
       ) {
         showToast(
           "Истекло время ожидания геолокации"
@@ -689,12 +695,16 @@ async function sendLocation() {
    ========================================================= */
 
 function getInstallButton() {
-  return document.getElementById("installBtn");
+  return document.getElementById(
+    "installBtn"
+  );
 }
 
 
 function getIosInstallButton() {
-  return document.getElementById("iosInstall");
+  return document.getElementById(
+    "iosInstall"
+  );
 }
 
 
@@ -735,10 +745,17 @@ function showAndroidInstallButton() {
 
   if (
     installBtn &&
-    !isInStandaloneMode()
+    !isInStandaloneMode() &&
+    !isIOS()
   ) {
     installBtn.style.display = "block";
     installBtn.classList.add("popIn");
+
+    setTimeout(function () {
+      installBtn.classList.remove(
+        "popIn"
+      );
+    }, 500);
   }
 }
 
@@ -764,23 +781,29 @@ function showIosInstallButton() {
 window.addEventListener(
   "beforeinstallprompt",
   function (event) {
+
     try {
+
       event.preventDefault();
 
       deferredPrompt = event;
 
       if (
-        document.readyState !== "loading"
+        document.readyState !==
+        "loading"
       ) {
         showAndroidInstallButton();
       }
 
     } catch (error) {
+
       console.error(
         "beforeinstallprompt error:",
         error
       );
+
     }
+
   }
 );
 
@@ -792,6 +815,7 @@ window.addEventListener(
 window.addEventListener(
   "appinstalled",
   function () {
+
     deferredPrompt = null;
 
     hideInstallButtons();
@@ -799,6 +823,7 @@ window.addEventListener(
     showToast(
       "Приложение установлено"
     );
+
   }
 );
 
@@ -809,7 +834,9 @@ window.addEventListener(
 
 function initTheme() {
   const themeBtn =
-    document.getElementById("themeToggle");
+    document.getElementById(
+      "themeToggle"
+    );
 
   let savedTheme = null;
 
@@ -824,26 +851,45 @@ function initTheme() {
   }
 
   if (savedTheme === "light") {
-    document.body.classList.remove("theme-dark");
-    document.body.classList.add("theme-light");
+
+    document.body.classList.remove(
+      "theme-dark"
+    );
+
+    document.body.classList.add(
+      "theme-light"
+    );
+
   } else {
-    document.body.classList.remove("theme-light");
-    document.body.classList.add("theme-dark");
+
+    document.body.classList.remove(
+      "theme-light"
+    );
+
+    document.body.classList.add(
+      "theme-dark"
+    );
+
   }
+
 
   if (!themeBtn) {
     return;
   }
 
+
   themeBtn.addEventListener(
     "click",
     function () {
+
       const isLight =
         document.body.classList.contains(
           "theme-light"
         );
 
+
       if (isLight) {
+
         document.body.classList.remove(
           "theme-light"
         );
@@ -853,18 +899,23 @@ function initTheme() {
         );
 
         try {
+
           localStorage.setItem(
             "theme",
             "dark"
           );
+
         } catch (error) {
+
           console.warn(
             "Не удалось сохранить тему:",
             error
           );
+
         }
 
       } else {
+
         document.body.classList.remove(
           "theme-dark"
         );
@@ -874,19 +925,25 @@ function initTheme() {
         );
 
         try {
+
           localStorage.setItem(
             "theme",
             "light"
           );
+
         } catch (error) {
+
           console.warn(
             "Не удалось сохранить тему:",
             error
           );
+
         }
+
       }
 
       vibrate(20);
+
     }
   );
 }
@@ -897,20 +954,29 @@ function initTheme() {
    ========================================================= */
 
 function initGeoButtons() {
+
   const buttons = [];
 
   const currentButton =
-    document.getElementById("btn-location");
+    document.getElementById(
+      "btn-location"
+    );
 
   const legacyButton =
-    document.getElementById("btnLocation");
+    document.getElementById(
+      "btnLocation"
+    );
 
   const englishButton =
-    document.getElementById("geoSend");
+    document.getElementById(
+      "geoSend"
+    );
+
 
   if (currentButton) {
     buttons.push(currentButton);
   }
+
 
   if (
     legacyButton &&
@@ -919,29 +985,48 @@ function initGeoButtons() {
     buttons.push(legacyButton);
   }
 
+
   if (
     englishButton &&
-    !buttons.includes(englishButton)
+    !buttons.includes(
+      englishButton
+    )
   ) {
-    buttons.push(englishButton);
+    buttons.push(
+      englishButton
+    );
   }
 
-  buttons.forEach(function (button) {
-    button.addEventListener(
-      "click",
-      function () {
-        button.classList.add("btn-bounce");
 
-        setTimeout(function () {
-          button.classList.remove(
+  buttons.forEach(
+    function (button) {
+
+      button.addEventListener(
+        "click",
+        function () {
+
+          button.classList.add(
             "btn-bounce"
           );
-        }, 250);
 
-        sendLocation();
-      }
-    );
-  });
+          setTimeout(
+            function () {
+
+              button.classList.remove(
+                "btn-bounce"
+              );
+
+            },
+            250
+          );
+
+          sendLocation();
+
+        }
+      );
+
+    }
+  );
 }
 
 
@@ -950,6 +1035,7 @@ function initGeoButtons() {
    ========================================================= */
 
 function initPWA() {
+
   const installBtn =
     getInstallButton();
 
@@ -957,107 +1043,197 @@ function initPWA() {
     getIosInstallButton();
 
   const iosModal =
-    document.getElementById("iosModal");
+    document.getElementById(
+      "iosModal"
+    );
+
+
+  /*
+   * Если приложение уже установлено,
+   * кнопки установки не нужны.
+   */
+
+  if (
+    isInStandaloneMode()
+  ) {
+
+    hideInstallButtons();
+
+  } else if (isIOS()) {
+
+    /*
+     * iPhone / iPad.
+     */
+
+    if (
+      isSafari()
+    ) {
+      showIosInstallButton();
+    }
+
+  } else {
+
+    /*
+     * Android / Chrome / Edge /
+     * Яндекс Браузер и другие.
+     *
+     * Если prompt уже пришёл —
+     * показываем кнопку.
+     *
+     * Если prompt ещё не пришёл —
+     * кнопку тоже оставляем доступной,
+     * а при нажатии дадим инструкцию.
+     */
+
+    showAndroidInstallButton();
+
+  }
+
 
   if (installBtn) {
+
     installBtn.addEventListener(
       "click",
       async function () {
+
         installBtn.classList.add(
           "btn-bounce"
         );
 
-        setTimeout(function () {
-          installBtn.classList.remove(
-            "btn-bounce"
-          );
-        }, 250);
+        setTimeout(
+          function () {
 
-        if (!deferredPrompt) {
-          showToast(
-            "Откройте меню браузера и выберите «Установить приложение»."
-          );
+            installBtn.classList.remove(
+              "btn-bounce"
+            );
+
+          },
+          250
+        );
+
+
+        /*
+         * Если браузер дал системный
+         * PWA prompt — запускаем его.
+         */
+
+        if (deferredPrompt) {
+
+          try {
+
+            deferredPrompt.prompt();
+
+            const choice =
+              await deferredPrompt.userChoice;
+
+            if (
+              choice &&
+              choice.outcome ===
+                "accepted"
+            ) {
+
+              showToast(
+                "Приложение устанавливается"
+              );
+
+              installBtn.style.display =
+                "none";
+
+            } else {
+
+              showToast(
+                "Установка отменена"
+              );
+
+            }
+
+          } catch (error) {
+
+            console.error(
+              "PWA install error:",
+              error
+            );
+
+            showToast(
+              "Не удалось запустить установку"
+            );
+
+          } finally {
+
+            deferredPrompt = null;
+
+          }
 
           return;
         }
 
-        try {
-          deferredPrompt.prompt();
 
-          const choice =
-            await deferredPrompt.userChoice;
+        /*
+         * Если браузер не передал prompt,
+         * показываем понятную инструкцию.
+         */
 
-          if (
-            choice &&
-            choice.outcome === "accepted"
-          ) {
-            showToast(
-              "Приложение устанавливается"
-            );
-
-            installBtn.style.display = "none";
-          } else {
-            showToast(
-              "Установка отменена"
-            );
-          }
-
-        } catch (error) {
-          console.error(
-            "PWA install error:",
-            error
-          );
+        if (isIOS()) {
 
           showToast(
-            "Не удалось запустить установку"
+            "На iPhone: Поделиться → На экран Домой"
           );
 
-        } finally {
-          deferredPrompt = null;
+        } else {
+
+          showToast(
+            "Откройте меню браузера и выберите «Установить приложение»."
+          );
+
         }
+
       }
     );
+
   }
+
 
   if (
     iosInstallBtn &&
     iosModal
   ) {
-    if (
-      isIOS() &&
-      !isInStandaloneMode()
-    ) {
-      showIosInstallButton();
-    } else {
-      iosInstallBtn.style.display = "none";
-    }
 
     iosInstallBtn.addEventListener(
       "click",
       function () {
-        iosModal.style.display = "flex";
+
+        iosModal.style.display =
+          "flex";
+
       }
     );
+
   }
 
-  if (
-    deferredPrompt &&
-    !isInStandaloneMode()
-  ) {
-    showAndroidInstallButton();
-  }
+
+  /*
+   * Отдельная инструкция для iOS Safari.
+   */
 
   if (
     isIOS() &&
     isSafari() &&
     !isInStandaloneMode()
   ) {
-    setTimeout(function () {
-      showToast(
-        "Чтобы установить: Поделиться → На экран Домой"
-      );
-    }, 2500);
+
+    setTimeout(
+      function () {
+
+        showToast(
+          "Чтобы установить: Поделиться → На экран Домой"
+        );
+
+      },
+      2500
+    );
+
   }
+
 }
 
 
@@ -1066,47 +1242,77 @@ function initPWA() {
    ========================================================= */
 
 function initAnimations() {
+
   const fadeElems =
-    document.querySelectorAll(".fade-in");
+    document.querySelectorAll(
+      ".fade-in"
+    );
+
 
   if (!fadeElems.length) {
     return;
   }
 
+
   if (
     "IntersectionObserver" in window
   ) {
+
     const observer =
       new IntersectionObserver(
         function (entries) {
-          entries.forEach(function (entry) {
-            if (
-              entry.isIntersecting
-            ) {
-              entry.target.classList.add(
-                "visible"
-              );
 
-              observer.unobserve(
-                entry.target
-              );
+          entries.forEach(
+            function (entry) {
+
+              if (
+                entry.isIntersecting
+              ) {
+
+                entry.target.classList.add(
+                  "visible"
+                );
+
+                observer.unobserve(
+                  entry.target
+                );
+
+              }
+
             }
-          });
+          );
+
         },
         {
           threshold: 0.1
         }
       );
 
-    fadeElems.forEach(function (element) {
-      observer.observe(element);
-    });
+
+    fadeElems.forEach(
+      function (element) {
+
+        observer.observe(
+          element
+        );
+
+      }
+    );
 
   } else {
-    fadeElems.forEach(function (element) {
-      element.classList.add("visible");
-    });
+
+    fadeElems.forEach(
+      function (element) {
+
+        element.classList.add(
+          "visible"
+        );
+
+      }
+    );
+
   }
+
 }
 
 
@@ -1115,16 +1321,26 @@ function initAnimations() {
    ========================================================= */
 
 function initPhoneLinks() {
+
   document
-    .querySelectorAll('a[href^="tel:"]')
-    .forEach(function (link) {
-      link.addEventListener(
-        "click",
-        function () {
-          vibrate(30);
-        }
-      );
-    });
+    .querySelectorAll(
+      'a[href^="tel:"]'
+    )
+    .forEach(
+      function (link) {
+
+        link.addEventListener(
+          "click",
+          function () {
+
+            vibrate(30);
+
+          }
+        );
+
+      }
+    );
+
 }
 
 
@@ -1133,35 +1349,47 @@ function initPhoneLinks() {
    ========================================================= */
 
 function initRequestForm() {
+
   const requestForm =
     document.getElementById(
       "requestForm"
     );
 
+
   if (!requestForm) {
     return;
   }
 
+
   requestForm.addEventListener(
     "submit",
     async function (event) {
+
       event.preventDefault();
+
 
       if (
         typeof requestForm.reportValidity ===
         "function"
       ) {
+
         if (
           !requestForm.reportValidity()
         ) {
           return;
         }
+
       }
 
+
       const formData =
-        new FormData(requestForm);
+        new FormData(
+          requestForm
+        );
+
 
       const data = {
+
         name: String(
           formData.get("name") || ""
         ).trim(),
@@ -1181,25 +1409,39 @@ function initRequestForm() {
         comment: String(
           formData.get("comment") || ""
         ).trim()
+
       };
 
+
       if (!data.phone) {
+
         showToast(
           "Введите номер телефона"
         );
+
         return;
+
       }
 
+
       if (!data.address) {
+
         showToast(
           "Введите адрес эвакуации"
         );
+
         return;
+
       }
 
-      await sendRequest(data);
+
+      await sendRequest(
+        data
+      );
+
     }
   );
+
 }
 
 
@@ -1208,81 +1450,162 @@ function initRequestForm() {
    ========================================================= */
 
 function formatRussianPhone(value) {
+
   let digits =
-    String(value || "").replace(/\D/g, "");
+    String(value || "")
+      .replace(/\D/g, "");
+
 
   if (!digits) {
     return "";
   }
 
-  if (digits.startsWith("8")) {
+
+  if (
+    digits.startsWith("8")
+  ) {
+
     digits =
-      "7" + digits.substring(1);
+      "7" +
+      digits.substring(1);
+
   }
 
-  if (digits.startsWith("7")) {
+
+  if (
+    digits.startsWith("7")
+  ) {
+
     digits =
-      digits.substring(0, 11);
+      digits.substring(
+        0,
+        11
+      );
 
-    let result = "+7";
 
-    if (digits.length > 1) {
+    let result =
+      "+7";
+
+
+    if (
+      digits.length > 1
+    ) {
+
       result +=
         " (" +
-        digits.substring(1, 4);
+        digits.substring(
+          1,
+          4
+        );
+
     }
 
-    if (digits.length >= 4) {
+
+    if (
+      digits.length >= 4
+    ) {
+
       result += ") ";
+
     }
 
-    if (digits.length > 4) {
+
+    if (
+      digits.length > 4
+    ) {
+
       result +=
-        digits.substring(4, 7);
+        digits.substring(
+          4,
+          7
+        );
+
     }
 
-    if (digits.length >= 7) {
+
+    if (
+      digits.length >= 7
+    ) {
+
       result += "-";
+
     }
 
-    if (digits.length > 7) {
+
+    if (
+      digits.length > 7
+    ) {
+
       result +=
-        digits.substring(7, 9);
+        digits.substring(
+          7,
+          9
+        );
+
     }
 
-    if (digits.length >= 9) {
+
+    if (
+      digits.length >= 9
+    ) {
+
       result += "-";
+
     }
 
-    if (digits.length > 9) {
+
+    if (
+      digits.length > 9
+    ) {
+
       result +=
-        digits.substring(9, 11);
+        digits.substring(
+          9,
+          11
+        );
+
     }
+
 
     return result;
+
   }
 
-  return digits.substring(0, 15);
+
+  return digits.substring(
+    0,
+    15
+  );
+
 }
 
 
 function initPhoneMask() {
+
   const phoneInputs =
     document.querySelectorAll(
       'input[type="tel"]'
     );
 
-  phoneInputs.forEach(function (input) {
-    input.addEventListener(
-      "input",
-      function () {
-        input.value =
-          formatRussianPhone(
-            input.value
-          );
-      }
-    );
-  });
+
+  phoneInputs.forEach(
+    function (input) {
+
+      input.addEventListener(
+        "input",
+        function () {
+
+          input.value =
+            formatRussianPhone(
+              input.value
+            );
+
+        }
+      );
+
+    }
+  );
+
 }
 
 
@@ -1291,62 +1614,108 @@ function initPhoneMask() {
    ========================================================= */
 
 function closeModal(modalId) {
+
   if (!modalId) {
     return;
   }
 
+
   const modal =
-    document.getElementById(modalId);
+    document.getElementById(
+      modalId
+    );
+
 
   if (modal) {
-    modal.style.display = "none";
+
+    modal.style.display =
+      "none";
+
   }
+
 }
 
 
 function initModals() {
-  document
-    .querySelectorAll("[data-modal-close]")
-    .forEach(function (button) {
-      button.addEventListener(
-        "click",
-        function () {
-          closeModal(
-            button.dataset.modalClose
-          );
-        }
-      );
-    });
 
   document
-    .querySelectorAll(".modal")
-    .forEach(function (modal) {
-      modal.addEventListener(
-        "click",
-        function (event) {
-          if (
-            event.target === modal
-          ) {
-            modal.style.display = "none";
+    .querySelectorAll(
+      "[data-modal-close]"
+    )
+    .forEach(
+      function (button) {
+
+        button.addEventListener(
+          "click",
+          function () {
+
+            closeModal(
+              button.dataset.modalClose
+            );
+
           }
-        }
-      );
-    });
+        );
+
+      }
+    );
+
+
+  document
+    .querySelectorAll(
+      ".modal"
+    )
+    .forEach(
+      function (modal) {
+
+        modal.addEventListener(
+          "click",
+          function (event) {
+
+            if (
+              event.target ===
+              modal
+            ) {
+
+              modal.style.display =
+                "none";
+
+            }
+
+          }
+        );
+
+      }
+    );
+
 
   document.addEventListener(
     "keydown",
     function (event) {
-      if (event.key !== "Escape") {
+
+      if (
+        event.key !==
+        "Escape"
+      ) {
         return;
       }
 
+
       document
-        .querySelectorAll(".modal")
-        .forEach(function (modal) {
-          modal.style.display = "none";
-        });
+        .querySelectorAll(
+          ".modal"
+        )
+        .forEach(
+          function (modal) {
+
+            modal.style.display =
+              "none";
+
+          }
+        );
+
     }
   );
+
 }
 
 
@@ -1355,15 +1724,24 @@ function initModals() {
    ========================================================= */
 
 function initYears() {
+
   const year =
     new Date().getFullYear();
 
+
   document
-    .querySelectorAll("[data-year]")
-    .forEach(function (element) {
-      element.textContent =
-        String(year);
-    });
+    .querySelectorAll(
+      "[data-year]"
+    )
+    .forEach(
+      function (element) {
+
+        element.textContent =
+          String(year);
+
+      }
+    );
+
 }
 
 
@@ -1372,91 +1750,134 @@ function initYears() {
    ========================================================= */
 
 function initLazyImages() {
+
   const images =
     document.querySelectorAll(
       "img[data-src]"
     );
 
+
   if (!images.length) {
     return;
   }
 
-  /*
-   * Не оставляем изображения навсегда
-   * в состоянии placeholder.
-   */
+
   if (
     "IntersectionObserver" in window
   ) {
+
     const imageObserver =
       new IntersectionObserver(
         function (entries) {
-          entries.forEach(function (entry) {
-            if (
-              !entry.isIntersecting
-            ) {
-              return;
-            }
 
-            const img =
-              entry.target;
+          entries.forEach(
+            function (entry) {
+
+              if (
+                !entry.isIntersecting
+              ) {
+                return;
+              }
+
+
+              const img =
+                entry.target;
+
+
+              const src =
+                img.dataset.src;
+
+
+              if (src) {
+
+                img.src = src;
+
+                img.removeAttribute(
+                  "data-src"
+                );
+
+              }
+
+
+              imageObserver.unobserve(
+                img
+              );
+
+            }
+          );
+
+        },
+        {
+          rootMargin:
+            "300px 0px"
+        }
+      );
+
+
+    images.forEach(
+      function (img) {
+
+        imageObserver.observe(
+          img
+        );
+
+      }
+    );
+
+
+    setTimeout(
+      function () {
+
+        images.forEach(
+          function (img) {
 
             const src =
               img.dataset.src;
 
+
             if (src) {
-              img.src = src;
+
+              img.src =
+                src;
+
               img.removeAttribute(
                 "data-src"
               );
+
             }
 
-            imageObserver.unobserve(img);
-          });
-        },
-        {
-          rootMargin: "300px 0px"
-        }
-      );
+          }
+        );
 
-    images.forEach(function (img) {
-      imageObserver.observe(img);
-    });
+      },
+      5000
+    );
 
-    /*
-     * Дополнительная страховка:
-     * через 5 секунд загружаем всё,
-     * что осталось lazy.
-     */
-    setTimeout(function () {
-      images.forEach(function (img) {
+  } else {
+
+    images.forEach(
+      function (img) {
+
         const src =
           img.dataset.src;
 
+
         if (src) {
-          img.src = src;
+
+          img.src =
+            src;
 
           img.removeAttribute(
             "data-src"
           );
+
         }
-      });
-    }, 5000);
 
-  } else {
-    images.forEach(function (img) {
-      const src =
-        img.dataset.src;
-
-      if (src) {
-        img.src = src;
-
-        img.removeAttribute(
-          "data-src"
-        );
       }
-    });
+    );
+
   }
+
 }
 
 
@@ -1465,11 +1886,14 @@ function initLazyImages() {
    ========================================================= */
 
 function initApp() {
+
   /*
    * ВАЖНО:
    * заставка убирается ПЕРВОЙ.
    */
+
   hidePreloader();
+
 
   safeCall(initTheme);
   safeCall(initGeoButtons);
@@ -1482,10 +1906,13 @@ function initApp() {
   safeCall(initYears);
   safeCall(initLazyImages);
 
+
   /*
    * Повторно убираем заставку.
    */
+
   hidePreloader();
+
 }
 
 
@@ -1494,8 +1921,10 @@ function initApp() {
    ========================================================= */
 
 if (
-  document.readyState === "loading"
+  document.readyState ===
+  "loading"
 ) {
+
   document.addEventListener(
     "DOMContentLoaded",
     initApp,
@@ -1503,8 +1932,11 @@ if (
       once: true
     }
   );
+
 } else {
+
   initApp();
+
 }
 
 
@@ -1515,7 +1947,9 @@ if (
 window.addEventListener(
   "load",
   function () {
+
     hidePreloader();
+
   },
   {
     once: true
@@ -1530,31 +1964,96 @@ window.addEventListener(
 if (
   "serviceWorker" in navigator
 ) {
+
   window.addEventListener(
     "load",
     function () {
+
       navigator.serviceWorker
-        .register("/sw.js")
-        .then(function (registration) {
-          console.log(
-            "SW зарегистрирован:",
-            registration.scope
-          );
-        })
-        .catch(function (error) {
-          /*
-           * SW не имеет права ломать app.js.
-           */
-          console.error(
-            "SW ошибка:",
-            error
-          );
-        });
+        .register(
+          "/sw.js",
+          {
+            updateViaCache:
+              "none"
+          }
+        )
+        .then(
+          function (registration) {
+
+            console.log(
+              "SW зарегистрирован:",
+              registration.scope
+            );
+
+            /*
+             * Проверяем наличие новой версии SW.
+             */
+
+            registration.update();
+
+          }
+        )
+        .catch(
+          function (error) {
+
+            /*
+             * Ошибка SW не должна
+             * ломать основной сайт.
+             */
+
+            console.error(
+              "SW ошибка:",
+              error
+            );
+
+          }
+        );
+
     },
     {
       once: true
     }
   );
+
+}
+
+
+/* =========================================================
+   СООБЩЕНИЯ SERVICE WORKER
+   ========================================================= */
+
+if (
+  "serviceWorker" in navigator
+) {
+
+  navigator.serviceWorker.addEventListener(
+    "message",
+    function (event) {
+
+      if (
+        !event.data ||
+        !event.data.type
+      ) {
+        return;
+      }
+
+
+      if (
+        event.data.type ===
+        "SW_UPDATED"
+      ) {
+
+        console.log(
+          "Service Worker обновлён:",
+          event.data.cache ||
+            "unknown"
+        );
+
+      }
+
+    }
+  );
+
 }
 
 
@@ -1565,16 +2064,21 @@ if (
 window.addEventListener(
   "error",
   function (event) {
+
     console.error(
       "Global JS error:",
-      event.error || event.message
+      event.error ||
+        event.message
     );
+
 
     /*
      * Даже при ошибке другого скрипта
      * заставка должна исчезнуть.
      */
+
     hidePreloader();
+
   }
 );
 
@@ -1582,12 +2086,15 @@ window.addEventListener(
 window.addEventListener(
   "unhandledrejection",
   function (event) {
+
     console.error(
       "Unhandled promise rejection:",
       event.reason
     );
 
+
     hidePreloader();
+
   }
 );
 
