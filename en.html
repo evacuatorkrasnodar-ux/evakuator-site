@@ -643,5 +643,14 @@
 
   <script src="/app.js" defer></script>
 
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const button = document.getElementById("heroLocationButton");
+      if (button && typeof window.sendLocation === "function") {
+        button.addEventListener("click", window.sendLocation);
+      }
+    });
+  </script>
+
 </body>
 </html>
