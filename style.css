@@ -62,6 +62,10 @@ body.theme-light {
    HERO
    ========================================================= */
 
+.hero-shell {
+  position:relative;
+}
+
 .hero {
   position:relative;
   width:100%;
@@ -99,6 +103,50 @@ body.theme-light {
   .hero-call-link:hover .hero {
     transform:translateY(-1px);
   }
+}
+
+/* Настоящие кликабельные зоны поверх пунктов меню, напечатанных в баннере. */
+.hero-nav-overlay {
+  position:absolute;
+  inset:0;
+  z-index:5;
+  pointer-events:none;
+}
+
+.hero-nav-link {
+  position:absolute;
+  top:0;
+  height:12%;
+  display:block;
+  pointer-events:auto;
+  background:transparent;
+  border:0;
+}
+
+.hero-nav-link:focus-visible {
+  outline:2px solid rgba(255,255,255,.9);
+  outline-offset:2px;
+  border-radius:8px;
+}
+
+/* Координаты под баннер 1536×1024; масштабируются вместе с изображением. */
+.hero-nav-home { left:27.5%; width:5.5%; }
+.hero-nav-services { left:35.3%; width:5.2%; }
+.hero-nav-prices { left:41.9%; width:4.2%; }
+.hero-nav-about { left:47.3%; width:5.0%; }
+.hero-nav-reviews { left:53.0%; width:5.8%; }
+.hero-nav-contacts { left:59.3%; width:6.6%; }
+.hero-nav-phone { left:78.0%; width:19.0%; }
+
+@media (max-width:680px) {
+  .hero-nav-link { height:13%; }
+  .hero-nav-home { left:27%; width:7%; }
+  .hero-nav-services { left:35%; width:6.5%; }
+  .hero-nav-prices { left:42%; width:5.5%; }
+  .hero-nav-about { left:48%; width:6.5%; }
+  .hero-nav-reviews { left:54%; width:7%; }
+  .hero-nav-contacts { left:61%; width:8%; }
+  .hero-nav-phone { left:75%; width:23%; }
 }
 
 /* =========================================================
