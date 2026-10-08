@@ -651,34 +651,49 @@
 
     <!-- HERO / CLICK TO CALL -->
 
-    <a
-      class="hero-call-link"
-      href="tel:+79888723363"
-      aria-label="Позвонить в службу эвакуации: +7 (988) 872-33-63"
-    >
+    <div class="hero-shell">
 
-      <header class="hero fade-in">
+      <a
+        class="hero-call-link"
+        href="tel:+79888723363"
+        aria-label="Позвонить в службу эвакуации: +7 (988) 872-33-63"
+      >
 
-        <picture>
+        <header class="hero fade-in">
 
-          <source
-            srcset="/banner-top.webp"
-            type="image/webp"
-          >
+          <picture>
 
-          <img
-            src="/banner-top.png"
-            alt="Эвакуатор Краснодар 24/7. Нажмите, чтобы позвонить"
-            class="hero-img"
-            fetchpriority="high"
-            decoding="async"
-          >
+            <source
+              srcset="/banner-top.webp"
+              type="image/webp"
+            >
 
-        </picture>
+            <img
+              src="/banner-top.png"
+              alt="Эвакуатор Краснодар 24/7. Нажмите, чтобы позвонить"
+              class="hero-img"
+              fetchpriority="high"
+              decoding="async"
+            >
 
-      </header>
+          </picture>
 
-    </a>
+        </header>
+
+      </a>
+
+      <!-- Прозрачные ссылки поверх текста меню, который уже нарисован внутри баннера. -->
+      <nav class="hero-nav-overlay" aria-label="Навигация по сайту">
+        <a class="hero-nav-link hero-nav-home" href="/" aria-label="Главная"></a>
+        <a class="hero-nav-link hero-nav-services" href="#prices" aria-label="Услуги"></a>
+        <a class="hero-nav-link hero-nav-prices" href="/prices.html" aria-label="Цены"></a>
+        <a class="hero-nav-link hero-nav-about" href="/about.html" aria-label="О нас"></a>
+        <a class="hero-nav-link hero-nav-reviews" href="/reviews.html" aria-label="Отзывы"></a>
+        <a class="hero-nav-link hero-nav-contacts" href="/contacts.html" aria-label="Контакты"></a>
+        <a class="hero-nav-link hero-nav-phone" href="tel:+79888723363" aria-label="Позвонить: +7 (988) 872-33-63"></a>
+      </nav>
+
+    </div>
 
 
     <!-- TOP BUTTONS -->
