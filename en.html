@@ -84,7 +84,7 @@
 
   <meta
     property="og:image"
-    content="https://evakuator-krd.online/banner-top.png"
+    content="https://evakuator-krd.online/banner-top-en.png"
   >
 
   <meta
@@ -125,7 +125,7 @@
 
   <meta
     name="twitter:image"
-    content="https://evakuator-krd.online/banner-top.png"
+    content="https://evakuator-krd.online/banner-top-en.png"
   >
 
   <meta
@@ -211,7 +211,7 @@
       "telephone": "+7-988-872-33-63",
 
       "image": [
-        "https://evakuator-krd.online/banner-top.png"
+        "https://evakuator-krd.online/banner-top-en.png"
       ],
 
       "priceRange": "₽₽",
@@ -266,26 +266,102 @@
 
   <div class="container">
 
-    <header class="hero fade-in">
-      <picture>
+    <div class="hero-shell">
 
-        <source
-          srcset="/banner-top.webp"
-          type="image/webp"
-        >
+      <header class="hero fade-in">
+        <picture>
 
-        <img
-          src="/banner-top.png"
-          alt="Towing Service Krasnodar 24/7"
-          class="hero-img"
-          width="2000"
-          height="1200"
-          fetchpriority="high"
-          decoding="async"
-        >
+          <source
+            srcset="/banner-top-en.webp"
+            type="image/webp"
+          >
 
-      </picture>
-    </header>
+          <img
+            src="/banner-top-en.png"
+            alt="Towing Service Krasnodar 24/7"
+            class="hero-img"
+            width="1536"
+            height="1024"
+            fetchpriority="high"
+            decoding="async"
+          >
+
+        </picture>
+      </header>
+
+      <!-- Clickable areas for the controls printed inside the banner. -->
+      <nav class="hero-nav-overlay" aria-label="Banner navigation">
+
+        <a
+          class="hero-nav-link hero-nav-home"
+          href="/en.html"
+          aria-label="Home"
+        ></a>
+
+        <a
+          class="hero-nav-link hero-nav-services"
+          href="#prices"
+          aria-label="Services"
+        ></a>
+
+        <a
+          class="hero-nav-link hero-nav-prices"
+          href="/prices.html"
+          aria-label="Prices"
+        ></a>
+
+        <a
+          class="hero-nav-link hero-nav-about"
+          href="/about.html"
+          aria-label="About us"
+        ></a>
+
+        <a
+          class="hero-nav-link hero-nav-reviews"
+          href="/reviews.html"
+          aria-label="Reviews"
+        ></a>
+
+        <a
+          class="hero-nav-link hero-nav-contacts"
+          href="/contacts.html"
+          aria-label="Contacts"
+        ></a>
+
+        <a
+          class="hero-nav-link hero-nav-phone"
+          href="tel:+79888723363"
+          aria-label="Call +7 (988) 872-33-63"
+        ></a>
+
+        <a
+          class="hero-nav-link hero-nav-call"
+          href="tel:+79888723363"
+          aria-label="Call a tow truck"
+        ></a>
+
+        <a
+          class="hero-nav-link hero-nav-price"
+          href="/request.html"
+          aria-label="Get a quote"
+        ></a>
+
+        <button
+          class="hero-nav-link hero-nav-location"
+          type="button"
+          id="heroLocationButton"
+          aria-label="Find me and send my location"
+        ></button>
+
+        <a
+          class="hero-nav-link hero-nav-language"
+          href="/"
+          aria-label="Russian version"
+        ></a>
+
+      </nav>
+
+    </div>
 
     <div class="top-buttons fade-in">
 
@@ -347,7 +423,7 @@
 
       </section>
 
-      <section class="section fade-in">
+      <section class="section fade-in" id="prices">
 
         <h2>Prices</h2>
 
