@@ -138,6 +138,44 @@ body.theme-light {
 .hero-nav-contacts { left:59.3%; width:6.6%; }
 .hero-nav-phone { left:78.0%; width:19.0%; }
 
+/* Кнопки, напечатанные внутри нового баннера 1536×1024. */
+.hero-nav-call {
+  top:51.0%;
+  left:3.9%;
+  width:17.4%;
+  height:6.0%;
+}
+
+.hero-nav-price {
+  top:51.0%;
+  left:22.7%;
+  width:15.6%;
+  height:6.0%;
+}
+
+.hero-nav-location {
+  top:81.7%;
+  left:18.0%;
+  width:64.0%;
+  height:10.0%;
+  padding:0;
+  margin:0;
+  cursor:pointer;
+  appearance:none;
+  -webkit-appearance:none;
+}
+
+.hero-nav-language {
+  left:70.0%;
+  width:7.0%;
+}
+
+.hero-nav-location:focus-visible {
+  outline:3px solid rgba(255,220,0,.95);
+  outline-offset:3px;
+  border-radius:40px;
+}
+
 @media (max-width:680px) {
   .hero-nav-link { height:13%; }
   .hero-nav-home { left:27%; width:7%; }
@@ -147,6 +185,32 @@ body.theme-light {
   .hero-nav-reviews { left:54%; width:7%; }
   .hero-nav-contacts { left:61%; width:8%; }
   .hero-nav-phone { left:75%; width:23%; }
+
+  .hero-nav-call {
+    top:51%;
+    left:3.5%;
+    width:20%;
+    height:6.5%;
+  }
+
+  .hero-nav-price {
+    top:51%;
+    left:22.5%;
+    width:17.5%;
+    height:6.5%;
+  }
+
+  .hero-nav-location {
+    top:81.5%;
+    left:17%;
+    width:66%;
+    height:10.5%;
+  }
+
+  .hero-nav-language {
+    left:69%;
+    width:9%;
+  }
 }
 
 /* =========================================================
