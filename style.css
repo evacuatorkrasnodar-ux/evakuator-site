@@ -80,6 +80,27 @@ body.theme-light {
   will-change:opacity;
 }
 
+.hero-call-link {
+  display:block;
+  color:inherit;
+  text-decoration:none;
+  cursor:pointer;
+}
+
+.hero-call-link .hero {
+  margin-bottom:28px;
+}
+
+.hero-call-link:active .hero {
+  transform:scale(.995);
+}
+
+@media (hover:hover) and (pointer:fine) {
+  .hero-call-link:hover .hero {
+    transform:translateY(-1px);
+  }
+}
+
 /* =========================================================
    FADE-IN
    ========================================================= */
