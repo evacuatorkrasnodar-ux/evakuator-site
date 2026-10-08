@@ -1336,6 +1336,21 @@
     defer
   ></script>
 
+  <script>
+    /* Подключаем кнопку FIND ME на баннере к уже существующей геолокации app.js. */
+    document.addEventListener("DOMContentLoaded", function () {
+      const heroLocationButton = document.getElementById("heroLocationButton");
+
+      if (!heroLocationButton || typeof window.sendLocation !== "function") {
+        return;
+      }
+
+      heroLocationButton.addEventListener("click", function () {
+        window.sendLocation();
+      });
+    }, { once: true });
+  </script>
+
 
 </body>
 
